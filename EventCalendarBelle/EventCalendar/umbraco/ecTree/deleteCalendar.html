@@ -1,0 +1,14 @@
+﻿<!--<div class="umb-pane" ng-controller="EventCalendar.CalendarDeleteController">                
+    <p>Really delete {{currentNode.name}}?</p>
+    <a href class="btn btn-primary" ng-click="delete(currentNode.id)">Delete</a>
+</div>-->
+<div class="umb-dialog umb-pane" ng-controller="EventCalendar.CalendarDeleteController">
+    <div class="umb-dialog-body" auto-scale="90">
+        
+        <p class="umb-abstract">
+        	Are you sure you want to delete <strong>{{currentNode.name}}</strong> ?
+        </p>
+
+        <umb-confirm on-confirm="performDelete" on-cancel="cancel"></umb-confirm>
+    </div>
+</div>

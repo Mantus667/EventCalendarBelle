@@ -1,0 +1,309 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{94BB08ED-5355-4E25-988F-D58868AD7B3E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EventCalendarBelle</RootNamespace>
+    <AssemblyName>EventCalendarBelle</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="businesslogic">
+      <HintPath>bin\businesslogic.dll</HintPath>
+    </Reference>
+    <Reference Include="ClientDependency.Core">
+      <HintPath>..\packages\ClientDependency.1.7.0.4\lib\ClientDependency.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="ClientDependency.Core.Mvc">
+      <HintPath>..\packages\ClientDependency-Mvc.1.7.0.4\lib\ClientDependency.Core.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="cms">
+      <HintPath>bin\cms.dll</HintPath>
+    </Reference>
+    <Reference Include="controls">
+      <HintPath>bin\controls.dll</HintPath>
+    </Reference>
+    <Reference Include="CookComputing.XmlRpcV2">
+      <HintPath>..\packages\xmlrpcnet.2.5.0\lib\net20\CookComputing.XmlRpcV2.dll</HintPath>
+    </Reference>
+    <Reference Include="Examine">
+      <HintPath>..\packages\UmbracoCms.Core.6.1.6\lib\Examine.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlAgilityPack">
+      <HintPath>..\packages\HtmlAgilityPack.1.4.6\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="interfaces">
+      <HintPath>bin\interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\packages\UmbracoCms.Core.6.1.6\lib\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Lucene.Net">
+      <HintPath>..\packages\Lucene.Net.2.9.4.1\lib\net40\Lucene.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationBlocks.Data">
+      <HintPath>..\packages\UmbracoCms.Core.6.1.6\lib\Microsoft.ApplicationBlocks.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Helpers">
+      <HintPath>..\packages\UmbracoCms.Core.6.1.6\lib\Microsoft.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Mvc.FixedDisplayModes">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.FixedDisplayModes.1.0.1\lib\net40\Microsoft.Web.Mvc.FixedDisplayModes.dll</HintPath>
+    </Reference>
+    <Reference Include="MiniProfiler">
+      <HintPath>..\packages\MiniProfiler.2.1.0\lib\net40\MiniProfiler.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data">
+      <HintPath>..\packages\MySql.Data.6.6.5\lib\net40\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Our.Umbraco.uGoLive">
+      <HintPath>..\packages\UmbracoCms.Core.6.1.6\lib\Our.Umbraco.uGoLive.dll</HintPath>
+    </Reference>
+    <Reference Include="Our.Umbraco.uGoLive.47x">
+      <HintPath>..\packages\UmbracoCms.Core.6.1.6\lib\Our.Umbraco.uGoLive.47x.dll</HintPath>
+    </Reference>
+    <Reference Include="Our.Umbraco.uGoLive.Checks">
+      <HintPath>..\packages\UmbracoCms.Core.6.1.6\lib\Our.Umbraco.uGoLive.Checks.dll</HintPath>
+    </Reference>
+    <Reference Include="ScheduleWidget">
+      <HintPath>..\packages\ScheduleWidget.2.2.0\lib\NET45\ScheduleWidget.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLCE4Umbraco">
+      <HintPath>..\packages\UmbracoCms.Core.6.1.6\lib\SQLCE4Umbraco.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\UmbracoCms.Core.6.1.6\lib\System.Data.SqlServerCe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SqlServerCe.Entity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\UmbracoCms.Core.6.1.6\lib\System.Data.SqlServerCe.Entity.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.4.0.30506.0\lib\net40\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.4.0.30506.0\lib\net40\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.4.0.30506.0\lib\net40\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.4.0.30506.0\lib\net40\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.2.0.30506.0\lib\net40\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.30506.0\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="TidyNet">
+      <HintPath>..\packages\UmbracoCms.Core.6.1.6\lib\TidyNet.dll</HintPath>
+    </Reference>
+    <Reference Include="umbraco">
+      <HintPath>bin\umbraco.dll</HintPath>
+    </Reference>
+    <Reference Include="Umbraco.Core">
+      <HintPath>bin\Umbraco.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="umbraco.DataLayer">
+      <HintPath>bin\umbraco.DataLayer.dll</HintPath>
+    </Reference>
+    <Reference Include="umbraco.editorControls">
+      <HintPath>bin\umbraco.editorControls.dll</HintPath>
+    </Reference>
+    <Reference Include="Umbraco.Web.UI">
+      <HintPath>bin\Umbraco.Web.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="umbraco.XmlSerializers">
+      <HintPath>..\packages\UmbracoCms.Core.6.1.6\lib\umbraco.XmlSerializers.dll</HintPath>
+    </Reference>
+    <Reference Include="UmbracoExamine">
+      <HintPath>..\packages\UmbracoCms.Core.6.1.6\lib\UmbracoExamine.dll</HintPath>
+    </Reference>
+    <Reference Include="UrlRewritingNet.UrlRewriter">
+      <HintPath>..\packages\UmbracoCms.Core.6.1.6\lib\UrlRewritingNet.UrlRewriter.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controller\CalendarApiController.cs" />
+    <Compile Include="Controller\DescriptionApiController.cs" />
+    <Compile Include="Controller\EventApiController.cs" />
+    <Compile Include="Controller\LocationApiController.cs" />
+    <Compile Include="Controller\REventApiController.cs" />
+    <Compile Include="DatabaseUp.cs" />
+    <Compile Include="EventCalendarApplication.cs" />
+    <Compile Include="Trees\ECCalendarTree.cs" />
+    <Compile Include="installer.ascx.cs">
+      <DependentUpon>installer.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="installer.ascx.designer.cs">
+      <DependentUpon>installer.ascx.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AddEventModel.cs" />
+    <Compile Include="Models\Event.cs" />
+    <Compile Include="Models\ECalendar.cs" />
+    <Compile Include="Models\EditDescriptionModel.cs" />
+    <Compile Include="Models\EditEventModel.cs" />
+    <Compile Include="Models\EventDescription.cs" />
+    <Compile Include="Models\EventDetailsModel.cs" />
+    <Compile Include="Models\EventLocation.cs" />
+    <Compile Include="Models\EventsOverviewModel.cs" />
+    <Compile Include="Models\RecurringEvent.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="EventCalendar\package.manifest" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="EventCalendar\backoffice\ecTree\editEvent.html" />
+    <Content Include="EventCalendar\backoffice\ecTree\event.edit.controller.js" />
+    <Content Include="EventCalendar\backoffice\ecTree\location.edit.controller.js" />
+    <Content Include="EventCalendar\css\bootstrap-datetimepicker.min.css" />
+    <Content Include="EventCalendar\css\bootstrap-switch.css" />
+    <Content Include="EventCalendar\css\jquery-gmaps-latlon-picker.css" />
+    <Content Include="EventCalendar\event.resource.js" />
+    <Content Include="EventCalendar\location.resource.js" />
+    <Content Include="EventCalendar\revent.resource.js" />
+    <Content Include="EventCalendar\scripts\bootstrap-datetimepicker.min.js" />
+    <Content Include="EventCalendar\scripts\bootstrap-switch.min.js" />
+    <Content Include="EventCalendar\scripts\jquery-gmaps-latlon-picker.js" />
+    <Content Include="EventCalendar\scripts\moment.min.js" />
+    <Content Include="EventCalendar\umbraco\ecTree\calendar.create.controller.js" />
+    <Content Include="EventCalendar\umbraco\ecTree\createCalendar.html" />
+    <Content Include="EventCalendar\backoffice\ecTree\calendar.edit.controller.js" />
+    <Content Include="EventCalendar\backoffice\ecTree\editCalendar.html" />
+    <Content Include="EventCalendar\backoffice\ecTree\editLocation.html" />
+    <Content Include="EventCalendar\calendar.resource.js" />
+    <Content Include="EventCalendar\css\colorpicker.css" />
+    <Content Include="EventCalendar\css\eventcalendar.custom.css" />
+    <Content Include="EventCalendar\images\animated-overlay.gif" />
+    <Content Include="EventCalendar\images\blank.gif" />
+    <Content Include="EventCalendar\images\colorpicker_background.png" />
+    <Content Include="EventCalendar\images\colorpicker_hex.png" />
+    <Content Include="EventCalendar\images\colorpicker_hsb_b.png" />
+    <Content Include="EventCalendar\images\colorpicker_hsb_h.png" />
+    <Content Include="EventCalendar\images\colorpicker_hsb_s.png" />
+    <Content Include="EventCalendar\images\colorpicker_indic.gif" />
+    <Content Include="EventCalendar\images\colorpicker_overlay.png" />
+    <Content Include="EventCalendar\images\colorpicker_rgb_b.png" />
+    <Content Include="EventCalendar\images\colorpicker_rgb_g.png" />
+    <Content Include="EventCalendar\images\colorpicker_rgb_r.png" />
+    <Content Include="EventCalendar\images\colorpicker_select.gif" />
+    <Content Include="EventCalendar\images\colorpicker_submit.png" />
+    <Content Include="EventCalendar\images\custom_background.png" />
+    <Content Include="EventCalendar\images\custom_hex.png" />
+    <Content Include="EventCalendar\images\custom_hsb_b.png" />
+    <Content Include="EventCalendar\images\custom_hsb_h.png" />
+    <Content Include="EventCalendar\images\custom_hsb_s.png" />
+    <Content Include="EventCalendar\images\custom_indic.gif" />
+    <Content Include="EventCalendar\images\custom_rgb_b.png" />
+    <Content Include="EventCalendar\images\custom_rgb_g.png" />
+    <Content Include="EventCalendar\images\custom_rgb_r.png" />
+    <Content Include="EventCalendar\images\custom_submit.png" />
+    <Content Include="EventCalendar\images\select.png" />
+    <Content Include="EventCalendar\images\select2.png" />
+    <Content Include="EventCalendar\images\slider.png" />
+    <Content Include="EventCalendar\images\ui-bg_diagonals-thick_18_b81900_40x40.png" />
+    <Content Include="EventCalendar\images\ui-bg_diagonals-thick_20_666666_40x40.png" />
+    <Content Include="EventCalendar\images\ui-bg_flat_10_000000_40x100.png" />
+    <Content Include="EventCalendar\images\ui-bg_glass_100_f6f6f6_1x400.png" />
+    <Content Include="EventCalendar\images\ui-bg_glass_100_fdf5ce_1x400.png" />
+    <Content Include="EventCalendar\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="EventCalendar\images\ui-bg_gloss-wave_35_f6a828_500x100.png" />
+    <Content Include="EventCalendar\images\ui-bg_highlight-soft_100_eeeeee_1x100.png" />
+    <Content Include="EventCalendar\images\ui-bg_highlight-soft_75_ffe45c_1x100.png" />
+    <Content Include="EventCalendar\images\ui-icons_222222_256x240.png" />
+    <Content Include="EventCalendar\images\ui-icons_228ef1_256x240.png" />
+    <Content Include="EventCalendar\images\ui-icons_ef8c08_256x240.png" />
+    <Content Include="EventCalendar\images\ui-icons_ffd27a_256x240.png" />
+    <Content Include="EventCalendar\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="EventCalendar\scripts\colorpicker.js" />
+    <Content Include="EventCalendar\scripts\EventCalendar.Scripts.js" />
+    <Content Include="EventCalendar\umbraco\ecTree\calendar.delete.controller.js" />
+    <Content Include="EventCalendar\umbraco\ecTree\createEvent.html" />
+    <Content Include="EventCalendar\umbraco\ecTree\deleteCalendar.html" />
+    <Content Include="EventCalendar\umbraco\ecTree\deleteEvent.html" />
+    <Content Include="EventCalendar\umbraco\ecTree\event.create.controller.js" />
+    <Content Include="EventCalendar\umbraco\ecTree\event.delete.controller.js" />
+    <Content Include="EventCalendar\umbraco\ecTree\location.create.controller.js" />
+    <Content Include="EventCalendar\umbraco\ecTree\createLocation.html" />
+    <Content Include="EventCalendar\umbraco\ecTree\location.delete.controller.js" />
+    <Content Include="EventCalendar\umbraco\ecTree\deleteLocation.html" />
+    <Content Include="EventCalendar\umbraco\ecTree\revent.create.controller.js" />
+    <Content Include="installer.ascx">
+      <SubType>ASPXCodeBehind</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

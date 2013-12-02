@@ -1,0 +1,38 @@
+﻿<umb-panel ng-controller="EventCalendar.CalendarCreateController">
+    <umb-header>
+        <div class="span4">
+                <input type="text"
+                    class="umb-headline" 
+                    localize="placeholder"
+                    select-on-focus 
+                    placeholder="@placeholders_entername" 
+                    ng-model="calendar.calendarname" />
+        </div>
+        <div class="span8">
+                <div class="btn-toolbar pull-right umb-btn-toolbar">
+                        <a href class="btn btn-primary" ng-click="save(calendar)" prevent-default>Save</a>
+                </div>
+        </div>
+    </umb-header>
+
+    <div class="umb-panel-body">
+        <div class="umb-pane">
+            <umb-control-group label="GCal" description="Do you want to use a Gcal Feed?">
+                <input type="checkbox" class="umb-editor umb-textstring" ng-model="calendar.isGCal" />
+            </umb-control-group>
+
+            <umb-control-group label="Verstecken?" description="Should the Calendar be hidden on front end?">
+                <input type="checkbox" class="umb-editor umb-textstring" ng-model="calendar.displayOnSite" />
+            </umb-control-group>
+                        
+            <umb-control-group label="GCal Feed Url" description="The feed url of your google calendar feed">
+                <input type="url" class="umb-editor umb-textstring" ng-model="calendar.gCalFeedUrl" />
+            </umb-control-group>
+
+            <umb-control-group label="Color" description="The unique color this calendar should use">
+                <input type="hidden" id="color_field" class="umb-editor umb-textstring" ng-model="calendar.color" />
+                <div id="colorSelector"><div style="background-color: {{calendar.color}}"></div></div>
+            </umb-control-group>
+        </div>
+    </div>
+</umb-panel>

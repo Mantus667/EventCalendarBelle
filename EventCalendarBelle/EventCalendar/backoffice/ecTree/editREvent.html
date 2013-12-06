@@ -1,0 +1,61 @@
+﻿<form novalidate name="form" id="editEventForm">
+<umb-panel ng-controller="EventCalendar.REventEditController">
+    <umb-header tabs="tabs">
+        <div class="span4">
+                <input type="text"
+                    class="umb-headline" 
+                    localize="placeholder"
+                    select-on-focus
+                    required
+                    placeholder="@placeholders_entername" 
+                    ng-model="event.title" />
+        </div>
+        <div class="span8">
+                <div class="btn-toolbar pull-right umb-btn-toolbar">
+                        <a href class="btn btn-primary" ng-click="save(event)" prevent-default>Save</a>
+                </div>
+        </div>
+    </umb-header>
+
+    <umb-tab-view>
+        <umb-tab id="tabContent" rel="Content" class="active">
+            <div class="umb-pane">               
+
+                <umb-control-group label="All day" description="Is this an all day long event?">
+                    <div class="make-switch" id="allday" data-on="success" data-on-label="<i class='icon-check icon-white'></i>" data-off-label="<i class='icon-delete'></i>">
+                        <input type="checkbox" class="umb-editor" ng-model="event.allday" name="allday">
+                    </div>
+                </umb-control-group>
+
+                <umb-control-group label="Day of Week" description="On which day does the event take place?">
+                    <select ng-model="event.day" name="daySelect" ng-options="d.Key as d.Value for d in DayOfWeekList" required ng-selected="event.day == d.Key"></select>
+                    <span ng-show="form.daySelect.$dirty && form.daySelect.$error.required">Day is required</span>
+                </umb-control-group>
+
+                <umb-control-group label="Frequency" description="Frequency of your event?">
+                    <select ng-model="event.frequency" name="freqSelect" ng-options="f.Key as f.Value for f in FrequencyTypes" required ng-selected="event.frequency == fKey"></select>
+                    <span ng-show="form.freqSelect.$dirty && form.freqSelect.$error.required">Frequency is required</span>
+                </umb-control-group>
+
+                <umb-control-group label="Monthly interval" description="Monthly interval of your event?">
+                    <select ng-model="event.monthly" name="monSelect" ng-options="m.Key as m.Value for m in MonthlyIntervals" required ng-selected="event.monthly == m.Key"></select>
+                    <span ng-show="form.monSelect.$dirty && form.monSelect.$error.required">Monthly is required</span>
+                </umb-control-group>
+
+                <umb-control-group label="Location" description="Where does the event take place?">
+                    <select ng-model="event.locationid" name="locSelect" ng-options="l.id as l.name for l in locations" required ng-selected="event.locationid == l.id"></select>
+                    <span ng-show="(form.locSelect.$dirty || form.locSelect.$invalid) && form.locSelect.$error.required">Location is required</span>
+                </umb-control-group>
+                    
+             </div>
+        </umb-tab>
+        <umb-tab id="tab{{$index}}" rel="{{$index}}" ng-repeat="description in event.descriptions">
+            <div class="umb-pane">
+                <umb-control-group label="Description {{description.culture}}" description="The description of your event.">
+                    <textarea class="umb-editor" ng-model="description.content" />
+                </umb-control-group>
+            </div>
+        </umb-tab>
+    </umb-tab-view>
+</umb-panel>
+</form>

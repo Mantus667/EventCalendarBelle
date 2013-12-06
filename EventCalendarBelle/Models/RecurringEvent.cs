@@ -38,10 +38,10 @@ namespace EventCalendarBelle.Models
         [DataMember(Name = "allday")]
         public bool allDay { get; set; }
 
-        [Column("description")]
-        [SpecialDbType(SpecialDbTypes.NTEXT)]
-        [DataMember(Name = "description")]
-        public string description { get; set; }
+        //[Column("description")]
+        //[SpecialDbType(SpecialDbTypes.NTEXT)]
+        //[DataMember(Name = "description")]
+        //public string description { get; set; }
 
         [Column("day")]
         [DataMember(Name = "day")]
@@ -54,6 +54,10 @@ namespace EventCalendarBelle.Models
         [Column("monthly")]
         [DataMember(Name = "monthly")]
         public int monthly_interval { get; set; }
+
+        [Ignore]
+        [DataMember(Name = "descriptions")]
+        public List<EventDescription> descriptions { get; set; }
     }
 
     public class RecurringEventListModel

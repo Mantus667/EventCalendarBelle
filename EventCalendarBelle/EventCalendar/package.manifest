@@ -15,8 +15,12 @@
 			'~/App_Plugins/EventCalendar/umbraco/ectree/event.create.controller.js',
 			'~/App_Plugins/EventCalendar/umbraco/ectree/event.delete.controller.js',
 
+			'~/App_Plugins/EventCalendar/backoffice/ectree/revent.edit.controller.js',
+			'~/App_Plugins/EventCalendar/umbraco/ectree/revent.create.controller.js',
+
             '~/App_Plugins/EventCalendar/calendar.resource.js',
 			'~/App_Plugins/EventCalendar/location.resource.js',
-			'~/App_Plugins/EventCalendar/event.resource.js'
+			'~/App_Plugins/EventCalendar/event.resource.js',
+			'~/App_Plugins/EventCalendar/revent.resource.js'
         ]
 }

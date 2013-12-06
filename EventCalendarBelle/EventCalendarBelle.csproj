@@ -219,8 +219,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="EventCalendar\backoffice\ecTree\editEvent.html" />
+    <Content Include="EventCalendar\backoffice\ecTree\editREvent.html" />
     <Content Include="EventCalendar\backoffice\ecTree\event.edit.controller.js" />
     <Content Include="EventCalendar\backoffice\ecTree\location.edit.controller.js" />
+    <Content Include="EventCalendar\backoffice\ecTree\revent.edit.controller.js" />
     <Content Include="EventCalendar\css\bootstrap-datetimepicker.min.css" />
     <Content Include="EventCalendar\css\bootstrap-switch.css" />
     <Content Include="EventCalendar\css\jquery-gmaps-latlon-picker.css" />
@@ -284,6 +286,7 @@
     <Content Include="EventCalendar\scripts\EventCalendar.Scripts.js" />
     <Content Include="EventCalendar\umbraco\ecTree\calendar.delete.controller.js" />
     <Content Include="EventCalendar\umbraco\ecTree\createEvent.html" />
+    <Content Include="EventCalendar\umbraco\ecTree\createREvent.html" />
     <Content Include="EventCalendar\umbraco\ecTree\deleteCalendar.html" />
     <Content Include="EventCalendar\umbraco\ecTree\deleteEvent.html" />
     <Content Include="EventCalendar\umbraco\ecTree\event.create.controller.js" />

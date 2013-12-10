@@ -188,6 +188,7 @@
   <ItemGroup>
     <Compile Include="Controller\CalendarApiController.cs" />
     <Compile Include="Controller\DescriptionApiController.cs" />
+    <Compile Include="Controller\ECFontendApiController.cs" />
     <Compile Include="Controller\EventApiController.cs" />
     <Compile Include="Controller\LocationApiController.cs" />
     <Compile Include="Controller\REventApiController.cs" />
@@ -216,6 +217,7 @@
   <ItemGroup>
     <None Include="EventCalendar\package.manifest" />
     <None Include="packages.config" />
+    <None Include="Views\EC_Calendar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="EventCalendar\backoffice\ecTree\editEvent.html" />
@@ -226,6 +228,8 @@
     <Content Include="EventCalendar\css\bootstrap-datetimepicker.min.css" />
     <Content Include="EventCalendar\css\bootstrap-switch.css" />
     <Content Include="EventCalendar\css\jquery-gmaps-latlon-picker.css" />
+    <Content Include="EventCalendar\Editors\calendar.editor.controller.js" />
+    <Content Include="EventCalendar\Editors\calendar.html" />
     <Content Include="EventCalendar\event.resource.js" />
     <Content Include="EventCalendar\location.resource.js" />
     <Content Include="EventCalendar\revent.resource.js" />

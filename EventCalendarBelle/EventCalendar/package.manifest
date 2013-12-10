@@ -1,8 +1,19 @@
 ﻿{
-        propertyEditors: [
-        ],
+        propertyEditors: [{
+			/*this must be a unique alias*/ 
+            alias: "EventCalendar.CalendarPicker",
+            /*the name*/
+            name: "Calendar Picker",
+            /*the html file we will load for the editor*/
+            editor: {
+                view: "~/App_Plugins/EventCalendar/Editors/calendar.html"
+            }
+        }],
 
         javascript: [
+
+			'~/App_Plugins/EventCalendar/Editors/calendar.editor.controller.js',
+
             '~/App_Plugins/EventCalendar/backoffice/ectree/calendar.edit.controller.js',
 			'~/App_Plugins/EventCalendar/umbraco/ectree/calendar.create.controller.js',
 			'~/App_Plugins/EventCalendar/umbraco/ectree/calendar.delete.controller.js',

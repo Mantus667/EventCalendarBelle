@@ -1,0 +1,3 @@
+﻿<div ng-controller="EventCalendar.CalendarEditorController">
+    <select ng-model="model.value" class="umb-editor umb-dropdown" ng-options="c.id as c.calendarname for c in calendars" ng-selected="model.value === $index" required></select>
+</div>

@@ -13,9 +13,15 @@ using Umbraco.Web.WebApi;
 namespace EventCalendarBelle.Controller
 {
     [PluginController("EventCalendar")]
-    public class ECFontendApiController : UmbracoApiController
+    public class ECApiController : UmbracoApiController
     {
         [HttpGet]
+        public string GetTest()
+        {
+            return "Hello World";
+        }
+
+        [HttpPost]
         public IEnumerable<EventsOverviewModel> GetCalendarEvents(int id = 0, int start = 0, int end = 0)
         {
             var db = UmbracoContext.Application.DatabaseContext.Database;

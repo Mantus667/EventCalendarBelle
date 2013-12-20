@@ -4,6 +4,7 @@
             alias: "EventCalendar.CalendarPicker",
             /*the name*/
             name: "Calendar Picker",
+			valueType: "JSON",
             /*the html file we will load for the editor*/
             editor: {
                 view: "~/App_Plugins/EventCalendar/Editors/calendar.html"

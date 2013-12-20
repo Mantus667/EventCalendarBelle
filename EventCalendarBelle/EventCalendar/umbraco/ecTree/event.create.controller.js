@@ -1,11 +1,11 @@
 ﻿angular.module("umbraco").controller("EventCalendar.EventCreateController",
         function ($scope, $routeParams, eventResource, locationResource, notificationsService, assetsService, navigationService) {
 
-            $scope.event = { id: 0, calendarid: $scope.currentNode.id.replace("c-", "") };
+            $scope.event = { id: 0, calendarid: $scope.currentNode.id.replace("c-", ""), allday: false, descriptions: {} };
 
             locationResource.getall().then(function (response) {
                 $scope.locations = response.data;
-                console.log(response.data);
+                //console.log(response.data);
             }, function (response) {
                 notificationsService.error("Error", "Could not load locations");
             });
@@ -49,8 +49,8 @@
                 });
 
             $scope.save = function (event) {
-                //console.log(event);
-                if (event.$valid) {
+                console.log(event);
+                //if (event.$valid) {
                     eventResource.save(event).then(function (response) {
                         $scope.event = response.data;
 
@@ -60,9 +60,9 @@
                     }, function (response) {
                         notificationsService.error("Error", event.title + " could not be created");
                     });
-                } else {
-                    notificationsService.error("Error", "Form is not valid!");
-                }
+                //} else {
+                //    notificationsService.error("Error", "Form is not valid!");
+                //}
             };
 
         });

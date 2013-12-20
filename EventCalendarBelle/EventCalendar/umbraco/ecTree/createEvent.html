@@ -1,61 +1,56 @@
-﻿<umb-panel ng-controller="EventCalendar.EventCreateController">
-    <umb-header>
-        <div class="span4">
+﻿<form name="form" novalidate>
+    <umb-panel ng-controller="EventCalendar.EventCreateController">
+        <umb-header>
+            <div class="span4">
                 <input type="text"
-                    class="umb-headline" 
-                    localize="placeholder"
-                    required
-                    select-on-focus 
-                    placeholder="@placeholders_entername" 
-                    ng-model="event.title" />
-        </div>
-        <div class="span8">
+                       class="umb-headline"
+                       localize="placeholder"
+                       required
+                       select-on-focus
+                       placeholder="@placeholders_entername"
+                       ng-model="event.title" />
+            </div>
+            <div class="span8">
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
-                        <a href class="btn btn-primary" ng-click="save(event)" prevent-default>Save</a>
+                    <a href class="btn btn-primary" ng-click="save(event)" prevent-default>Save</a>
                 </div>
-        </div>
-    </umb-header>
+            </div>
+        </umb-header>
 
-    <div class="umb-panel-body">
-        <div class="umb-pane">
-            <form name="form" novalidate>
+        <div class="umb-panel-body">
+            <div class="umb-pane">
                 <umb-control-group label="Start" description="The starting date/time of your event.">
                     <div id="datetimepicker1" class="input-append">
-                        <input data-format="MM/dd/yyyy HH:mm:ss PP" type="text" name="starttime" required />
+                        <input data-format="MM/dd/yyyy HH:mm:ss PP" type="text" name="starttime" />
                         <span class="add-on">
-                          <i data-time-icon="icon-time" data-date-icon="icon-calendar">
-                          </i>
+                            <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+                            </i>
                         </span>
                     </div>
-                    <div class="alert alert-error" ng-show="form.starttime.$error.required">Required!</div>
                 </umb-control-group>
 
                 <umb-control-group label="End" description="The ending date/time of your event.">
                     <div id="datetimepicker2" class="input-append">
-                        <input data-format="MM/dd/yyyy HH:mm:ss PP" type="text" name="endtime" required />
+                        <input data-format="MM/dd/yyyy HH:mm:ss PP" type="text" name="endtime" />
                         <span class="add-on">
-                          <i data-time-icon="icon-time" data-date-icon="icon-calendar">
-                          </i>
+                            <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+                            </i>
                         </span>
                     </div>
-                    <span class="error" ng-show="form.endtime.$error.required">Required!</span>
                 </umb-control-group>
-                        
+
                 <umb-control-group label="All day" description="Is this an all day long event?">
-                    <div class="make-switch" id="allday" data-on="success" data-on-label="<i class='icon-check icon-white'></i>" data-off-label="<i class='icon-delete'></i>">
+                    <div class="make-switch" id="allday" data-on="success" data-on-label="
+                        <i class='icon-check icon-white'></i>" data-off-label="<i class='icon-delete'></i>">
                         <input type="checkbox" class="umb-editor" ng-model="event.allday" name="allday">
                     </div>
                 </umb-control-group>
 
                 <umb-control-group label="Location" description="Where does the event take place?">
                     <select ng-model="event.locationId" ng-options="l.id as l.name for l in locations" required ng-selected="event.locationId == l.id" name="locationId"></select>
-                    <span class="error" ng-show="form.locationId.$error.required">Required!</span>
                 </umb-control-group>
 
-                <!--<umb-control-group label="Description" description="The description of your event.">
-                    <textarea class="umb-editor umb-textstring" ng-model="event.description" name="description" />
-                </umb-control-group>-->
-            </form>
+            </div>
         </div>
-    </div>
-</umb-panel>
+    </umb-panel>
+</form>

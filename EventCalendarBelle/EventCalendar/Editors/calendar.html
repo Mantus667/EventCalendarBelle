@@ -1,6 +1,10 @@
 ﻿<div ng-controller="EventCalendar.CalendarEditorController">
+<<<<<<< HEAD
     <select ng-model="model.value" name="calendar_pick" id="calendar_picker" ng-options="c.calendarname for c in calendars" required>
         <option value="">All calendars</option>
+=======
+    <select ng-model="model.value" name="calendar_pick" id="calendar_picker" ng-options="c.id as c.calendarname for c in calendars" required>
+>>>>>>> 0aeab6d97270bdc9ee3c05b43307ae7c288f9a1b
     </select>
     <p>{{model.value | json}}</p>
 </div>

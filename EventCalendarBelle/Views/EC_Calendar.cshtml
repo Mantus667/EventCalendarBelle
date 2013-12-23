@@ -1,12 +1,13 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
 @using EventCalendarBelle
+@using EventCalendarBelle.Models
 @{
     Layout = "";
-    int id = 0;
+    ECalendar cal = null;
     try{
-        id = Convert.ToInt32(Model.Content.GetProperty("calendar").Value);
+        cal = Model.Content.GetPropertyValue<ECalendar>("calendar");
     }catch(Exception ex){}
-    var calendar = EventCalendarApplication.GetCalendar(id);
+    //var calendar = EventCalendarApplication.GetCalendar(id);
 }
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
@@ -30,27 +31,48 @@
 		<link type="text/css" href="@Url.Content("~/css/EventCalendar/fullcalendar.css")" rel="stylesheet" />
 		<script type="text/javascript" src="@Url.Content("~/scripts/EventCalendar/jquery-1.9.1.min.js")"></script>
 		<script type="text/javascript" src="@Url.Content("~/scripts/EventCalendar/fullcalendar.min.js")"></script>
-        @if (null != calendar && calendar.IsGCal)
+        @if (null != cal && cal.IsGCal)
         {
             <script type="text/javascript" src="@Url.Content("~/scripts/EventCalendar/gcal.js")"></script>
         }
 		<script type="text/javascript">
 		    $(document).ready(function () {
 		        $('#calendar').fullCalendar({
+                    @if(null != cal) {
+						<text>defaultView: '@cal.ViewMode',</text>
+		            }
+                    header: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'month,basicWeek,basicDay'
+                    },
 		            events: {
-                        @if (null != calendar && calendar.IsGCal)
+                        @if (null != cal && cal.IsGCal)
                         {
-                            <text>url: '</text>@calendar.GCalFeedUrl<text>',</text>
+                            <text>url: '</text>@cal.GCalFeedUrl<text>',</text>
                         }
                         else
                         {
 						    <text>
-		                url: 'EventCalendar/ECFontendApi/GetCalendarEvents/',
-				        type: 'GET',
-				        data: {
-				            id: '@id'
-						        },
+		                    url: '/umbraco/EventCalendar/ECApi/GetCalendarEvents/',
+		                    type: 'GET',
                             </text>
+                            if(cal != null)
+                            {
+                                <text>
+				                data: {
+				                    id: '@cal.Id'
+				                },
+                                </text>
+                            }
+                            else
+                            {
+                                <text>
+				                data: {
+				                    id: '0'
+				                },
+                                </text>
+                            }                            
                         }
 				        error: function () {
 				            alert('There was an error while fetching events!');

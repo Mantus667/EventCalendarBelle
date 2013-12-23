@@ -1,7 +1,7 @@
 ﻿angular.module("umbraco").controller("EventCalendar.CalendarCreateController",
         function ($scope, $routeParams, calendarResource, notificationsService, assetsService, navigationService) {
 
-            $scope.calendar = { id: 0, calendarname: '', color: '#0000FF', isGCal: false, displayOnSite: false, gCalFeedUrl: '' };
+            $scope.calendar = { id: 0, calendarname: '', color: '#0000FF', isGCal: false, displayOnSite: false, gCalFeedUrl: '', viewMode: "month" };
 
             assetsService.loadCss("/App_Plugins/EventCalendar/css/colorpicker.css");
             assetsService.loadCss("/App_Plugins/EventCalendar/css/EventCalendar.Custom.css");

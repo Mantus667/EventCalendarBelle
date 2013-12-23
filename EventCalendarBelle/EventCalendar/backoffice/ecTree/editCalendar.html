@@ -33,6 +33,12 @@
                 <input type="hidden" id="color_field" class="umb-editor umb-textstring" ng-model="calendar.color" />
                 <div id="colorSelector"><div style="background-color: {{calendar.color}}"></div></div>
             </umb-control-group>
+
+            <umb-control-group label="ViewMode" description="Set the initial view mode for this calendar">
+                <input type="radio" ng-model="calendar.viewMode" value="month">  Month <br />
+                <input type="radio" ng-model="calendar.viewMode" value="basicWeek"> Week <br />
+                <input type="radio" ng-model="calendar.viewMode" value="basicDay"> Day <br />
+            </umb-control-group>
         </div>
     </div>
 </umb-panel>

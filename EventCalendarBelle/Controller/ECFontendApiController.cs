@@ -15,13 +15,8 @@ namespace EventCalendarBelle.Controller
     [PluginController("EventCalendar")]
     public class ECApiController : UmbracoApiController
     {
-        [HttpGet]
-        public string GetTest()
-        {
-            return "Hello World";
-        }
 
-        [HttpPost]
+        [HttpGet]
         public IEnumerable<EventsOverviewModel> GetCalendarEvents(int id = 0, int start = 0, int end = 0)
         {
             var db = UmbracoContext.Application.DatabaseContext.Database;
@@ -46,14 +41,20 @@ namespace EventCalendarBelle.Controller
             return events;
         }
 
-        private List<EventsOverviewModel> GetNormalEvents(int id)
+        private List<EventsOverviewModel> GetNormalEvents(int id, int start = 0, int end = 0)
         {
             var db = UmbracoContext.Application.DatabaseContext.Database;
+
+            DateTime startDate = new System.DateTime(1970, 1, 1, 0, 0, 0, 0);
+            startDate = startDate.AddSeconds(start);
+            DateTime endDate = new System.DateTime(1970, 1, 1, 0, 0, 0, 0);
+            endDate = endDate.AddSeconds(end);
+
             //Handle normal events
             List<EventsOverviewModel> events = new List<EventsOverviewModel>();
             var calendar = db.SingleOrDefault<ECalendar>(id);
             var normal_events = db.Query<EventCalendarBelle.Models.Event>("SELECT * FROM ec_events WHERE calendarId = @0", id).ToList();
-            foreach (var ne in normal_events)
+            foreach (var ne in normal_events.Where(x => x.start >= startDate && x.end <= endDate))
             {
                 events.Add(
                     new EventsOverviewModel()

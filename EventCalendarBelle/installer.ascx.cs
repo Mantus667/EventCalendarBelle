@@ -35,20 +35,20 @@ namespace EventCalendarBelle
                         this._db.CreateTable<EventCalendarBelle.Models.ECalendar>(false);
                         this.BulletedList1.Items.Add(new ListItem("Successfully created tables."));
                     }
-                    else
-                    {
-                        try
-                        {
-                            this._db.Execute(new Sql("ALTER TABLE ec_calendars ALTER COLUMN gcalfeed nvarchar(255) NULL", null));
-                        }
-                        catch (Exception ex) { }
-                        try
-                        {
-                            this._db.Execute(new Sql("ALTER TABLE ec_calendars ADD color nvarchar(255) NULL", null));
-                        }
-                        catch (Exception ex) { }
-                        this.BulletedList1.Items.Add(new ListItem("Database already exists. Altering some fields or ignoring table"));
-                    }
+                    //else
+                    //{
+                    //    try
+                    //    {
+                    //        this._db.Execute(new Sql("ALTER TABLE ec_calendars ALTER COLUMN gcalfeed nvarchar(255) NULL", null));
+                    //    }
+                    //    catch (Exception ex) { }
+                    //    try
+                    //    {
+                    //        this._db.Execute(new Sql("ALTER TABLE ec_calendars ADD color nvarchar(255) NULL", null));
+                    //    }
+                    //    catch (Exception ex) { }
+                    //    this.BulletedList1.Items.Add(new ListItem("Database already exists. Altering some fields or ignoring table"));
+                    //}
                 }
                 catch (Exception ex)
                 {
@@ -64,15 +64,15 @@ namespace EventCalendarBelle
                         this._db.CreateTable<Event>(false);
                         this.BulletedList1.Items.Add(new ListItem("Successfully created table."));
                     }
-                    else
-                    {
-                        try
-                        {
-                            this._db.Execute(new Sql("ALTER TABLE ec_events ALTER COLUMN description ntext", null));
-                        }
-                        catch (Exception ex) { }
-                        this.BulletedList1.Items.Add(new ListItem("Database already exists. Altering some fields or ignoring table."));
-                    }
+                    //else
+                    //{
+                    //    try
+                    //    {
+                    //        this._db.Execute(new Sql("ALTER TABLE ec_events ALTER COLUMN description ntext", null));
+                    //    }
+                    //    catch (Exception ex) { }
+                    //    this.BulletedList1.Items.Add(new ListItem("Database already exists. Altering some fields or ignoring table."));
+                    //}
                 }
                 catch (Exception ex)
                 {
@@ -88,10 +88,10 @@ namespace EventCalendarBelle
                         this._db.CreateTable<RecurringEvent>(false);
                         this.BulletedList1.Items.Add(new ListItem("Successfully created table."));
                     }
-                    else
-                    {
-                        this.BulletedList1.Items.Add(new ListItem("Database already exists. No changes have to be made or no alter table script has been added"));
-                    }
+                    //else
+                    //{
+                    //    this.BulletedList1.Items.Add(new ListItem("Database already exists. No changes have to be made or no alter table script has been added"));
+                    //}
                 }
                 catch (Exception ex) { }
 
@@ -104,10 +104,10 @@ namespace EventCalendarBelle
                         this._db.CreateTable<EventLocation>(false);
                         this.BulletedList1.Items.Add(new ListItem("Successfully created table."));
                     }
-                    else
-                    {
-                        this.BulletedList1.Items.Add(new ListItem("Database already exists. No changes have to be made or no alter table script has been added"));
-                    }
+                    //else
+                    //{
+                    //    this.BulletedList1.Items.Add(new ListItem("Database already exists. No changes have to be made or no alter table script has been added"));
+                    //}
                 }
                 catch (Exception ex)
                 {
@@ -123,15 +123,15 @@ namespace EventCalendarBelle
                         this._db.CreateTable<EventDescription>(false);
                         this.BulletedList1.Items.Add(new ListItem("Successfully created table."));
                     }
-                    else
-                    {
-                        try
-                        {
-                            this._db.Execute(new Sql("ALTER TABLE ec_eventdescriptions ALTER COLUMN content ntext", null));
-                        }
-                        catch (Exception ex) { }
-                        this.BulletedList1.Items.Add(new ListItem("Database already exists. Altering some fields or ignoring table."));
-                    }
+                    //else
+                    //{
+                    //    try
+                    //    {
+                    //        this._db.Execute(new Sql("ALTER TABLE ec_eventdescriptions ALTER COLUMN content ntext", null));
+                    //    }
+                    //    catch (Exception ex) { }
+                    //    this.BulletedList1.Items.Add(new ListItem("Database already exists. Altering some fields or ignoring table."));
+                    //}
                 }
                 catch (Exception ex) { this.BulletedList1.Items.Add(new ListItem(ex.Message)); }
 

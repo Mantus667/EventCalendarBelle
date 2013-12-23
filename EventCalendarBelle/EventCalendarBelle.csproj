@@ -189,13 +189,12 @@
   <ItemGroup>
     <Compile Include="Controller\CalendarApiController.cs" />
     <Compile Include="Controller\DescriptionApiController.cs" />
-    <Compile Include="Controller\ECFontendApiController.cs" />
+    <Compile Include="Controller\ECApiController.cs" />
+    <Compile Include="Controller\ECSurfaceController.cs" />
     <Compile Include="Controller\EventApiController.cs" />
     <Compile Include="Controller\LocationApiController.cs" />
     <Compile Include="Controller\REventApiController.cs" />
-    <Compile Include="DatabaseUp.cs" />
     <Compile Include="EventCalendarApplication.cs" />
-    <Compile Include="Helper\CalendarEditorConverter.cs" />
     <Compile Include="Models\EventsOverviewModel.cs" />
     <Compile Include="Trees\ECCalendarTree.cs" />
     <Compile Include="installer.ascx.cs">
@@ -215,8 +214,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="EventCalendar\package.manifest" />
+    <None Include="EventCalendar\Views\Partials\EventDetails.cshtml" />
     <None Include="packages.config" />
-    <None Include="Views\EC_Calendar.cshtml" />
+    <None Include="Views\ECCalendar.cshtml" />
+    <None Include="Views\ECEventDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="EventCalendar\backoffice\ecTree\editEvent.html" />

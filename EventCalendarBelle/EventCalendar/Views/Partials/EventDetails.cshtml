@@ -1,0 +1,73 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<EventCalendarBelle.Models.EventDetailsModel>
+@using System.Globalization
+@{
+    var showLocation = (Model.LocationId != 0) ? true : false;
+}
+@if (showLocation)
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var myLatlng = new google.maps.LatLng(@Model.Location.lat,@Model.Location.lon);
+            var mapOptions = {
+                center: myLatlng,
+                zoom: 14,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            var map = new google.maps.Map(document.getElementById("map_canvas"),
+                mapOptions);
+            var marker = new google.maps.Marker({
+                position: myLatlng,
+                map: map,
+                title:"Your Target"
+            });
+        });
+    </script>
+}
+<section class="EventDetails">
+    <div class="container">
+        <div class="row-fluid">
+            <h1>@Model.Title</h1>
+        </div>
+        <div class="row-fluid">
+            <div class="span12" id="settings">
+                <p>Start: @Model.StartDate</p>
+                @if (Model.EndDate != null)
+                {
+                    <p>End: @Model.EndDate</p>
+                }
+            </div>
+        </div>
+        <div class="row-fluid">
+            @if (showLocation)
+            {
+                <hr />
+                <div class="span12" id="location">
+                    <div class="row-fluid">
+                        <h2>
+                            Location: @Model.Location.LocationName</h2>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span4">
+                        <fieldset>
+                            <legend>Location Adress</legend>
+                            <p>@Model.Location.Street</p>
+                            <p>@Model.Location.ZipCode @Model.Location.City</p>
+                            <p>@Model.Location.Country</p>
+                        </fieldset>
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+                        <div id="map_canvas" style="height: 300px">
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="row-fluid">
+            <hr />
+            <div class="span12" id="description">
+                @Html.Raw(Model.GetDescription(CultureInfo.CurrentCulture.ToString()))
+            </div>
+        </div>
+    </div>
+</section>

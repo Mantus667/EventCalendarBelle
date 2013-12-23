@@ -25,7 +25,7 @@ namespace EventCalendarBelle.Controller
 
             if (id != 0)
             {
-                events.AddRange(this.GetNormalEvents(id));
+                events.AddRange(this.GetNormalEvents(id, start, end));
                 events.AddRange(this.GetRecurringEvents(id, start, end));
             }
             else

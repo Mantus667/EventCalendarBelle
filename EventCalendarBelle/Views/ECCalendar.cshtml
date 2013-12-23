@@ -3,11 +3,11 @@
 @using EventCalendarBelle.Models
 @{
     Layout = "";
-    ECalendar cal = null;
+    int id = 0;
     try{
-        cal = Model.Content.GetPropertyValue<ECalendar>("calendar");
+        id = int.Parse(Model.Content.GetPropertyValue<string>("calendar"));
     }catch(Exception ex){}
-    //var calendar = EventCalendarApplication.GetCalendar(id);
+    var calendar = EventCalendarApplication.GetCalendar(id);
 }
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
@@ -21,7 +21,7 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
 
-        <link rel="stylesheet" href="@Url.Content("~/css/EventCalendar/bootstrap.css")">
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
         <style>
             body {
                 padding-top: 60px;
@@ -29,17 +29,18 @@
             }
         </style>
 		<link type="text/css" href="@Url.Content("~/css/EventCalendar/fullcalendar.css")" rel="stylesheet" />
-		<script type="text/javascript" src="@Url.Content("~/scripts/EventCalendar/jquery-1.9.1.min.js")"></script>
+		<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
 		<script type="text/javascript" src="@Url.Content("~/scripts/EventCalendar/fullcalendar.min.js")"></script>
-        @if (null != cal && cal.IsGCal)
+        @if (null != calendar && calendar.IsGCal)
         {
             <script type="text/javascript" src="@Url.Content("~/scripts/EventCalendar/gcal.js")"></script>
         }
 		<script type="text/javascript">
 		    $(document).ready(function () {
 		        $('#calendar').fullCalendar({
-                    @if(null != cal) {
-						<text>defaultView: '@cal.ViewMode',</text>
+                    @if (null != calendar)
+                    {
+						<text>defaultView: '@calendar.ViewMode',</text>
 		            }
                     header: {
                         left: 'prev,next today',
@@ -47,9 +48,9 @@
                         right: 'month,basicWeek,basicDay'
                     },
 		            events: {
-                        @if (null != cal && cal.IsGCal)
+                        @if (null != calendar && calendar.IsGCal)
                         {
-                            <text>url: '</text>@cal.GCalFeedUrl<text>',</text>
+                            <text>url: '</text>@calendar.GCalFeedUrl<text>',</text>
                         }
                         else
                         {
@@ -57,11 +58,11 @@
 		                    url: '/umbraco/EventCalendar/ECApi/GetCalendarEvents/',
 		                    type: 'GET',
                             </text>
-                            if(cal != null)
+                            if (calendar != null)
                             {
                                 <text>
 				                data: {
-				                    id: '@cal.Id'
+				                    id: '@calendar.Id'
 				                },
                                 </text>
                             }

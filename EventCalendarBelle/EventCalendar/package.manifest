@@ -1,10 +1,11 @@
 ﻿{
         propertyEditors: [{
+			guid: "5eb3ed92-d489-4112-9900-1a239fb00751",
 			/*this must be a unique alias*/ 
             alias: "EventCalendar.CalendarPicker",
             /*the name*/
             name: "Calendar Picker",
-			valueType: "JSON",
+			valueType: "INT",
             /*the html file we will load for the editor*/
             editor: {
                 view: "~/App_Plugins/EventCalendar/Editors/calendar.html"

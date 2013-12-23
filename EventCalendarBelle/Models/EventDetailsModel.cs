@@ -14,13 +14,13 @@ namespace EventCalendarBelle.Models
         public string Description { get; set; }
         public int LocationId { get; set; }        
         public EventLocation Location { get; set; }
-        public Dictionary<string, EventDescription> Descriptions { get; set; }
+        public List<EventDescription> Descriptions { get; set; }
 
         public string GetDescription(string culture)
         {
-            if (this.Descriptions.ContainsKey(culture))
+            if (this.Descriptions.Any(x => x.CultureCode == culture))
             {
-                return this.Descriptions[culture].Content;
+                return this.Descriptions.SingleOrDefault(x => x.CultureCode == culture).Content;
             }
             else
             {

@@ -1,9 +1,21 @@
-﻿<umb-panel ng-controller="EventCalendar.CalendarEditController">
+﻿<umb-panel ng-controller="EventCalendar.CalendarOverviewController">
     <umb-header>
         <h1>Nothing to do here</h1>
     </umb-header>
 
     <div class="umb-panel-body">
-        <p>Nothing to edit here</p>
+        <div class="umb-pane">
+            <p>Nothing to edit here</p>
+            <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="calendarOverview" width="100%">
+                <thead>
+                    <tr>
+                        <th width="30%">Name</th>
+                        <th width="20%">GCal</th>
+                        <th width="18%">Color</th>
+                    </tr>
+                </thead>                
+            </table>            
+        </div>
     </div>
 </umb-panel>
+<!-- converters="converters" pagination-type="explicit" -->

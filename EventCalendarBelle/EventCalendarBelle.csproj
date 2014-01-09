@@ -220,6 +220,8 @@
     <None Include="Views\ECEventDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="EventCalendar\backoffice\ecTree\calendar.overview.controller.js" />
+    <Content Include="EventCalendar\backoffice\ecTree\edit.html" />
     <Content Include="EventCalendar\backoffice\ecTree\editEvent.html" />
     <Content Include="EventCalendar\backoffice\ecTree\editREvent.html" />
     <Content Include="EventCalendar\backoffice\ecTree\event.edit.controller.js" />
@@ -227,7 +229,10 @@
     <Content Include="EventCalendar\backoffice\ecTree\revent.edit.controller.js" />
     <Content Include="EventCalendar\css\bootstrap-datetimepicker.min.css" />
     <Content Include="EventCalendar\css\bootstrap-switch.css" />
+    <Content Include="EventCalendar\css\DT_bootstrap.css" />
     <Content Include="EventCalendar\css\jquery-gmaps-latlon-picker.css" />
+    <Content Include="EventCalendar\dataTable.js" />
+    <Content Include="EventCalendar\dataTableExtensions.js" />
     <Content Include="EventCalendar\Editors\calendar.editor.controller.js" />
     <Content Include="EventCalendar\Editors\calendar.html" />
     <Content Include="EventCalendar\event.resource.js" />
@@ -235,10 +240,12 @@
     <Content Include="EventCalendar\revent.resource.js" />
     <Content Include="EventCalendar\scripts\bootstrap-datetimepicker.min.js" />
     <Content Include="EventCalendar\scripts\bootstrap-switch.min.js" />
+    <Content Include="EventCalendar\scripts\DT_bootstrap.js" />
     <Content Include="EventCalendar\scripts\jquery-gmaps-latlon-picker.js" />
+    <Content Include="EventCalendar\scripts\jquery.dataTables.js" />
     <Content Include="EventCalendar\scripts\moment.min.js" />
-    <Content Include="EventCalendar\umbraco\ecTree\calendar.create.controller.js" />
-    <Content Include="EventCalendar\umbraco\ecTree\createCalendar.html" />
+    <Content Include="EventCalendar\backoffice\ecTree\calendar.create.controller.js" />
+    <Content Include="EventCalendar\backoffice\ecTree\createCalendar.html" />
     <Content Include="EventCalendar\backoffice\ecTree\calendar.edit.controller.js" />
     <Content Include="EventCalendar\backoffice\ecTree\editCalendar.html" />
     <Content Include="EventCalendar\backoffice\ecTree\editLocation.html" />
@@ -288,18 +295,18 @@
     <Content Include="EventCalendar\images\ui-icons_ffffff_256x240.png" />
     <Content Include="EventCalendar\scripts\colorpicker.js" />
     <Content Include="EventCalendar\scripts\EventCalendar.Scripts.js" />
-    <Content Include="EventCalendar\umbraco\ecTree\calendar.delete.controller.js" />
-    <Content Include="EventCalendar\umbraco\ecTree\createEvent.html" />
-    <Content Include="EventCalendar\umbraco\ecTree\createREvent.html" />
-    <Content Include="EventCalendar\umbraco\ecTree\deleteCalendar.html" />
-    <Content Include="EventCalendar\umbraco\ecTree\deleteEvent.html" />
-    <Content Include="EventCalendar\umbraco\ecTree\event.create.controller.js" />
-    <Content Include="EventCalendar\umbraco\ecTree\event.delete.controller.js" />
-    <Content Include="EventCalendar\umbraco\ecTree\location.create.controller.js" />
-    <Content Include="EventCalendar\umbraco\ecTree\createLocation.html" />
-    <Content Include="EventCalendar\umbraco\ecTree\location.delete.controller.js" />
-    <Content Include="EventCalendar\umbraco\ecTree\deleteLocation.html" />
-    <Content Include="EventCalendar\umbraco\ecTree\revent.create.controller.js" />
+    <Content Include="EventCalendar\backoffice\ecTree\calendar.delete.controller.js" />
+    <Content Include="EventCalendar\backoffice\ecTree\createEvent.html" />
+    <Content Include="EventCalendar\backoffice\ecTree\createREvent.html" />
+    <Content Include="EventCalendar\backoffice\ecTree\deleteCalendar.html" />
+    <Content Include="EventCalendar\backoffice\ecTree\deleteEvent.html" />
+    <Content Include="EventCalendar\backoffice\ecTree\event.create.controller.js" />
+    <Content Include="EventCalendar\backoffice\ecTree\event.delete.controller.js" />
+    <Content Include="EventCalendar\backoffice\ecTree\location.create.controller.js" />
+    <Content Include="EventCalendar\backoffice\ecTree\createLocation.html" />
+    <Content Include="EventCalendar\backoffice\ecTree\location.delete.controller.js" />
+    <Content Include="EventCalendar\backoffice\ecTree\deleteLocation.html" />
+    <Content Include="EventCalendar\backoffice\ecTree\revent.create.controller.js" />
     <Content Include="installer.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </Content>

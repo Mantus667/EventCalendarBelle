@@ -1,6 +1,3 @@
 ﻿<div ng-controller="EventCalendar.CalendarEditorController">
-    <select ng-model="model.value" name="calendar_pick" id="calendar_picker" ng-options="c.id as c.calendarname for c in calendars" ng-selected="c.id == model.value" required>
-        <option value="">All calendars</option>
-    </select>
-    <p>{{model.value}}</p>
+    <select ng-model="model.value" ng-options="c.id as c.calendarname for c in calendars" required></select>
 </div>

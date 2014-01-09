@@ -5,35 +5,38 @@
             alias: "EventCalendar.CalendarPicker",
             /*the name*/
             name: "Calendar Picker",
-			valueType: "INT",
+			valueType: "JSON",
             /*the html file we will load for the editor*/
             editor: {
                 view: "~/App_Plugins/EventCalendar/Editors/calendar.html"
-            }
+            },
+			prevalues: {}
         }],
-
+		parameterEditors:[],
         javascript: [
 
 			'~/App_Plugins/EventCalendar/Editors/calendar.editor.controller.js',
 
             '~/App_Plugins/EventCalendar/backoffice/ectree/calendar.edit.controller.js',
-			'~/App_Plugins/EventCalendar/umbraco/ectree/calendar.create.controller.js',
-			'~/App_Plugins/EventCalendar/umbraco/ectree/calendar.delete.controller.js',
+			'~/App_Plugins/EventCalendar/backoffice/ectree/calendar.create.controller.js',
+			'~/App_Plugins/EventCalendar/backoffice/ectree/calendar.delete.controller.js',
+			'~/App_Plugins/EventCalendar/backoffice/ectree/calendar.overview.controller.js',
 					
 			'~/App_Plugins/EventCalendar/backoffice/ectree/location.edit.controller.js',
-			'~/App_Plugins/EventCalendar/umbraco/ectree/location.create.controller.js',
-			'~/App_Plugins/EventCalendar/umbraco/ectree/location.delete.controller.js',
+			'~/App_Plugins/EventCalendar/backoffice/ectree/location.create.controller.js',
+			'~/App_Plugins/EventCalendar/backoffice/ectree/location.delete.controller.js',
 			
 			'~/App_Plugins/EventCalendar/backoffice/ectree/event.edit.controller.js',
-			'~/App_Plugins/EventCalendar/umbraco/ectree/event.create.controller.js',
-			'~/App_Plugins/EventCalendar/umbraco/ectree/event.delete.controller.js',
+			'~/App_Plugins/EventCalendar/backoffice/ectree/event.create.controller.js',
+			'~/App_Plugins/EventCalendar/backoffice/ectree/event.delete.controller.js',
 
 			'~/App_Plugins/EventCalendar/backoffice/ectree/revent.edit.controller.js',
-			'~/App_Plugins/EventCalendar/umbraco/ectree/revent.create.controller.js',
+			'~/App_Plugins/EventCalendar/backoffice/ectree/revent.create.controller.js',
 
             '~/App_Plugins/EventCalendar/calendar.resource.js',
 			'~/App_Plugins/EventCalendar/location.resource.js',
 			'~/App_Plugins/EventCalendar/event.resource.js',
 			'~/App_Plugins/EventCalendar/revent.resource.js'
-        ]
+        ],
+		css: []
 }

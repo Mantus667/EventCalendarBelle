@@ -26,13 +26,6 @@
                                     { "mData": "color", "sTitle": "3. Color", "fnCreatedCell": color },
                                     { "mData": "id", "fnCreatedCell": buttons}
                                 ]
-                                //,
-                                //"aoColumnDefs": [{
-                                //    "aTargets": [3],
-                                //    "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
-                                //        $(nTd).html('<a class="btn btn-success" href="#/eventCalendar/ecTree/editCalendar/' + sData + '"><span class="icon icon-pencil"></span>Edit</a>');
-                                //    }
-                                //}]
                             });
 
                         }, function (response) {

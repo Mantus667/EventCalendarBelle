@@ -62,8 +62,8 @@ namespace EventCalendarBelle.Trees
             if (id == global::Umbraco.Core.Constants.System.Root.ToInvariantString())
             {
                 var tree = new TreeNodeCollection();
-                tree.Add(CreateTreeNode("calendarTree", id, queryStrings, "Calendar", "icon-calendar-alt", true));
-                tree.Add(CreateTreeNode("locationTree", id, queryStrings, "Locations", "icon-globe-alt", true));
+                tree.Add(CreateTreeNode("calendarTree", id, queryStrings, "Calendar", "icon-calendar-alt", true, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/overviewCalendar/all"));
+                tree.Add(CreateTreeNode("locationTree", id, queryStrings, "Locations", "icon-globe-alt", true, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/overviewLocation/all"));
                 return tree;
             }
 

@@ -6,6 +6,8 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using Umbraco.Core.Persistence;
 using EventCalendarBelle.Models;
+using System.Web.Hosting;
+using System.Xml;
 
 namespace EventCalendarBelle
 {
@@ -17,7 +19,108 @@ namespace EventCalendarBelle
         {
             this._db = ApplicationContext.DatabaseContext.Database;
 
+            //Create section and language code
+            this.CreateSection();
+            this.addLanguagekey();
+
+            //Create database tables
             this.CreateTable();
+        }
+
+        private void CreateSection()
+        {
+            this.BulletedList1.Items.Add(new ListItem("Creating the section."));
+
+            var sectionService = ApplicationContext.Services.SectionService;
+
+            //Try & find a section with the alias of "nuget"
+            var ecSection = sectionService.GetSections().SingleOrDefault(x => x.Alias == "eventCalendar");
+
+            //If we can't find the section - doesn't exist
+            if (ecSection == null)
+            {
+                //So let's create it the section
+                sectionService.MakeNew("EventCalendar", "eventCalendar", "icon-calendar-alt");
+            }
+            this.BulletedList1.Items.Add(new ListItem("Done creating the section."));
+        }
+
+        private void addLanguagekey()
+        {
+            this.BulletedList1.Items.Add(new ListItem("Adding language keys."));
+
+            bool saveFile = false;
+
+            //Open up language file
+            //umbraco/config/lang/en.xml
+            var langPath = "~/umbraco/config/lang/en.xml";
+
+            //Path to the file resolved
+            var langFilePath = HostingEnvironment.MapPath(langPath);
+
+            //Load settings.config XML file
+            XmlDocument langXml = new XmlDocument();
+            langXml.Load(langFilePath);
+
+            // Section Node
+            // <area alias="sections">
+            XmlNode sectionNode = langXml.SelectSingleNode("//area [@alias='sections']");
+
+            if (sectionNode != null)
+            {
+                XmlNode findSectionKey = sectionNode.SelectSingleNode("./key [@alias='eventCalendar']");
+
+                if (findSectionKey == null)
+                {
+                    //Let's add the key
+                    var attrToAdd = langXml.CreateAttribute("alias");
+                    attrToAdd.Value = "eventCalendar";
+
+                    var keyToAdd = langXml.CreateElement("key");
+                    keyToAdd.InnerText = "EventCalendar";
+                    keyToAdd.Attributes.Append(attrToAdd);
+
+                    sectionNode.AppendChild(keyToAdd);
+
+                    //Save the file flag to true
+                    saveFile = true;
+                }
+            }
+
+            // Section Node
+            // <area alias="treeHeaders">
+            XmlNode treeNode = langXml.SelectSingleNode("//area [@alias='treeHeaders']");
+
+            if (treeNode != null)
+            {
+                XmlNode findTreeKey = treeNode.SelectSingleNode("./key [@alias='eventCalendar']");
+
+                if (findTreeKey == null)
+                {
+                    //Let's add the key
+                    var attrToAdd = langXml.CreateAttribute("alias");
+                    attrToAdd.Value = "eventCalendar";
+
+                    var keyToAdd = langXml.CreateElement("key");
+                    keyToAdd.InnerText = "EventCalendar";
+                    keyToAdd.Attributes.Append(attrToAdd);
+
+                    treeNode.AppendChild(keyToAdd);
+
+                    //Save the file flag to true
+                    saveFile = true;
+                }
+            }
+
+
+            //If saveFile flag is true then save the file
+            if (saveFile)
+            {
+                //Save the XML file
+                langXml.Save(langFilePath);
+            }
+
+            this.BulletedList1.Items.Add(new ListItem("Done adding language keys."));
         }
 
         private void CreateTable()
@@ -35,20 +138,6 @@ namespace EventCalendarBelle
                         this._db.CreateTable<EventCalendarBelle.Models.ECalendar>(false);
                         this.BulletedList1.Items.Add(new ListItem("Successfully created tables."));
                     }
-                    //else
-                    //{
-                    //    try
-                    //    {
-                    //        this._db.Execute(new Sql("ALTER TABLE ec_calendars ALTER COLUMN gcalfeed nvarchar(255) NULL", null));
-                    //    }
-                    //    catch (Exception ex) { }
-                    //    try
-                    //    {
-                    //        this._db.Execute(new Sql("ALTER TABLE ec_calendars ADD color nvarchar(255) NULL", null));
-                    //    }
-                    //    catch (Exception ex) { }
-                    //    this.BulletedList1.Items.Add(new ListItem("Database already exists. Altering some fields or ignoring table"));
-                    //}
                 }
                 catch (Exception ex)
                 {
@@ -64,15 +153,6 @@ namespace EventCalendarBelle
                         this._db.CreateTable<Event>(false);
                         this.BulletedList1.Items.Add(new ListItem("Successfully created table."));
                     }
-                    //else
-                    //{
-                    //    try
-                    //    {
-                    //        this._db.Execute(new Sql("ALTER TABLE ec_events ALTER COLUMN description ntext", null));
-                    //    }
-                    //    catch (Exception ex) { }
-                    //    this.BulletedList1.Items.Add(new ListItem("Database already exists. Altering some fields or ignoring table."));
-                    //}
                 }
                 catch (Exception ex)
                 {
@@ -88,10 +168,6 @@ namespace EventCalendarBelle
                         this._db.CreateTable<RecurringEvent>(false);
                         this.BulletedList1.Items.Add(new ListItem("Successfully created table."));
                     }
-                    //else
-                    //{
-                    //    this.BulletedList1.Items.Add(new ListItem("Database already exists. No changes have to be made or no alter table script has been added"));
-                    //}
                 }
                 catch (Exception ex) { }
 
@@ -104,10 +180,6 @@ namespace EventCalendarBelle
                         this._db.CreateTable<EventLocation>(false);
                         this.BulletedList1.Items.Add(new ListItem("Successfully created table."));
                     }
-                    //else
-                    //{
-                    //    this.BulletedList1.Items.Add(new ListItem("Database already exists. No changes have to be made or no alter table script has been added"));
-                    //}
                 }
                 catch (Exception ex)
                 {
@@ -123,15 +195,6 @@ namespace EventCalendarBelle
                         this._db.CreateTable<EventDescription>(false);
                         this.BulletedList1.Items.Add(new ListItem("Successfully created table."));
                     }
-                    //else
-                    //{
-                    //    try
-                    //    {
-                    //        this._db.Execute(new Sql("ALTER TABLE ec_eventdescriptions ALTER COLUMN content ntext", null));
-                    //    }
-                    //    catch (Exception ex) { }
-                    //    this.BulletedList1.Items.Add(new ListItem("Database already exists. Altering some fields or ignoring table."));
-                    //}
                 }
                 catch (Exception ex) { this.BulletedList1.Items.Add(new ListItem(ex.Message)); }
 

@@ -25,6 +25,7 @@
 			'~/App_Plugins/EventCalendar/backoffice/ectree/location.edit.controller.js',
 			'~/App_Plugins/EventCalendar/backoffice/ectree/location.create.controller.js',
 			'~/App_Plugins/EventCalendar/backoffice/ectree/location.delete.controller.js',
+			'~/App_Plugins/EventCalendar/backoffice/ectree/location.overview.controller.js',
 			
 			'~/App_Plugins/EventCalendar/backoffice/ectree/event.edit.controller.js',
 			'~/App_Plugins/EventCalendar/backoffice/ectree/event.create.controller.js',

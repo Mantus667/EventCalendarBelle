@@ -35,12 +35,13 @@
                 });
 
             $scope.save = function (calendar) {
-                calendarResource.save(calendar).then(function (response) {
-                    $scope.calendar = response.data;
+                console.log(calendar);
+                //calendarResource.save(calendar).then(function (response) {
+                //    $scope.calendar = response.data;
 
-                    notificationsService.success("Success", calendar.calendarname + " has been saved");
-                }, function (response) {
-                    notificationsService.error("Error", calendar.calendarname + " could not be saved");
-                });
+                //    notificationsService.success("Success", calendar.calendarname + " has been saved");
+                //}, function (response) {
+                //    notificationsService.error("Error", calendar.calendarname + " could not be saved");
+                //});
             };
         });

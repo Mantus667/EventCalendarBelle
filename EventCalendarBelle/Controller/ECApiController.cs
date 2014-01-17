@@ -33,7 +33,7 @@ namespace EventCalendarBelle.Controller
                 var calendar = db.Query<ECalendar>("SELECT * FROM ec_calendars").ToList();
                 foreach (var cal in calendar)
                 {
-                    events.AddRange(this.GetNormalEvents(cal.Id));
+                    events.AddRange(this.GetNormalEvents(cal.Id, start, end));
                     events.AddRange(this.GetRecurringEvents(cal.Id, start, end));
                 }
             }

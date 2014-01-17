@@ -1,14 +1,14 @@
 ﻿angular.module("umbraco").controller("EventCalendar.EventEditController",
-        function ($scope, $routeParams, eventResource, locationResource, notificationsService, assetsService, tinyMceService, $timeout) {
+        function ($scope, $routeParams, eventResource, locationResource, notificationsService, assetsService, tinyMceService, $timeout, dialogService, angularHelper) {
 
             var validElements = "";
             var extendedValidElements = "";
             var invalidElements = "";
             var plugins = "";
             var editorConfig = {
-                toolbar: ["code", "undo", "redo", "cut", "styleselect", "bold", "italic", "alignleft", "aligncenter", "alignright", "bullist", "numlist", "link", "umbmediapicker", "umbmacro", "table", "umbembeddialog"],
+                toolbar: ["code", "undo", "redo", "cut", "styleselect", "bold", "italic", "alignleft", "aligncenter", "alignright", "bullist", "numlist", "link", "umbmediapicker", "table", "umbembeddialog"],
                 stylesheets: [],
-                dimensions: { height: 400, width: 250 }
+                dimensions: { height: 400, width: '100%' }
             };
             var toolbar = "";
             var stylesheets = [];
@@ -64,6 +64,17 @@
                         $('#datetimepicker1 input').val(moment($scope.event.starttime).format('MM/DD/YYYY HH:mm:ss'));
                         $('#datetimepicker2 input').val(moment($scope.event.endtime).format('MM/DD/YYYY HH:mm:ss'));
                     });
+
+                assetsService
+                .loadJs("/App_Plugins/EventCalendar/scripts/bootstrap-switch.min.js")
+                .then(function () {
+                    if ($scope.event) {
+                        $('#allday').bootstrapSwitch('setState', $scope.event.allday, true);
+                    }
+                    $('#allday').on('switch-change', function (e, data) {
+                        $scope.event.allday = data.value;
+                    });
+                });
             }, function (response) {
                 notificationsService.error("Error", $scope.currentNode.name + " could not be loaded");
             });
@@ -99,20 +110,13 @@
                         var d = moment(e.date).format('MM/DD/YYYY HH:mm:ss');
                         $scope.event.endtime = d;
                     });
-                });
-
-            assetsService
-                .loadJs("/App_Plugins/EventCalendar/scripts/bootstrap-switch.min.js")
-                .then(function () {
-                    if($scope.event) {
-                        $('#allday').bootstrapSwitch('setState', $scope.event.allday, true);
-                    }
-                    $('#allday').on('switch-change', function (e, data) {
-                        $scope.event.allday = data.value;
-                    });
-                });
+                });            
 
             $scope.save = function (event) {
+                angular.forEach($scope.event.descriptions, function (description, i) {
+                    description.content = tinyMceEditor[i].getContent();
+                });
+                console.log(event);
                 eventResource.save(event).then(function (response) {
                     $scope.event = response.data;
 
@@ -185,20 +189,4 @@
                     });
                 }, 200);
             }
-
-            //listen for formSubmitting event (the result is callback used to remove the event subscription)
-            var unsubscribe = $scope.$on("formSubmitting", function () {
-
-                //TODO: Here we should parse out the macro rendered content so we can save on a lot of bytes in data xfer
-                // we do parse it out on the server side but would be nice to do that on the client side before as well.
-                $scope.model.value = tinyMceEditor.getContent();
-            });
-
-            //when the element is disposed we need to unsubscribe!
-            // NOTE: this is very important otherwise if this is part of a modal, the listener still exists because the dom 
-            // element might still be there even after the modal has been hidden.
-            $scope.$on('$destroy', function () {
-                unsubscribe();
-            });
-
         });

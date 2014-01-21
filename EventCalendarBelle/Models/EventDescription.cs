@@ -51,7 +51,7 @@ namespace EventCalendarBelle.Models
         [NullSetting(NullSetting = NullSettings.Null)]
         [SpecialDbType(SpecialDbTypes.NTEXT)]
         [AllowHtml]
-        [DataMember(Name = "content")]
+        [DataMember(Name = "value")]
         public string Content { get; set; }
     }
 }

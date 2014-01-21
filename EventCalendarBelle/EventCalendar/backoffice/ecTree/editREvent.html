@@ -51,9 +51,9 @@
         </umb-tab>
         <umb-tab id="tab{{$index}}" rel="{{$index}}" ng-repeat="description in event.descriptions">
             <div class="umb-pane">
-                <umb-control-group label="Description {{description.culture}}" description="The description of your event.">
-                    <textarea class="umb-editor" ng-model="description.content" />
-                </umb-control-group>
+                <umb-property property="description" >
+                    <umb-editor model="description"></umb-editor>
+                </umb-property>
             </div>
         </umb-tab>
     </umb-tab-view>

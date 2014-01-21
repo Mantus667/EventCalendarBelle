@@ -1,44 +1,17 @@
 ﻿angular.module("umbraco").controller("EventCalendar.EventEditController",
-        function ($scope, $routeParams, eventResource, locationResource, notificationsService, assetsService, tinyMceService, $timeout, dialogService, angularHelper) {
+        function ($scope, $routeParams, eventResource, locationResource, notificationsService, assetsService, tinyMceService, $timeout, dialogService, angularHelper) {           
 
-            var validElements = "";
-            var extendedValidElements = "";
-            var invalidElements = "";
-            var plugins = "";
-            var editorConfig = {
-                toolbar: ["code", "undo", "redo", "cut", "styleselect", "bold", "italic", "alignleft", "aligncenter", "alignright", "bullist", "numlist", "link", "umbmediapicker", "table", "umbembeddialog"],
-                stylesheets: [],
-                dimensions: { height: 400, width: '100%' }
-            };
-            var toolbar = "";
-            var stylesheets = [];
-            var styleFormats = [];
+            //$scope.model = {
+            //    alias: 'myRichtexteditor',
+            //    config: {
+            //        editor: {
+            //            toolbar: ["code", "undo", "redo", "cut", "styleselect", "bold", "italic", "alignleft", "aligncenter", "alignright", "bullist", "numlist", "link", "umbmediapicker", "umbmacro", "table", "umbembeddialog"],
+            //            stylesheets: [],
+            //            dimensions: { height: 400, width: '100%' }
+            //        }
 
-            //stores a reference to the editor
-            var tinyMceEditor = [];
-
-            tinyMceService.configuration().then(function(tinyMceConfig){
-                //config value from general tinymce.config file
-                validElements = tinyMceConfig.validElements;
-
-                //These are absolutely required in order for the macros to render inline
-                //we put these as extended elements because they get merged on top of the normal allowed elements by tiny mce
-                extendedValidElements = "@[id|class|style],-div[id|dir|class|align|style],ins[datetime|cite],-ul[class|style],-li[class|style]";
-
-                invalidElements = tinyMceConfig.inValidElements;
-                plugins = _.map(tinyMceConfig.plugins, function(plugin){ 
-                    if(plugin.useOnFrontend){
-                        return plugin.name;   
-                    }
-                }).join(" ");                
-
-                if(!editorConfig || angular.isString(editorConfig)){
-                    editorConfig = tinyMceService.defaultPrevalues();
-                }
-
-                //config value on the data type
-                toolbar = editorConfig.toolbar.join(" | ");                
-            });
+            //    }
+            //};
 
             //get a calendar id -> service
             eventResource.getById($routeParams.id.replace("e-","")).then(function (response) {
@@ -50,11 +23,19 @@
                     this.push({ id: key, label: value.culture });
                 }, $scope.tabs);
 
-                //queue file loading
-                assetsService.loadJs("lib/tinymce/tinymce.min.js").then(function () {
-                    angular.forEach($scope.event.descriptions, function (description) {
-                        loadTinyMce(description.culture);
-                    });
+                //Update descriptions with data for rte
+                angular.forEach($scope.event.descriptions, function (description) {
+                    description.label = '';
+                    description.description = '';
+                    description.view = 'rte';
+                    description.hideLabel = true;
+                    description.config = {
+                        editor: {
+                            toolbar: ["code", "undo", "redo", "cut", "styleselect", "bold", "italic", "alignleft", "aligncenter", "alignright", "bullist", "numlist", "link", "umbmediapicker", "umbmacro", "table", "umbembeddialog"],
+                            stylesheets: [],
+                            dimensions: { height: 400, width: '100%' }
+                        }
+                    };
                 });
 
                 //Load js library add set the date values for starttime/endtime
@@ -113,80 +94,13 @@
                 });            
 
             $scope.save = function (event) {
-                angular.forEach($scope.event.descriptions, function (description, i) {
-                    description.content = tinyMceEditor[i].getContent();
-                });
                 console.log(event);
                 eventResource.save(event).then(function (response) {
-                    $scope.event = response.data;
+                    //$scope.event = response.data;
 
                     notificationsService.success("Success", event.title + " has been saved");
                 }, function (response) {
                     notificationsService.error("Error", event.title + " could not be saved");
                 });
             };
-
-            /** Loads in the editor */
-            function loadTinyMce(alias) {
-
-                //we need to add a timeout here, to force a redraw so TinyMCE can find
-                //the elements needed
-                $timeout(function () {
-                    tinymce.DOM.events.domLoaded = true;
-                    tinymce.init({
-                        mode: "exact",
-                        elements: alias + "_rte",
-                        skin: "umbraco",
-                        plugins: plugins,
-                        valid_elements: validElements,
-                        invalid_elements: invalidElements,
-                        extended_valid_elements: extendedValidElements,
-                        menubar: false,
-                        statusbar: false,
-                        height: editorConfig.dimensions.height,
-                        width: editorConfig.dimensions.width,
-                        toolbar: toolbar,
-                        content_css: stylesheets.join(','),
-                        relative_urls: false,
-                        style_formats: styleFormats,
-                        setup: function (editor) {
-
-                            //set the reference
-                            tinyMceEditor.push(editor);
-
-                            //We need to listen on multiple things here because of the nature of tinymce, it doesn't 
-                            //fire events when you think!
-                            //The change event doesn't fire when content changes, only when cursor points are changed and undo points
-                            //are created. the blur event doesn't fire if you insert content into the editor with a button and then 
-                            //press save. 
-                            //We have a couple of options, one is to do a set timeout and check for isDirty on the editor, or we can 
-                            //listen to both change and blur and also on our own 'saving' event. I think this will be best because a 
-                            //timer might end up using unwanted cpu and we'd still have to listen to our saving event in case they clicked
-                            //save before the timeout elapsed.
-                            editor.on('change', function (e) {
-                                angularHelper.safeApply($scope, function () {
-                                    $scope.model.value = editor.getContent();
-                                });
-                            });
-                            editor.on('blur', function (e) {
-                                angularHelper.safeApply($scope, function () {
-                                    $scope.model.value = editor.getContent();
-                                });
-                            });
-
-                            //Create the insert media plugin
-                            tinyMceService.createMediaPicker(editor, $scope);
-
-                            //Create the embedded plugin
-                            tinyMceService.createInsertEmbeddedMedia(editor, $scope);
-
-                            //Create the insert link plugin
-                            tinyMceService.createLinkPicker(editor, $scope);
-
-                            //Create the insert macro plugin
-                            tinyMceService.createInsertMacro(editor, $scope);
-                        }
-                    });
-                }, 200);
-            }
         });

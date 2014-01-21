@@ -45,11 +45,11 @@ namespace EventCalendarBelle.Models
         [DataMember(Name = "allday")]
         public bool allDay { get; set; }
 
-        [Column("description")]
-        [SpecialDbType(SpecialDbTypes.NTEXT)]
-        [NullSetting(NullSetting = NullSettings.Null)]
-        [DataMember(Name = "description")]
-        public string description { get; set; }
+        //[Column("description")]
+        //[SpecialDbType(SpecialDbTypes.NTEXT)]
+        //[NullSetting(NullSetting = NullSettings.Null)]
+        //[DataMember(Name = "description")]
+        //public string description { get; set; }
 
         [Ignore]
         [DataMember(Name = "descriptions")]

@@ -260,6 +260,9 @@
     <Content Include="EventCalendar\Editors\calendar.editor.controller.js" />
     <Content Include="EventCalendar\Editors\calendar.html" />
     <Content Include="EventCalendar\event.resource.js" />
+    <Content Include="EventCalendar\images\sort_asc.png" />
+    <Content Include="EventCalendar\images\sort_both.png" />
+    <Content Include="EventCalendar\images\sort_desc.png" />
     <Content Include="EventCalendar\location.resource.js" />
     <Content Include="EventCalendar\revent.resource.js" />
     <Content Include="EventCalendar\scripts\bootstrap-datetimepicker.min.js" />

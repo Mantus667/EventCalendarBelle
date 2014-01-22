@@ -2,19 +2,19 @@
         .factory("eventResource", function ($http) {
             return {
                 getById: function (id) {
-                    return $http.get("EventCalendar/EventApi/GetById?id=" + id);
+                    return $http.get("backoffice/EventCalendar/EventApi/GetById?id=" + id);
                 },
 
                 getall: function () {
-                    return $http.get("EventCalendar/EventApi/GetAll");
+                    return $http.get("backoffice/EventCalendar/EventApi/GetAll");
                 },
 
                 save: function (calendar) {
-                    return $http.post("EventCalendar/EventApi/PostSave", angular.toJson(calendar));
+                    return $http.post("backoffice/EventCalendar/EventApi/PostSave", angular.toJson(calendar));
                 },
 
                 deleteById: function (id) {
-                    return $http.delete("EventCalendar/EventApi/DeleteById?id=" + id);
+                    return $http.delete("backoffice/EventCalendar/EventApi/DeleteById?id=" + id);
                 }
             };
         });

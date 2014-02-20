@@ -52,6 +52,10 @@
                     <select ng-model="event.locationId" name="locSelect" ng-options="l.id as l.name for l in locations" required ng-selected="event.locationId == l.id"></select>
                     <span ng-show="form.locSelect.$dirty && frmRegister.locSelect.$error.required">Location is required</span>
                 </umb-control-group>
+
+                <umb-property property="tags_test" id="tags">
+                    <umb-editor model="tags_test"></umb-editor>
+                </umb-property>
                     
                 </div>
         </umb-tab>

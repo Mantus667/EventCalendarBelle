@@ -2,20 +2,20 @@
         .factory("locationResource", function ($http) {
             return {
                 getById: function (id) {
-                    return $http.get("backoffice/EventCalendar/LocationApi/GetById?id=" + id);
+                    return $http.get(Umbraco.Sys.ServerVariables.eventCalendar.locationBaseUrl + "GetById?id=" + id);
                 },
 
                 getall: function () {
-                    return $http.get("backoffice/EventCalendar/LocationApi/GetAll");
+                    return $http.get(Umbraco.Sys.ServerVariables.eventCalendar.locationBaseUrl + "GetAll");
                 },
 
                 save: function (location) {
                     //console.log(angular.toJson(calendar));
-                    return $http.post("backoffice/EventCalendar/LocationApi/PostSave", angular.toJson(location));
+                    return $http.post(Umbraco.Sys.ServerVariables.eventCalendar.locationBaseUrl + "PostSave", angular.toJson(location));
                 },
 
                 deleteById: function (id) {
-                    return $http.delete("backoffice/EventCalendar/LocationApi/DeleteById?id=" + id);
+                    return $http.delete(Umbraco.Sys.ServerVariables.eventCalendar.locationBaseUrl + "DeleteById?id=" + id);
                 }
             };
         });

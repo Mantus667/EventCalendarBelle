@@ -2,31 +2,31 @@
         .factory("reventResource", function ($http) {
             return {
                 getById: function (id) {
-                    return $http.get("backoffice/EventCalendar/REventApi/GetById?id=" + id);
+                    return $http.get(Umbraco.Sys.ServerVariables.eventCalendar.reventBaseUrl + "GetById?id=" + id);
                 },
 
                 getall: function () {
-                    return $http.get("backoffice/EventCalendar/REventApi/GetAll");
+                    return $http.get(Umbraco.Sys.ServerVariables.eventCalendar.reventBaseUrl + "GetAll");
                 },
 
                 save: function (event) {
-                    return $http.post("backoffice/EventCalendar/REventApi/PostSave", angular.toJson(event));
+                    return $http.post(Umbraco.Sys.ServerVariables.eventCalendar.reventBaseUrl + "PostSave", angular.toJson(event));
                 },
 
                 deleteById: function (id) {
-                    return $http.delete("backoffice/EventCalendar/REventApi/DeleteById?id=" + id);
+                    return $http.delete(Umbraco.Sys.ServerVariables.eventCalendar.reventBaseUrl + "DeleteById?id=" + id);
                 },
 
                 getDayOfWeekValues: function () {
-                    return $http.get("backoffice/EventCalendar/REventApi/GetDayOfWeekValues");
+                    return $http.get(Umbraco.Sys.ServerVariables.eventCalendar.reventBaseUrl + "GetDayOfWeekValues");
                 },
 
                 getFrequencyTypes: function () {
-                    return $http.get("backoffice/EventCalendar/REventApi/GetFrequencyTypes");
+                    return $http.get(Umbraco.Sys.ServerVariables.eventCalendar.reventBaseUrl + "GetFrequencyTypes");
                 },
 
                 getMonthlyIntervalValues: function () {
-                    return $http.get("backoffice/EventCalendar/REventApi/GetMonthlyIntervalValues");
+                    return $http.get(Umbraco.Sys.ServerVariables.eventCalendar.reventBaseUrl + "GetMonthlyIntervalValues");
                 }
             };
         });

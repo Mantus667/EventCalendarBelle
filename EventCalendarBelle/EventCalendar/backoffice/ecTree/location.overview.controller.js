@@ -17,7 +17,7 @@
                             angular.forEach(response.data, function (location) {
                                 dataSource.push({ id: location.id, name: location.name, country: location.country, city: location.city });
                             });
-                            console.log(dataSource);
+
                             $('#locationOverview').dataTable({
                                 "aaData": dataSource,
                                 "aoColumns": [

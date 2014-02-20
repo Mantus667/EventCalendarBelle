@@ -2,19 +2,19 @@
         .factory("eventResource", function ($http) {
             return {
                 getById: function (id) {
-                    return $http.get("backoffice/EventCalendar/EventApi/GetById?id=" + id);
+                    return $http.get(Umbraco.Sys.ServerVariables.eventCalendar.eventBaseUrl + "GetById?id=" + id);
                 },
 
                 getall: function () {
-                    return $http.get("backoffice/EventCalendar/EventApi/GetAll");
+                    return $http.get(Umbraco.Sys.ServerVariables.eventCalendar.eventBaseUrl + "GetAll");
                 },
 
                 save: function (calendar) {
-                    return $http.post("backoffice/EventCalendar/EventApi/PostSave", angular.toJson(calendar));
+                    return $http.post(Umbraco.Sys.ServerVariables.eventCalendar.eventBaseUrl + "PostSave", angular.toJson(calendar));
                 },
 
                 deleteById: function (id) {
-                    return $http.delete("backoffice/EventCalendar/EventApi/DeleteById?id=" + id);
+                    return $http.delete(Umbraco.Sys.ServerVariables.eventCalendar.eventBaseUrl + "DeleteById?id=" + id);
                 }
             };
         });

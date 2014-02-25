@@ -8,23 +8,60 @@ using Umbraco.Core.Persistence;
 using EventCalendarBelle.Models;
 using System.Web.Hosting;
 using System.Xml;
+using System.Web.Configuration;
+using Umbraco.Core.Persistence.Migrations;
+using Umbraco.Core.Logging;
+using System.Configuration;
 
 namespace EventCalendarBelle
 {
     public partial class installer : Umbraco.Web.UmbracoUserControl
     {
         private UmbracoDatabase _db = null;
+        protected Version newVersion = new Version("2.0.1");
+        private Version oldVersion = new Version("2.0.0");
 
         protected void Page_Load(object sender, EventArgs e)
         {
             this._db = ApplicationContext.DatabaseContext.Database;
 
+            //Get the current version from appsettings if its there
+            if (WebConfigurationManager.AppSettings.AllKeys.Contains("EventCalendarVersion"))
+            {
+                oldVersion = new Version(WebConfigurationManager.AppSettings["EventCalendarVersion"]);
+                if (newVersion != oldVersion)
+                {
+                    Configuration config = WebConfigurationManager.OpenWebConfiguration(HttpContext.Current.Request.ApplicationPath);
+                    config.AppSettings.Settings.Add("EventCalendarVersion", newVersion.ToString());
+                    config.Save();
+                }
+            }
+            else
+            {
+                Configuration config = WebConfigurationManager.OpenWebConfiguration(HttpContext.Current.Request.ApplicationPath);
+                config.AppSettings.Settings.Add("EventCalendarVersion", newVersion.ToString());
+                config.Save();
+            }
+
             //Create section and language code
             this.CreateSection();
             this.addLanguagekey();
+            this.AddSectionDashboard();
 
             //Create database tables
             this.CreateTable();
+
+            this.RunMigrations();
+        }
+
+        private void RunMigrations()
+        {
+            try
+            {
+                var runner = new MigrationRunner(this.oldVersion, this.newVersion, "UpdateEventCalendarTables");
+                var upgraded = runner.Execute(this._db, true);
+            }
+            catch (Exception ex) { LogHelper.Error<installer>("Failed to do the migration", ex); }
         }
 
         private void CreateSection()
@@ -41,8 +78,8 @@ namespace EventCalendarBelle
             {
                 //So let's create it the section
                 sectionService.MakeNew("EventCalendar", "eventCalendar", "icon-calendar-alt");
-            }
-            this.BulletedList1.Items.Add(new ListItem("Done creating the section."));
+                this.BulletedList1.Items.Add(new ListItem("Done creating the section."));
+            }            
         }
 
         private void addLanguagekey()
@@ -203,6 +240,68 @@ namespace EventCalendarBelle
             else
             {
                 this.BulletedList1.Items.Add(new ListItem("Couldn't create necessary tables."));
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void AddSectionDashboard()
+        {
+            bool saveFile = false;
+
+            //Open up language file
+            var dashboardPath = "~/config/dashboard.config";
+
+            //Path to the file resolved
+            var dashboardFilePath = HostingEnvironment.MapPath(dashboardPath);
+
+            //Load settings.config XML file
+            XmlDocument dashboardXml = new XmlDocument();
+            dashboardXml.Load(dashboardFilePath);
+
+            // Section Node
+            XmlNode findSection = dashboardXml.SelectSingleNode("//section [@alias='EventCalendarDashboardSection']");
+
+            //Couldn't find it
+            if (findSection == null)
+            {
+                //Let's add the xml
+                var xmlToAdd = "<section alias='EventCalendarDashboardSection'>" +
+                                    "<areas>" +
+                                        "<area>eventCalendar</area>" +
+                                    "</areas>" +
+                                    "<tab caption='EventCalendar'>" +
+                                        "<control addPanel='true' panelCaption=''>/App_Plugins/EventCalendar/backoffice/ecTree/dashboard.html</control>" +
+                                    "</tab>" +
+                               "</section>";
+
+                //Get the main root <dashboard> node
+                XmlNode dashboardNode = dashboardXml.SelectSingleNode("//dashBoard");
+
+                if (dashboardNode != null)
+                {
+                    //Load in the XML string above
+                    XmlDocument xmlNodeToAdd = new XmlDocument();
+                    xmlNodeToAdd.LoadXml(xmlToAdd);
+
+                    //Append the xml above to the dashboard node
+                    try
+                    {
+                        dashboardNode.AppendChild(xmlNodeToAdd);
+                    }
+                    catch (Exception ex) { LogHelper.Error<installer>("Couldn't add dashboard section", ex); } 
+
+                    //Save the file flag to true
+                    saveFile = true;
+                }
+            }
+
+            //If saveFile flag is true then save the file
+            if (saveFile)
+            {
+                //Save the XML file
+                dashboardXml.Save(dashboardFilePath);
             }
         }
     }

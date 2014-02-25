@@ -55,6 +55,10 @@ namespace EventCalendarBelle.Models
         [DataMember(Name = "monthly")]
         public int monthly_interval { get; set; }
 
+        [Column("categories")]
+        [DataMember(Name = "categories")]
+        public string categories { get; set; }
+
         [Ignore]
         [DataMember(Name = "descriptions")]
         public List<EventDescription> descriptions { get; set; }

@@ -18,6 +18,7 @@ namespace EventCalendarBelle.Models
         public bool allDay { get; set; }
         public string description { get; set; }
         public string color { get; set; }
+        public string categories { get; set; }
         public EventType type { get; set; }
         public int calendar { get; set; }
     }

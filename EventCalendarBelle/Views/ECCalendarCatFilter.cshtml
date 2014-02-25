@@ -1,0 +1,186 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@using EventCalendarBelle
+@using EventCalendarBelle.Models
+@{
+    Layout = "";
+    int id = 0;
+    try{
+        id = int.Parse(Model.Content.GetPropertyValue<string>("calendar"));
+    }catch(Exception ex){}
+    var calendar = EventCalendarHelper.GetCalendar(id);
+}
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+        <style>
+            body {
+                padding-top: 60px;
+                padding-bottom: 40px;
+            }
+        </style>
+		<link type="text/css" href="@Url.Content("~/css/EventCalendar/fullcalendar.css")" rel="stylesheet" />
+        <link type="text/css" href="http://cdn.jsdelivr.net/qtip2/2.2.0/jquery.qtip.min.css" rel="stylesheet" />
+        <link type="text/css" href="@Url.Content("~/css/EventCalendar/custom.css")" rel="stylesheet" />
+		<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="@Url.Content("~/scripts/EventCalendar/fullcalendar.min.js")"></script>
+        <script type="text/javascript" src="http://cdn.jsdelivr.net/qtip2/2.2.0/jquery.qtip.min.js"></script>
+        @if (null != calendar && calendar.IsGCal)
+        {
+            <script type="text/javascript" src="@Url.Content("~/scripts/EventCalendar/gcal.js")"></script>
+        }
+		<script type="text/javascript">
+		    var selectedCats = [];
+		    $(document).ready(function () {
+		        $('#catList').on("click", 'a.catSelector', function (e) {
+		            var text = $(this).text();
+		            var index = $.inArray(text, selectedCats);
+		            if (index > -1) {
+		                selectedCats.splice(index, 1);
+		                $(this).removeClass("active");
+		            } else {
+		                selectedCats.push(text);
+		                $(this).addClass("active");
+		                console.log($(this));
+		            }
+		            $('#calendar').fullCalendar('refetchEvents');
+		            console.log(selectedCats);
+		            e.preventDefault();
+		        });
+
+		        $('#calendar').fullCalendar({
+                    @if (null != calendar)
+                    {
+						<text>defaultView: '@calendar.ViewMode',</text>
+		            }
+                    header: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'month,basicWeek,basicDay'
+                    },
+		            events: {
+                        @if (null != calendar && calendar.IsGCal)
+                        {
+                            <text>url: '</text>@calendar.GCalFeedUrl<text>',</text>
+                        }
+                        else
+                        {
+						    <text>
+		                    url: '/umbraco/EventCalendar/ECApi/GetCalendarEvents/',
+		                    type: 'GET',
+                            </text>
+                            if (calendar != null)
+                            {
+                                <text>
+				                data: {
+				                    id: '@calendar.Id',
+				                    culture: '@System.Globalization.CultureInfo.CurrentCulture.ToString().ToLower()'
+				                },
+                                </text>
+                            }
+                            else
+                            {
+                                <text>
+				                data: {
+				                    id: '0',
+				                    culture: '@System.Globalization.CultureInfo.CurrentCulture.ToString().ToLower()'
+				                },
+		                </text>
+                            }                            
+                        }
+		                success: function (events) {		                    
+		                    var unique = {};
+		                    var distinct = [];
+		                    events.forEach(function (event) {
+		                        event.categories.split(',').forEach(function (cat) {
+		                            if (!unique[cat]) {
+		                                distinct.push(cat);
+		                                unique[cat] = true;
+		                            }
+		                        });
+		                    });
+
+		                    $('#catList').empty();
+		                    distinct.forEach(function (cat) {
+		                        $('#catList').append('<li><a class="catSelector" id="'+cat+'" href="#">'+cat+'<span class="circle pull-right"></span></a></li>');
+		                    });
+
+		                    if (selectedCats.length > 0) {
+		                        return $.map(events, function (e) {
+		                            var included = false;
+		                            e.categories.split(',').forEach(function (cat) {
+		                                if ($.inArray(cat, selectedCats) > -1) {
+		                                    included = true;
+		                                    $('a.catSelector#' + cat).addClass("active");
+		                                }
+		                            });
+
+		                            if (!included)
+		                                return null;
+		                            else
+		                                return e;
+		                        });
+		                    }
+		                },
+				        error: function () {
+				            alert('There was an error while fetching events!');
+				        }
+				    },
+				    eventClick: function (event) {
+				        if (event.url) {
+				            window.open(event.url);
+				            return false;
+				        } else {
+				            if (event.type == 1) {
+				                window.location.href = '@Model.Content.Down().Url?id=' + event.id + '&type=1&calendar=' + event.calendar;
+                            } else {
+                                window.location.href = '@Model.Content.Down().Url?id=' + event.id + '&type=0&calendar=' + event.calendar;
+                            }
+                            return false;
+                        }
+				    },
+		            eventRender: function (event, element) {
+		                if (event.type == 0) {
+		                    element.qtip({
+		                        content: {
+		                            text: "<h1>" + event.title + "</h1><h5>Start:" + event.start.toLocaleDateString() + "</h5><h5>End:" + event.end.toLocaleDateString() + "</h5><div>" + event.description + "</div>",
+		                            title: event.title
+		                        },
+		                        style: "qtip-blue"
+		                    });
+		                } else {
+		                    element.qtip({
+		                        content: {
+		                            text: "<h1>" + event.title + "</h1><h5>Start:" + event.start.toLocaleDateString() + "</h5><div>" + event.description + "</div>",
+		                            title: event.title
+		                        },
+		                        style: "qtip-blue"
+		                    });
+		                }
+		            }
+				})
+			});
+		</script>
+	</head>
+    <body>
+        <div class="container">
+            <div class="col-md-3 col-lg-3 col-sm-4 col-xs-12">
+                <h2>Filter by category</h2>
+                <ul id="catList">
+                </ul>
+            </div>
+            <div class="col-md-9 col-lg-9 col-sm-8 col-xs-12">
+		        <div id="calendar"></div>
+            </div>
+        </div>
+	</body>
+</html>

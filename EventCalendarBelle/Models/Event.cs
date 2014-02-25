@@ -51,6 +51,10 @@ namespace EventCalendarBelle.Models
         //[DataMember(Name = "description")]
         //public string description { get; set; }
 
+        [Column("categories")]
+        [DataMember(Name = "categories")]
+        public string categories { get; set; }
+
         [Ignore]
         [DataMember(Name = "descriptions")]
         public List<EventDescription> descriptions { get; set; }

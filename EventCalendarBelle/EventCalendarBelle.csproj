@@ -114,6 +114,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -221,6 +222,8 @@
     <Compile Include="Controller\LocationApiController.cs" />
     <Compile Include="Controller\REventApiController.cs" />
     <Compile Include="EventCalendarHelper.cs" />
+    <Compile Include="Mapper\EventDescriptionMapper.cs" />
+    <Compile Include="Migrations\TargetVersionTwo.cs" />
     <Compile Include="Models\EventsOverviewModel.cs" />
     <Compile Include="Trees\ECCalendarTree.cs" />
     <Compile Include="installer.ascx.cs">
@@ -244,9 +247,11 @@
     <None Include="packages.config" />
     <None Include="Views\ECCalendar.cshtml" />
     <None Include="Views\ECEventDetails.cshtml" />
+    <None Include="Views\ECCalendarCatFilter.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="EventCalendar\backoffice\ecTree\calendar.overview.controller.js" />
+    <Content Include="EventCalendar\backoffice\ecTree\dashboard.html" />
     <Content Include="EventCalendar\backoffice\ecTree\location.overview.controller.js" />
     <Content Include="EventCalendar\backoffice\ecTree\overviewLocation.html" />
     <Content Include="EventCalendar\backoffice\ecTree\overviewCalendar.html" />

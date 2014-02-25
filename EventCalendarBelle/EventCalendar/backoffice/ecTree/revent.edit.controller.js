@@ -1,9 +1,20 @@
 ﻿angular.module("umbraco").controller("EventCalendar.REventEditController",
         function ($scope, $routeParams, reventResource, locationResource, notificationsService, assetsService) {
 
+            $scope.categories = { view: 'tags', label: "Categories", description: 'Specify categories which the event is related to.' };
+            var tag_scope = undefined;
+
             //get a calendar id -> service
             reventResource.getById($routeParams.id.replace("re-", "")).then(function (response) {
-                $scope.event = response.data;                
+                $scope.event = response.data;
+
+                //Get the scope for the tags editor
+                $("div.umb-tags").ready(function () {
+                    tag_scope = angular.element($("div.umb-tags")).scope();
+                    if ($scope.event.categories != null) {
+                        tag_scope.currentTags = $scope.event.categories.split(',');
+                    }
+                });
 
                 //Create the tabs for every language etc
                 $scope.tabs = [{ id: "Content", label: "Content" }];
@@ -65,6 +76,8 @@
                 });
 
             $scope.save = function (event) {
+                tag_scope = angular.element($("div.umb-tags")).scope();
+                event.categories = tag_scope.currentTags.join();
                 reventResource.save(event).then(function (response) {
                     //$scope.event = response.data;
                     notificationsService.success("Success", event.title + " has been saved");

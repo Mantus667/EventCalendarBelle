@@ -1,18 +1,20 @@
 ﻿angular.module("umbraco").controller("EventCalendar.EventEditController",
         function ($scope, $routeParams, eventResource, locationResource, notificationsService, assetsService, tinyMceService, $timeout, dialogService, angularHelper) {           
 
-            $scope.tags_test = { view: 'tags', label: "Tags Test", description: 'funzt auch'};
-            console.log($scope.tags_test);
+            $scope.categories = { view: 'tags', label: "Categories", description: 'Specify categories which the event is related to.'};
             var tag_scope = undefined;
 
             //get a calendar id -> service
             eventResource.getById($routeParams.id.replace("e-","")).then(function (response) {
                 $scope.event = response.data;
-                $scope.event.currentTags = ['Test', 'unko'];
                 
-                tag_scope = angular.element($("div.umb-tags")).scope();
-                console.log(tag_scope);
-                tag_scope.currentTags = $scope.event.currentTags;
+                //Get the scope for the tags editor
+                $("div.umb-tags").ready(function () {
+                    tag_scope = angular.element($("div.umb-tags")).scope();
+                    if($scope.event.categories != null) {
+                        tag_scope.currentTags = $scope.event.categories.split(',');
+                    }
+                });
 
                 //Create the tabs for every language etc
                 $scope.tabs = [{ id: "Content", label: "Content" }];
@@ -91,14 +93,12 @@
                 });            
 
             $scope.save = function (event) {
-                console.log($scope.tags_test);
-                console.log(tag_scope.currentTags);
-                //eventResource.save(event).then(function (response) {
-                //    //$scope.event = response.data;
-
-                //    notificationsService.success("Success", event.title + " has been saved");
-                //}, function (response) {
-                //    notificationsService.error("Error", event.title + " could not be saved");
-                //});
+                tag_scope = angular.element($("div.umb-tags")).scope();
+                event.categories = tag_scope.currentTags.join();
+                eventResource.save(event).then(function (response) {
+                    notificationsService.success("Success", event.title + " has been saved");
+                }, function (response) {
+                    notificationsService.error("Error", event.title + " could not be saved");
+                });
             };
         });

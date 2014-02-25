@@ -3,6 +3,7 @@ using ScheduleWidget.Enums;
 using ScheduleWidget.ScheduledEvents;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,7 +18,7 @@ namespace EventCalendarBelle.Controller
     {
 
         [HttpGet]
-        public IEnumerable<EventsOverviewModel> GetCalendarEvents(int id = 0, int start = 0, int end = 0)
+        public IEnumerable<EventsOverviewModel> GetCalendarEvents(int id = 0,string culture = "en-us", int start = 0, int end = 0)
         {
             var db = UmbracoContext.Application.DatabaseContext.Database;
 
@@ -25,23 +26,23 @@ namespace EventCalendarBelle.Controller
 
             if (id != 0)
             {
-                events.AddRange(this.GetNormalEvents(id, start, end));
-                events.AddRange(this.GetRecurringEvents(id, start, end));
+                events.AddRange(this.GetNormalEvents(id,culture, start, end));
+                events.AddRange(this.GetRecurringEvents(id, culture, start, end));
             }
             else
             {
                 var calendar = db.Query<ECalendar>("SELECT * FROM ec_calendars").ToList();
                 foreach (var cal in calendar)
                 {
-                    events.AddRange(this.GetNormalEvents(cal.Id, start, end));
-                    events.AddRange(this.GetRecurringEvents(cal.Id, start, end));
+                    events.AddRange(this.GetNormalEvents(cal.Id, culture, start, end));
+                    events.AddRange(this.GetRecurringEvents(cal.Id, culture, start, end));
                 }
             }
 
             return events;
         }
 
-        private List<EventsOverviewModel> GetNormalEvents(int id, int start = 0, int end = 0)
+        private List<EventsOverviewModel> GetNormalEvents(int id,string culture, int start = 0, int end = 0)
         {
             var db = UmbracoContext.Application.DatabaseContext.Database;
 
@@ -53,27 +54,37 @@ namespace EventCalendarBelle.Controller
             //Handle normal events
             List<EventsOverviewModel> events = new List<EventsOverviewModel>();
             var calendar = db.SingleOrDefault<ECalendar>(id);
-            var normal_events = db.Query<EventCalendarBelle.Models.Event>("SELECT * FROM ec_events WHERE calendarId = @0", id).ToList();
+            var normal_events = db.Fetch<EventCalendarBelle.Models.Event>("SELECT * FROM ec_events WHERE ec_events.calendarId = @0", id).ToList();
             foreach (var ne in normal_events.Where(x => x.start >= startDate && x.end <= endDate))
             {
+                List<EventDescription> descriptions = db.Query<EventDescription>("SELECT * FROM ec_eventdescriptions WHERE eventid = @0 AND calendarid = @1", ne.Id, ne.calendarId).ToList();
+                EventDescription currentDescription = descriptions.SingleOrDefault(x => x.CultureCode.ToLower() == culture);                
+                string description = String.Empty;
+                System.Text.RegularExpressions.Regex rx = new System.Text.RegularExpressions.Regex("<[^>]*>");
+                if (null != currentDescription) {
+                    description = rx.Replace(currentDescription.Content, "");
+                    description = description.Substring(0, (description.Length > 150) ? 150 : description.Length) + "...";
+                }
+
                 events.Add(
                     new EventsOverviewModel()
                     {
                         type = EventType.Normal,
                         title = ne.title,
                         allDay = ne.allDay,
-                        //description = ne.description,
+                        description = description,
                         end = ne.end,
                         start = ne.start,
                         id = ne.Id,
                         color = !String.IsNullOrEmpty(calendar.Color) ? calendar.Color : "",
+                        categories = ne.categories,
                         calendar = ne.calendarId
                     });
             }
             return events;
         }
 
-        private List<EventsOverviewModel> GetRecurringEvents(int id, int start = 0, int end = 0)
+        private List<EventsOverviewModel> GetRecurringEvents(int id, string culture, int start = 0, int end = 0)
         {
             var db = UmbracoContext.Application.DatabaseContext.Database;
 
@@ -104,15 +115,27 @@ namespace EventCalendarBelle.Controller
                     });
                 foreach (var tmp in schedule.Occurrences(range))
                 {
+                    List<EventDescription> descriptions = db.Query<EventDescription>("SELECT * FROM ec_eventdescriptions WHERE eventid = @0 AND calendarid = @1", e.Id, e.calendarId).ToList();
+                    EventDescription currentDescription = descriptions.SingleOrDefault(x => x.CultureCode.ToLower() == culture);
+                    string description = String.Empty;
+                    System.Text.RegularExpressions.Regex rx = new System.Text.RegularExpressions.Regex("<[^>]*>");
+
+                    if (null != currentDescription)
+                    {
+                        description = rx.Replace(currentDescription.Content, "");
+                        description = description.Substring(0, (description.Length > 150) ? 150 : description.Length) + "...";
+                    }
+
                     events.Add(new EventsOverviewModel()
                     {
                         title = e.title,
                         id = e.Id,
                         allDay = e.allDay,
-                        //description = e.description,
+                        description = description,
                         start = tmp,
                         type = EventType.Recurring,
                         color = !String.IsNullOrEmpty(calendar.Color) ? calendar.Color : "",
+                        categories = e.categories,
                         calendar = e.calendarId
                     });
                 }

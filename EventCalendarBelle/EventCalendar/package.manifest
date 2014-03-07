@@ -33,6 +33,7 @@
 
 			'~/App_Plugins/EventCalendar/backoffice/ectree/revent.edit.controller.js',
 			'~/App_Plugins/EventCalendar/backoffice/ectree/revent.create.controller.js',
+			'~/App_Plugins/EventCalendar/backoffice/ectree/revent.delete.controller.js',
 
             '~/App_Plugins/EventCalendar/calendar.resource.js',
 			'~/App_Plugins/EventCalendar/location.resource.js',

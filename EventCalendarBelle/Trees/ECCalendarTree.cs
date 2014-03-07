@@ -44,14 +44,15 @@ namespace EventCalendarBelle.Trees
             {
                 menu.Items.Add(new MenuItem("deleteLocation", "Delete Location"));
             }
+            else if (id.Contains("re-"))
+            {
+                menu.Items.Add(new MenuItem("deleteREvent", "Delete Recurring Event"));
+            }
             else if (id.Contains("e-"))
             {
                 menu.Items.Add(new MenuItem("deleteEvent", "Delete Event"));
             }
-            else if (id.Contains("re-"))
-            {
-                menu.Items.Add(new MenuItem("deleteREvent", "Delete Event"));
-            }
+            
             
             return menu;
         }

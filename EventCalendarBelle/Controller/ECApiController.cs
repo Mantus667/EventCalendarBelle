@@ -57,11 +57,11 @@ namespace EventCalendarBelle.Controller
             var normal_events = db.Fetch<EventCalendarBelle.Models.Event>("SELECT * FROM ec_events WHERE ec_events.calendarId = @0", id).ToList();
             foreach (var ne in normal_events.Where(x => x.start >= startDate && x.end <= endDate))
             {
-                List<EventDescription> descriptions = db.Query<EventDescription>("SELECT * FROM ec_eventdescriptions WHERE eventid = @0 AND calendarid = @1", ne.Id, ne.calendarId).ToList();
+                List<EventDescription> descriptions = db.Query<EventDescription>("SELECT * FROM ec_eventdescriptions WHERE eventid = @0 AND calendarid = @1 AND type = @2", ne.Id, ne.calendarId, (int)EventType.Normal).ToList();
                 EventDescription currentDescription = descriptions.SingleOrDefault(x => x.CultureCode.ToLower() == culture);                
                 string description = String.Empty;
                 System.Text.RegularExpressions.Regex rx = new System.Text.RegularExpressions.Regex("<[^>]*>");
-                if (null != currentDescription) {
+                if (null != currentDescription && null != currentDescription.Content) {
                     description = rx.Replace(currentDescription.Content, "");
                     description = description.Substring(0, (description.Length > 150) ? 150 : description.Length) + "...";
                 }
@@ -115,12 +115,12 @@ namespace EventCalendarBelle.Controller
                     });
                 foreach (var tmp in schedule.Occurrences(range))
                 {
-                    List<EventDescription> descriptions = db.Query<EventDescription>("SELECT * FROM ec_eventdescriptions WHERE eventid = @0 AND calendarid = @1", e.Id, e.calendarId).ToList();
+                    List<EventDescription> descriptions = db.Query<EventDescription>("SELECT * FROM ec_eventdescriptions WHERE eventid = @0 AND calendarid = @1 AND type = @2", e.Id, e.calendarId, (int)EventType.Recurring).ToList();
                     EventDescription currentDescription = descriptions.SingleOrDefault(x => x.CultureCode.ToLower() == culture);
                     string description = String.Empty;
                     System.Text.RegularExpressions.Regex rx = new System.Text.RegularExpressions.Regex("<[^>]*>");
 
-                    if (null != currentDescription)
+                    if (null != currentDescription && null != currentDescription.Content)
                     {
                         description = rx.Replace(currentDescription.Content, "");
                         description = description.Substring(0, (description.Length > 150) ? 150 : description.Length) + "...";

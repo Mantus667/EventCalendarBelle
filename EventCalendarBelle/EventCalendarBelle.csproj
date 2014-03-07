@@ -219,10 +219,10 @@
     <Compile Include="Controller\ECApiController.cs" />
     <Compile Include="Controller\ECSurfaceController.cs" />
     <Compile Include="Controller\EventApiController.cs" />
+    <Compile Include="Controller\LocalizationApiController.cs" />
     <Compile Include="Controller\LocationApiController.cs" />
     <Compile Include="Controller\REventApiController.cs" />
     <Compile Include="EventCalendarHelper.cs" />
-    <Compile Include="Mapper\EventDescriptionMapper.cs" />
     <Compile Include="Migrations\TargetVersionTwo.cs" />
     <Compile Include="Models\EventsOverviewModel.cs" />
     <Compile Include="Trees\ECCalendarTree.cs" />
@@ -242,6 +242,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="EventCalendar\calendar.resource.min.js.map">
+      <DependentUpon>calendar.resource.js</DependentUpon>
+    </None>
     <None Include="EventCalendar\package.manifest" />
     <None Include="EventCalendar\Views\Partials\EventDetails.cshtml" />
     <None Include="packages.config" />
@@ -252,6 +255,7 @@
   <ItemGroup>
     <Content Include="EventCalendar\backoffice\ecTree\calendar.overview.controller.js" />
     <Content Include="EventCalendar\backoffice\ecTree\dashboard.html" />
+    <Content Include="EventCalendar\backoffice\ecTree\deleteREvent.html" />
     <Content Include="EventCalendar\backoffice\ecTree\location.overview.controller.js" />
     <Content Include="EventCalendar\backoffice\ecTree\overviewLocation.html" />
     <Content Include="EventCalendar\backoffice\ecTree\overviewCalendar.html" />
@@ -259,13 +263,18 @@
     <Content Include="EventCalendar\backoffice\ecTree\editREvent.html" />
     <Content Include="EventCalendar\backoffice\ecTree\event.edit.controller.js" />
     <Content Include="EventCalendar\backoffice\ecTree\location.edit.controller.js" />
+    <Content Include="EventCalendar\backoffice\ecTree\revent.delete.controller.js" />
     <Content Include="EventCalendar\backoffice\ecTree\revent.edit.controller.js" />
+    <Content Include="EventCalendar\calendar.resource.min.js">
+      <DependentUpon>calendar.resource.js</DependentUpon>
+    </Content>
     <Content Include="EventCalendar\css\bootstrap-datetimepicker.min.css" />
     <Content Include="EventCalendar\css\bootstrap-switch.css" />
     <Content Include="EventCalendar\css\DT_bootstrap.css" />
     <Content Include="EventCalendar\css\jquery-gmaps-latlon-picker.css" />
     <Content Include="EventCalendar\dataTable.js" />
     <Content Include="EventCalendar\dataTableExtensions.js" />
+    <Content Include="EventCalendar\directives.js" />
     <Content Include="EventCalendar\Editors\calendar.editor.controller.js" />
     <Content Include="EventCalendar\Editors\calendar.html" />
     <Content Include="EventCalendar\event.resource.js" />

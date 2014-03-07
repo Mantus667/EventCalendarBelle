@@ -150,13 +150,23 @@
 				    },
 		            eventRender: function (event, element) {
 		                if (event.type == 0) {
-		                    element.qtip({
-		                        content: {
-		                            text: "<h1>" + event.title + "</h1><h5>Start:" + event.start.toLocaleDateString() + "</h5><h5>End:" + event.end.toLocaleDateString() + "</h5><div>" + event.description + "</div>",
-		                            title: event.title
-		                        },
-		                        style: "qtip-blue"
-		                    });
+		                    if (event.end != null) {
+		                        element.qtip({
+		                            content: {
+		                                text: "<h1>" + event.title + "</h1><h5>Start:" + event.start.toLocaleDateString() + "</h5><h5>End:" + event.end.toLocaleDateString() + "</h5><div>" + event.description + "</div>",
+		                                title: event.title
+		                            },
+		                            style: "qtip-blue"
+		                        });
+		                    } else {
+		                        element.qtip({
+		                            content: {
+		                                text: "<h1>" + event.title + "</h1><h5>Start:" + event.start.toLocaleDateString() + "</h5><div>" + event.description + "</div>",
+		                                title: event.title
+		                            },
+		                            style: "qtip-blue"
+		                        });
+		                    }
 		                } else {
 		                    element.qtip({
 		                        content: {

@@ -38,11 +38,6 @@ namespace EventCalendarBelle.Models
         [DataMember(Name = "allday")]
         public bool allDay { get; set; }
 
-        //[Column("description")]
-        //[SpecialDbType(SpecialDbTypes.NTEXT)]
-        //[DataMember(Name = "description")]
-        //public string description { get; set; }
-
         [Column("day")]
         [DataMember(Name = "day")]
         public int day { get; set; }
@@ -57,6 +52,7 @@ namespace EventCalendarBelle.Models
 
         [Column("categories")]
         [DataMember(Name = "categories")]
+        [NullSetting(NullSetting = NullSettings.Null)]
         public string categories { get; set; }
 
         [Ignore]

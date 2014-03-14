@@ -4,6 +4,8 @@
             //get a calendar id -> service
             calendarResource.getById($routeParams.id).then(function (response) {
                 $scope.calendar = response.data;
+                $scope.calendar.test = "";
+                console.log($scope.calendar);
             }, function (response) {
                 notificationsService.error("Error", calendar.calendarname + " could not be loaded");
             });
@@ -35,9 +37,9 @@
                 });
 
             $scope.save = function (calendar) {
-                //console.log(calendar);
+                console.log(calendar);
                 calendarResource.save(calendar).then(function (response) {
-                    $scope.calendar = response.data;
+                   // $scope.calendar = response.data;
 
                     notificationsService.success("Success", calendar.calendarname + " has been saved");
                 }, function (response) {

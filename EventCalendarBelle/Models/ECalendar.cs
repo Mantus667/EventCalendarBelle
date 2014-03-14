@@ -43,7 +43,7 @@ namespace EventCalendarBelle.Models
         [Display(Name = "GCal Feed Url")]
         [NullSetting(NullSetting = NullSettings.Null)]
         [StringLength(255)]
-        [DataMember(Name = "gCalFeedUrl")]
+        [DataMember(Name = "gcalFeedUrl")]
         public string GCalFeedUrl { get; set; }
 
         [Column("color")]

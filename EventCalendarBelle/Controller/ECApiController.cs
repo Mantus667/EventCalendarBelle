@@ -1,4 +1,5 @@
 ﻿using EventCalendarBelle.Models;
+using Newtonsoft.Json;
 using ScheduleWidget.Enums;
 using ScheduleWidget.ScheduledEvents;
 using System;
@@ -8,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Umbraco.Core.Persistence;
 using Umbraco.Web.Mvc;
 using Umbraco.Web.WebApi;
 
@@ -40,6 +42,31 @@ namespace EventCalendarBelle.Controller
             }
 
             return events;
+        }
+
+        [HttpGet]
+        public List<string> GetCalendarSources()
+        {
+            var db = UmbracoContext.Application.DatabaseContext.Database;
+            List<string> sources = new List<string>();
+
+            //Get all calendar
+            var query = new Sql().Select("*").From("ec_calendars");
+            var calendar = db.Fetch<ECalendar>(query);
+
+            foreach (var cal in calendar)
+            {
+                if (cal.IsGCal)
+                {
+                    sources.Add(cal.GCalFeedUrl);
+                }
+                else
+                {
+                    sources.Add("/umbraco/EventCalendar/ECApi/GetCalendarEvents/?id=" + cal.Id);
+                }
+            }
+
+            return sources;
         }
 
         private List<EventsOverviewModel> GetNormalEvents(int id,string culture, int start = 0, int end = 0)

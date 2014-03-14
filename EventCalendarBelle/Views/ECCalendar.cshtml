@@ -31,68 +31,42 @@
 		<link type="text/css" href="@Url.Content("~/css/EventCalendar/fullcalendar.css")" rel="stylesheet" />
 		<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
 		<script type="text/javascript" src="@Url.Content("~/scripts/EventCalendar/fullcalendar.min.js")"></script>
-        @if (null != calendar && calendar.IsGCal)
-        {
-            <script type="text/javascript" src="@Url.Content("~/scripts/EventCalendar/gcal.js")"></script>
-        }
+        <script type="text/javascript" src="@Url.Content("~/scripts/EventCalendar/gcal.js")"></script>        
 		<script type="text/javascript">
+		    var event_details_url = '@Model.Content.Down().Url';
 		    $(document).ready(function () {
-		        $('#calendar').fullCalendar({
-                    @if (null != calendar)
-                    {
-						<text>defaultView: '@calendar.ViewMode',</text>
-		            }
-                    header: {
-                        left: 'prev,next today',
-                        center: 'title',
-                        right: 'month,basicWeek,basicDay'
-                    },
-		            events: {
-                        @if (null != calendar && calendar.IsGCal)
+		        var sources = [];
+		        $.get("/umbraco/EventCalendar/ECApi/GetCalendarSources/", function (data) {
+		            console.log(data);
+		            $('#calendar').fullCalendar({
+		                @if (null != calendar)
                         {
-                            <text>url: '</text>@calendar.GCalFeedUrl<text>',</text>
+						    <text>defaultView: '@calendar.ViewMode',</text>
+		                }
+                        else {
+                            <text>defaultView: 'month',</text>
                         }
-                        else
-                        {
-						    <text>
-		                    url: '/umbraco/EventCalendar/ECApi/GetCalendarEvents/',
-		                    type: 'GET',
-                            </text>
-                            if (calendar != null)
-                            {
-                                <text>
-				                data: {
-				                    id: '@calendar.Id'
-				                },
-                                </text>
-                            }
-                            else
-                            {
-                                <text>
-				                data: {
-				                    id: '0'
-				                },
-                                </text>
-                            }                            
-                        }
-				        error: function () {
-				            alert('There was an error while fetching events!');
-				        }
-				    },
-				    eventClick: function (event) {
-				        if (event.url) {
-				            window.open(event.url);
-				            return false;
-				        } else {
-				            if (event.type == 1) {
-				                window.location.href = '@Model.Content.Down().Url?id=' + event.id + '&type=1&calendar=' + event.calendar;
-                            } else {
-                                window.location.href = '@Model.Content.Down().Url?id=' + event.id + '&type=0&calendar=' + event.calendar;
-                            }
+		                header: {
+		                    left: 'prev,next today',
+		                    center: 'title',
+		                    right: 'month,basicWeek,basicDay'
+		                },
+                        eventSources: data,
+		                eventClick: function (event) {
+		                    if (event.url) {
+		                        window.open(event.url);
+		                        return false;
+		                    } else {
+		                        if (event.type == 1) {
+		                            window.location.href = event_details_url + '?id=' + event.id + '&type=1&calendar=' + event.calendar;
+		                    } else {
+		                        window.location.href = event_details_url + '?id=' + event.id + '&type=0&calendar=' + event.calendar;
+		                    }
                             return false;
                         }
-                    }
-				})
+		            }
+		            });
+		        });		        
 			});
 		</script>
 	</head>

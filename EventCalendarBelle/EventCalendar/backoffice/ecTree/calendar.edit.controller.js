@@ -4,8 +4,6 @@
             //get a calendar id -> service
             calendarResource.getById($routeParams.id).then(function (response) {
                 $scope.calendar = response.data;
-                $scope.calendar.test = "";
-                console.log($scope.calendar);
             }, function (response) {
                 notificationsService.error("Error", calendar.calendarname + " could not be loaded");
             });
@@ -34,13 +32,25 @@
                             $('#colorSelector div').css('background-color', '#' + hex);
                         }
                     });
+                    $('#colorSelector2').ColorPicker({
+                        color: '#0000ff',
+                        onShow: function (colpkr) {
+                            $(colpkr).fadeIn(500);
+                            return false;
+                        },
+                        onHide: function (colpkr) {
+                            $(colpkr).fadeOut(500);
+                            return false;
+                        },
+                        onChange: function (hsb, hex, rgb) {
+                            $scope.calendar.textColor = '#' + hex;
+                            $('#colorSelector2 div').css('background-color', '#' + hex);
+                        }
+                    });
                 });
 
             $scope.save = function (calendar) {
-                console.log(calendar);
                 calendarResource.save(calendar).then(function (response) {
-                   // $scope.calendar = response.data;
-
                     notificationsService.success("Success", calendar.calendarname + " has been saved");
                 }, function (response) {
                     notificationsService.error("Error", calendar.calendarname + " could not be saved");

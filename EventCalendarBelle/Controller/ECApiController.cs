@@ -45,24 +45,42 @@ namespace EventCalendarBelle.Controller
         }
 
         [HttpGet]
-        public List<string> GetCalendarSources()
+        public List<string> GetCalendarSources(int id = 0)
         {
             var db = UmbracoContext.Application.DatabaseContext.Database;
             List<string> sources = new List<string>();
 
-            //Get all calendar
-            var query = new Sql().Select("*").From("ec_calendars");
-            var calendar = db.Fetch<ECalendar>(query);
-
-            foreach (var cal in calendar)
+            //Check if we got an id, otherwise get all calendar
+            if (id != 0)
             {
-                if (cal.IsGCal)
+                var query = new Sql().Select("*").From("ec_calendars").Where<ECalendar>(x => x.Id == id);
+                var calendar = db.Fetch<ECalendar>(query).FirstOrDefault();
+                if (calendar.IsGCal)
                 {
-                    sources.Add(cal.GCalFeedUrl);
+                    sources.Add(calendar.GCalFeedUrl);
                 }
                 else
                 {
-                    sources.Add("/umbraco/EventCalendar/ECApi/GetCalendarEvents/?id=" + cal.Id);
+                    sources.Add("/umbraco/EventCalendar/ECApi/GetCalendarEvents/?id=" + calendar.Id);
+                }
+                
+            }
+            else
+            {
+                //Get all calendar
+                var query = new Sql().Select("*").From("ec_calendars");
+                var calendar = db.Fetch<ECalendar>(query);
+
+                foreach (var cal in calendar)
+                {
+                    if (cal.IsGCal)
+                    {
+                        sources.Add(cal.GCalFeedUrl);
+                    }
+                    else
+                    {
+                        sources.Add("/umbraco/EventCalendar/ECApi/GetCalendarEvents/?id=" + cal.Id);
+                    }
                 }
             }
 
@@ -104,6 +122,7 @@ namespace EventCalendarBelle.Controller
                         start = ne.start,
                         id = ne.Id,
                         color = !String.IsNullOrEmpty(calendar.Color) ? calendar.Color : "",
+                        textColor = !String.IsNullOrEmpty(calendar.TextColor) ? calendar.TextColor : "",
                         categories = ne.categories,
                         calendar = ne.calendarId
                     });

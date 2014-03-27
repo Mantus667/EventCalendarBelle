@@ -12,13 +12,14 @@ using System.Web.Configuration;
 using Umbraco.Core.Persistence.Migrations;
 using Umbraco.Core.Logging;
 using System.Configuration;
+using System.IO;
 
 namespace EventCalendarBelle
 {
     public partial class installer : Umbraco.Web.UmbracoUserControl
     {
         private UmbracoDatabase _db = null;
-        protected Version newVersion = new Version("2.0.1");
+        protected Version newVersion = new Version("2.0.2");
         private Version oldVersion = new Version("2.0.0");
 
         protected void Page_Load(object sender, EventArgs e)
@@ -26,19 +27,21 @@ namespace EventCalendarBelle
             this._db = ApplicationContext.DatabaseContext.Database;
 
             //Get the current version from appsettings if its there
-            if (WebConfigurationManager.AppSettings.AllKeys.Contains("EventCalendarVersion"))
+            Configuration config = WebConfigurationManager.OpenWebConfiguration(HttpContext.Current.Request.ApplicationPath);
+
+            if (config.AppSettings.Settings.AllKeys.Contains("EventCalendarVersion"))//WebConfigurationManager.AppSettings.AllKeys.Contains("EventCalendarVersion"))
             {
                 oldVersion = new Version(WebConfigurationManager.AppSettings["EventCalendarVersion"]);
                 if (newVersion != oldVersion)
                 {
-                    Configuration config = WebConfigurationManager.OpenWebConfiguration(HttpContext.Current.Request.ApplicationPath);
+                    config.AppSettings.Settings.Remove("EventCalendarVersion");
+                    config.Save();
                     config.AppSettings.Settings.Add("EventCalendarVersion", newVersion.ToString());
                     config.Save();
                 }
             }
             else
-            {
-                Configuration config = WebConfigurationManager.OpenWebConfiguration(HttpContext.Current.Request.ApplicationPath);
+            {                
                 config.AppSettings.Settings.Add("EventCalendarVersion", newVersion.ToString());
                 config.Save();
             }
@@ -60,8 +63,17 @@ namespace EventCalendarBelle
             {
                 var runner = new MigrationRunner(this.oldVersion, this.newVersion, "UpdateEventCalendarTables");
                 var upgraded = runner.Execute(this._db, true);
+                LogHelper.Info<installer>("Done doing migration for version 2.0.1" + upgraded.ToString());
             }
-            catch (Exception ex) { LogHelper.Error<installer>("Failed to do the migration", ex); }
+            catch (Exception ex) { LogHelper.Error<installer>("Failed to do the migration for a version", ex); }
+
+            try
+            {
+                var runner = new MigrationRunner(this.oldVersion, this.newVersion, "UpdateEventCalendarTables2.0.2");
+                var upgraded = runner.Execute(this._db, true);
+                LogHelper.Info<installer>("Done doing migration for version 2.0.2" + upgraded.ToString());
+            }
+            catch (Exception ex) { LogHelper.Error<installer>("Failed to do the migration for a version", ex); }
         }
 
         private void CreateSection()
@@ -90,72 +102,77 @@ namespace EventCalendarBelle
 
             //Open up language file
             //umbraco/config/lang/en.xml
-            var langPath = "~/umbraco/config/lang/en.xml";
+            var langPath = "~/umbraco/config/lang/"; //en.xml";
 
             //Path to the file resolved
             var langFilePath = HostingEnvironment.MapPath(langPath);
 
-            //Load settings.config XML file
-            XmlDocument langXml = new XmlDocument();
-            langXml.Load(langFilePath);
+            var folder = new DirectoryInfo(langFilePath);
 
-            // Section Node
-            // <area alias="sections">
-            XmlNode sectionNode = langXml.SelectSingleNode("//area [@alias='sections']");
-
-            if (sectionNode != null)
+            foreach (var file in folder.GetFiles("*.xml"))
             {
-                XmlNode findSectionKey = sectionNode.SelectSingleNode("./key [@alias='eventCalendar']");
+                //Load settings.config XML file
+                XmlDocument langXml = new XmlDocument();
+                langXml.Load(file.FullName);
 
-                if (findSectionKey == null)
+                // Section Node
+                // <area alias="sections">
+                XmlNode sectionNode = langXml.SelectSingleNode("//area [@alias='sections']");
+
+                if (sectionNode != null)
                 {
-                    //Let's add the key
-                    var attrToAdd = langXml.CreateAttribute("alias");
-                    attrToAdd.Value = "eventCalendar";
+                    XmlNode findSectionKey = sectionNode.SelectSingleNode("./key [@alias='eventCalendar']");
 
-                    var keyToAdd = langXml.CreateElement("key");
-                    keyToAdd.InnerText = "EventCalendar";
-                    keyToAdd.Attributes.Append(attrToAdd);
+                    if (findSectionKey == null)
+                    {
+                        //Let's add the key
+                        var attrToAdd = langXml.CreateAttribute("alias");
+                        attrToAdd.Value = "eventCalendar";
 
-                    sectionNode.AppendChild(keyToAdd);
+                        var keyToAdd = langXml.CreateElement("key");
+                        keyToAdd.InnerText = "EventCalendar";
+                        keyToAdd.Attributes.Append(attrToAdd);
 
-                    //Save the file flag to true
-                    saveFile = true;
+                        sectionNode.AppendChild(keyToAdd);
+
+                        //Save the file flag to true
+                        saveFile = true;
+                    }
                 }
-            }
 
-            // Section Node
-            // <area alias="treeHeaders">
-            XmlNode treeNode = langXml.SelectSingleNode("//area [@alias='treeHeaders']");
+                // Section Node
+                // <area alias="treeHeaders">
+                XmlNode treeNode = langXml.SelectSingleNode("//area [@alias='treeHeaders']");
 
-            if (treeNode != null)
-            {
-                XmlNode findTreeKey = treeNode.SelectSingleNode("./key [@alias='eventCalendar']");
-
-                if (findTreeKey == null)
+                if (treeNode != null)
                 {
-                    //Let's add the key
-                    var attrToAdd = langXml.CreateAttribute("alias");
-                    attrToAdd.Value = "eventCalendar";
+                    XmlNode findTreeKey = treeNode.SelectSingleNode("./key [@alias='eventCalendar']");
 
-                    var keyToAdd = langXml.CreateElement("key");
-                    keyToAdd.InnerText = "EventCalendar";
-                    keyToAdd.Attributes.Append(attrToAdd);
+                    if (findTreeKey == null)
+                    {
+                        //Let's add the key
+                        var attrToAdd = langXml.CreateAttribute("alias");
+                        attrToAdd.Value = "eventCalendar";
 
-                    treeNode.AppendChild(keyToAdd);
+                        var keyToAdd = langXml.CreateElement("key");
+                        keyToAdd.InnerText = "EventCalendar";
+                        keyToAdd.Attributes.Append(attrToAdd);
 
-                    //Save the file flag to true
-                    saveFile = true;
+                        treeNode.AppendChild(keyToAdd);
+
+                        //Save the file flag to true
+                        saveFile = true;
+                    }
                 }
-            }
 
 
-            //If saveFile flag is true then save the file
-            if (saveFile)
-            {
-                //Save the XML file
-                langXml.Save(langFilePath);
-            }
+                //If saveFile flag is true then save the file
+                if (saveFile)
+                {
+                    //Save the XML file
+                    langXml.Save(file.FullName);
+                }
+            }            
 
             this.BulletedList1.Items.Add(new ListItem("Done adding language keys."));
         }
@@ -289,11 +306,12 @@ namespace EventCalendarBelle
                     try
                     {
                         dashboardNode.AppendChild(xmlNodeToAdd);
+                        //Save the file flag to true
+                        saveFile = true;
                     }
                     catch (Exception ex) { LogHelper.Error<installer>("Couldn't add dashboard section", ex); } 
 
-                    //Save the file flag to true
-                    saveFile = true;
+                    
                 }
             }
 

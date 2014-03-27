@@ -36,8 +36,7 @@
 		    var event_details_url = '@Model.Content.Down().Url';
 		    $(document).ready(function () {
 		        var sources = [];
-		        $.get("/umbraco/EventCalendar/ECApi/GetCalendarSources/", function (data) {
-		            console.log(data);
+		        $.get("/umbraco/EventCalendar/ECApi/GetCalendarSources/",{ id: '@id' }, function (data) {
 		            $('#calendar').fullCalendar({
 		                @if (null != calendar)
                         {

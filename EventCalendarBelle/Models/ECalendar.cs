@@ -52,6 +52,12 @@ namespace EventCalendarBelle.Models
         [DataMember(Name = "color")]
         public string Color { get; set; }
 
+        [Column("textcolor")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        [Display(Name = "Event-Text-Color")]
+        [DataMember(Name = "textColor")]
+        public string TextColor { get; set; }
+
         [Column("viewmode")]
         [Display(Name = "View Mode")]
         [DataMember(Name="viewMode")]

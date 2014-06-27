@@ -224,6 +224,7 @@
     <Compile Include="Controller\REventApiController.cs" />
     <Compile Include="EventCalendarHelper.cs" />
     <Compile Include="Migrations\TargetVersionTwo.cs" />
+    <Compile Include="Migrations\v202.cs" />
     <Compile Include="Models\EventsOverviewModel.cs" />
     <Compile Include="Trees\ECCalendarTree.cs" />
     <Compile Include="installer.ascx.cs">

@@ -34,18 +34,4 @@ namespace EventCalendarBelle.Migrations
             Alter.Table("ec_recevents").AddColumn("categories").AsString(255).Nullable();
         }
     }
-
-    [Migration("2.0.2", 0, "UpdateEventCalendarTables")]
-    public class CalendarTextColorMigration : MigrationBase
-    {
-        public override void Down()
-        {
-            Delete.Column("textcolor").FromTable("ec_calendars");
-        }
-
-        public override void Up()
-        {
-            Alter.Table("ec_calendars").AddColumn("textcolor").AsString(255).Nullable();
-        }
-    }
 }

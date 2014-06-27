@@ -61,19 +61,20 @@ namespace EventCalendarBelle
         {
             try
             {
-                var runner = new MigrationRunner(this.oldVersion, this.newVersion, "UpdateEventCalendarTables");
+
+                var runner = new MigrationRunner(this.oldVersion, this.newVersion, "UpdateEventCalendarTables"+this.newVersion.ToString());
                 var upgraded = runner.Execute(this._db, true);
-                LogHelper.Info<installer>("Done doing migration for version 2.0.1" + upgraded.ToString());
+                LogHelper.Info<installer>("Done doing migration for version " + this.newVersion.ToString());
             }
             catch (Exception ex) { LogHelper.Error<installer>("Failed to do the migration for a version", ex); }
 
-            try
-            {
-                var runner = new MigrationRunner(this.oldVersion, this.newVersion, "UpdateEventCalendarTables2.0.2");
-                var upgraded = runner.Execute(this._db, true);
-                LogHelper.Info<installer>("Done doing migration for version 2.0.2" + upgraded.ToString());
-            }
-            catch (Exception ex) { LogHelper.Error<installer>("Failed to do the migration for a version", ex); }
+            //try
+            //{
+            //    var runner = new MigrationRunner(this.oldVersion, this.newVersion, "UpdateEventCalendarTables2.0.2");
+            //    var upgraded = runner.Execute(this._db, true);
+            //    LogHelper.Info<installer>("Done doing migration for version 2.0.2" + upgraded.ToString());
+            //}
+            //catch (Exception ex) { LogHelper.Error<installer>("Failed to do the migration for a version", ex); }
         }
 
         private void CreateSection()

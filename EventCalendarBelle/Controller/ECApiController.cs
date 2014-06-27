@@ -100,7 +100,7 @@ namespace EventCalendarBelle.Controller
             List<EventsOverviewModel> events = new List<EventsOverviewModel>();
             var calendar = db.SingleOrDefault<ECalendar>(id);
             var normal_events = db.Fetch<EventCalendarBelle.Models.Event>("SELECT * FROM ec_events WHERE ec_events.calendarId = @0", id).ToList();
-            foreach (var ne in normal_events.Where(x => x.start >= startDate && x.end <= endDate))
+            foreach (var ne in normal_events.Where(x => x.start <= endDate && x.end >= startDate))
             {
                 List<EventDescription> descriptions = db.Query<EventDescription>("SELECT * FROM ec_eventdescriptions WHERE eventid = @0 AND calendarid = @1 AND type = @2", ne.Id, ne.calendarId, (int)EventType.Normal).ToList();
                 EventDescription currentDescription = descriptions.SingleOrDefault(x => x.CultureCode.ToLower() == culture);                

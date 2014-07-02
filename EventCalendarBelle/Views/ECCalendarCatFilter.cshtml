@@ -118,7 +118,7 @@
 		                    events.forEach(function (event) {
 		                        if (event.categories != null) {
 		                            event.categories.split(',').forEach(function (cat) {
-		                                if (!unique[cat]) {
+		                                if (!unique[cat] && cat != ""){
 		                                    distinct.push(cat);
 		                                    unique[cat] = true;
 		                                }

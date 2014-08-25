@@ -10,7 +10,7 @@
                 },
 
                 save: function (calendar) {
-                    //console.log(angular.toJson(calendar));
+                    console.log(angular.toJson(calendar));
                     return $http.post(Umbraco.Sys.ServerVariables.eventCalendar.calendarBaseUrl + "PostSave", angular.toJson(calendar));
                 },
 

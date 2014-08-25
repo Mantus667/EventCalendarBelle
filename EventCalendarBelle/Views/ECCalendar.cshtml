@@ -1,6 +1,7 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
 @using EventCalendarBelle
 @using EventCalendarBelle.Models
+@using System.Globalization
 @{
     Layout = "";
     int id = 0;
@@ -30,8 +31,10 @@
         </style>
 		<link type="text/css" href="@Url.Content("~/css/EventCalendar/fullcalendar.css")" rel="stylesheet" />
 		<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script type="text/javascript" src="@Url.Content("~/scripts/EventCalendar/moment.min.js")"></script>
 		<script type="text/javascript" src="@Url.Content("~/scripts/EventCalendar/fullcalendar.min.js")"></script>
-        <script type="text/javascript" src="@Url.Content("~/scripts/EventCalendar/gcal.js")"></script>        
+        <script type="text/javascript" src="@Url.Content("~/scripts/EventCalendar/gcal.js")"></script>
+        <script type="text/javascript" src="@Url.Content("~/scripts/EventCalendar/lang-all.js")"></script>       
 		<script type="text/javascript">
 		    var event_details_url = '@Model.Content.Down().Url';
 		    $(document).ready(function () {
@@ -50,6 +53,7 @@
 		                    center: 'title',
 		                    right: 'month,basicWeek,basicDay'
 		                },
+		                lang: '@CultureInfo.CurrentCulture.TwoLetterISOLanguageName.ToLower()',
                         eventSources: data,
 		                eventClick: function (event) {
 		                    if (event.url) {

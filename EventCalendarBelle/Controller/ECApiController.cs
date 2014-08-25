@@ -20,7 +20,7 @@ namespace EventCalendarBelle.Controller
     {
 
         [HttpGet]
-        public IEnumerable<EventsOverviewModel> GetCalendarEvents(int id = 0,string culture = "en-us", int start = 0, int end = 0)
+        public IEnumerable<EventsOverviewModel> GetCalendarEvents(DateTime start, DateTime end, int id = 0, string culture = "en-us")
         {
             var db = UmbracoContext.Application.DatabaseContext.Database;
 
@@ -87,14 +87,12 @@ namespace EventCalendarBelle.Controller
             return sources;
         }
 
-        private List<EventsOverviewModel> GetNormalEvents(int id,string culture, int start = 0, int end = 0)
+        private List<EventsOverviewModel> GetNormalEvents(int id,string culture, DateTime start, DateTime end)
         {
             var db = UmbracoContext.Application.DatabaseContext.Database;
 
-            DateTime startDate = new System.DateTime(1970, 1, 1, 0, 0, 0, 0);
-            startDate = startDate.AddSeconds(start);
-            DateTime endDate = new System.DateTime(1970, 1, 1, 0, 0, 0, 0);
-            endDate = endDate.AddSeconds(end);
+            DateTime startDate = start;
+            DateTime endDate = end;
 
             //Handle normal events
             List<EventsOverviewModel> events = new List<EventsOverviewModel>();
@@ -130,17 +128,15 @@ namespace EventCalendarBelle.Controller
             return events;
         }
 
-        private List<EventsOverviewModel> GetRecurringEvents(int id, string culture, int start = 0, int end = 0)
+        private List<EventsOverviewModel> GetRecurringEvents(int id, string culture, DateTime start, DateTime end)
         {
             var db = UmbracoContext.Application.DatabaseContext.Database;
 
             //Handle recurring events
             List<EventsOverviewModel> events = new List<EventsOverviewModel>();
 
-            DateTime startDate = new System.DateTime(1970, 1, 1, 0, 0, 0, 0);
-            startDate = startDate.AddSeconds(start);
-            DateTime endDate = new System.DateTime(1970, 1, 1, 0, 0, 0, 0);
-            endDate = endDate.AddSeconds(end);
+            DateTime startDate = start;
+            DateTime endDate = end;
 
             DateRange range = new DateRange();
             range.StartDateTime = startDate;
@@ -181,6 +177,7 @@ namespace EventCalendarBelle.Controller
                         start = tmp,
                         type = EventType.Recurring,
                         color = !String.IsNullOrEmpty(calendar.Color) ? calendar.Color : "",
+                        textColor = !String.IsNullOrEmpty(calendar.TextColor) ? calendar.TextColor : "",
                         categories = e.categories,
                         calendar = e.calendarId
                     });

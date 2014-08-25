@@ -23,34 +23,38 @@ namespace EventCalendarBelle.Trees
             var menu = new MenuItemCollection();
             if (id == global::Umbraco.Core.Constants.System.Root.ToInvariantString())
             {
-                menu.Items.Add(new MenuItem("createCalendar", "Create Calendar"));
-                menu.Items.Add(new MenuItem("createLocation", "Create Location"));
+                menu.Items.Add(new MenuItem("createCalendar", "Create Calendar") { Icon = "add" });
+                menu.Items.Add(new MenuItem("createLocation", "Create Location") { Icon = "add" });
             }
             else if (id == "calendarTree")
             {
-                menu.Items.Add(new MenuItem("createCalendar", "Create Calendar"));
+                menu.DefaultMenuAlias = "createCalendar";
+                menu.Items.Add(new MenuItem("createCalendar", "Create Calendar") { Icon = "add" });
             }
             else if (id == "locationTree")
             {
-                menu.Items.Add(new MenuItem("createLocation", "Create Location"));
+                menu.DefaultMenuAlias = "createLocation";
+                menu.Items.Add(new MenuItem("createLocation", "Create Location") { Icon = "add" });
             }
             else if (id.Contains("c-"))
             {
-                menu.Items.Add(new MenuItem("createEvent", "Create Event"));
-                menu.Items.Add(new MenuItem("createREvent", "Create recurring Event"));
-                menu.Items.Add(new MenuItem("deleteCalendar", "Delete Calendar"));
+                menu.DefaultMenuAlias = "createEvents";
+                menu.Items.Add(new MenuItem("createEvents", "Create") { Icon = "add" });
+                //menu.Items.Add(new MenuItem("createEvent", "Create Event"));
+                //menu.Items.Add(new MenuItem("createREvent", "Create recurring Event"));
+                menu.Items.Add(new MenuItem("deleteCalendar", "Delete Calendar") { Icon = "delete" });
             }
             else if (id.Contains("l-"))
             {
-                menu.Items.Add(new MenuItem("deleteLocation", "Delete Location"));
+                menu.Items.Add(new MenuItem("deleteLocation", "Delete Location") { Icon = "delete" });
             }
             else if (id.Contains("re-"))
             {
-                menu.Items.Add(new MenuItem("deleteREvent", "Delete Recurring Event"));
+                menu.Items.Add(new MenuItem("deleteREvent", "Delete Recurring Event") { Icon = "delete" });
             }
             else if (id.Contains("e-"))
             {
-                menu.Items.Add(new MenuItem("deleteEvent", "Delete Event"));
+                menu.Items.Add(new MenuItem("deleteEvent", "Delete Event") { Icon = "delete" });
             }
             
             
@@ -89,7 +93,7 @@ namespace EventCalendarBelle.Trees
 
                 foreach (var loc in locations)
                 {
-                    tree.Add(CreateTreeNode("l-" + loc.Id.ToString(), id, queryStrings, loc.LocationName, "icon-globe", false, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/editLocation/" + loc.Id.ToString()));
+                    tree.Add(CreateTreeNode("l-" + loc.Id.ToString(), id, queryStrings, loc.LocationName, "icon-map-loaction", false, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/editLocation/" + loc.Id.ToString()));
                 }
                 return tree;
             }
@@ -109,7 +113,7 @@ namespace EventCalendarBelle.Trees
 
                 foreach (var e in revents)
                 {
-                    tree.Add(CreateTreeNode("re-" + e.Id.ToString(), id, queryStrings, e.title, "icon-music", false, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/editREvent/" + e.Id));
+                    tree.Add(CreateTreeNode("re-" + e.Id.ToString(), id, queryStrings, e.title, "icon-axis-rotation", false, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/editREvent/" + e.Id));
                 }
 
                 return tree;

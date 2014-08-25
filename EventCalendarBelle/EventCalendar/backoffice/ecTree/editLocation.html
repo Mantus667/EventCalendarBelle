@@ -10,41 +10,92 @@
         </div>
         <div class="span8">
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
-                        <a href class="btn btn-primary" ng-click="save(location)" prevent-default>Save</a>
+                        <a href class="btn btn-primary" ng-click="save(location)" prevent-default><localize key="buttons_save">Save</localize></a>
                 </div>
         </div>
     </umb-header>
 
     <div class="umb-panel-body">
-        <div class="umb-pane">
-            <umb-control-group label="Street" description="Enter the street of your location.">
-                <input type="text" class="umb-editor umb-textstring" ng-model="location.street" />
-            </umb-control-group>
+        <div class="umb-pane form-horizontal"> 
+            
+            <div class="umb-property">
+                <div class="control-group umb-control-group">
+                    <div class="umb-el-wrap">
+                        <label class="control-label" for="">
+                            <eventcalendar-localize key="location_street_label">Street</eventcalendar-localize>
+                            <small><eventcalendar-localize key="location_street_description">Enter the street of your location.</eventcalendar-localize></small>
+                        </label>
+                        <div class="controls controls-row">            
+                            <input type="text" class="umb-editor umb-textstring" ng-model="location.street">
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-            <umb-control-group label="Zip Code" description="Enter the zip code of your location.">
-                <input type="text" class="umb-editor umb-textstring" ng-model="location.zipCode" />
-            </umb-control-group>
-                        
-            <umb-control-group label="City" description="Enter the city of your location.">
-                <input type="text" class="umb-editor umb-textstring" ng-model="location.city" />
-            </umb-control-group>
+            <div class="umb-property">
+                <div class="control-group umb-control-group">
+                    <div class="umb-el-wrap">
+                        <label class="control-label" for="">
+                            <eventcalendar-localize key="location_zip_label">Zip Code</eventcalendar-localize>
+                            <small><eventcalendar-localize key="location_zip_description">Enter the zip code of your location.</eventcalendar-localize></small>
+                        </label>
+                        <div class="controls controls-row">            
+                            <input type="text" class="umb-editor umb-textstring" ng-model="location.zipCode">
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-            <umb-control-group label="Country" description="Enter the country of your location.">
-                <input type="text" class="umb-editor umb-textstring" ng-model="location.country" />
-            </umb-control-group>
+            <div class="umb-property">
+                <div class="control-group umb-control-group">
+                    <div class="umb-el-wrap">
+                        <label class="control-label" for="">
+                            <eventcalendar-localize key="location_city_label">City</eventcalendar-localize>
+                            <small><eventcalendar-localize key="location_city_description">Enter the city of your location.</eventcalendar-localize></small>
+                        </label>
+                        <div class="controls controls-row">            
+                            <input type="text" class="umb-editor umb-textstring" ng-model="location.city">
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-            <umb-control-group label="Map" description="Pick your location on the map">
-                <fieldset class="gllpLatlonPicker">
-                    <legend>Search your location on google maps</legend>
-                    <input type="text" class="gllpSearchField">
-		            <input type="button" class="gllpSearchButton" value="search">
-		            <br/><br/>
-		            <div class="gllpMap">Google Maps</div>
-		            <input type="hidden" class="gllpZoom" value="12"/>
-                    <input type="hidden" id="lat" class="umb-editor umb-textstring gllpLatitude" value="{{location.lat}}" />
-                    <input type="hidden" id="lon" class="umb-editor umb-textstring gllpLongitude" value="{{location.lon}}" />
-                </fieldset>
-            </umb-control-group>
+            <div class="umb-property">
+                <div class="control-group umb-control-group">
+                    <div class="umb-el-wrap">
+                        <label class="control-label" for="">
+                            <eventcalendar-localize key="location_country_label">Country</eventcalendar-localize>
+                            <small><eventcalendar-localize key="location_country_description">Enter the country of your location.</eventcalendar-localize></small>
+                        </label>
+                        <div class="controls controls-row">            
+                            <input type="text" class="umb-editor umb-textstring" ng-model="location.country">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="umb-property">
+                <div class="control-group umb-control-group">
+                    <div class="umb-el-wrap">
+                        <label class="control-label" for="">
+                            <eventcalendar-localize key="location_map_label">Map</eventcalendar-localize>
+                            <small><eventcalendar-localize key="location_map_description">Pick your location on the map.</eventcalendar-localize></small>
+                        </label>
+                        <div class="controls controls-row">   
+                            <fieldset class="gllpLatlonPicker">
+                                <legend><eventcalendar-localize key="location_map_search_headline">Search your location on google maps</eventcalendar-localize></legend>
+                                <input type="text" class="gllpSearchField">
+                                <button type="button" class="gllpSearchButton"><eventcalendar-localize key="location_map_search_button">Search</eventcalendar-localize></button>
+		                        <br/><br/>
+		                        <div class="gllpMap">Google Maps</div>
+		                        <input type="hidden" class="gllpZoom" value="12"/>
+                                <input type="hidden" id="lat" class="umb-editor umb-textstring gllpLatitude" value="{{location.lat}}" />
+                                <input type="hidden" id="lon" class="umb-editor umb-textstring gllpLongitude" value="{{location.lon}}" />
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </umb-panel>

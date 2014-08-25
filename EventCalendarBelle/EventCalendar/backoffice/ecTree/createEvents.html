@@ -1,0 +1,32 @@
+﻿<div class="umb-dialog-body with-footer">
+	
+	<div class="umb-pane">
+	<h5>What type of event do you want to create?</h5>
+
+	<ul class="umb-actions umb-actions-child">
+
+		<li>
+		    <a href="#/eventCalendar/ecTree/editEvent/{{currentNode.id}}?create=true" ng-click="nav.hideNavigation()">
+		        
+		        <i class="large icon-music"></i>
+
+		        <span class="menu-label">Normal Event</span>
+		    </a>
+		</li>
+        <li>
+		    <a href="#/eventCalendar/ecTree/editREvent/{{currentNode.id}}?create=true" ng-click="nav.hideNavigation()">
+		        
+		        <i class="large icon-axis-rotation"></i>
+
+		        <span class="menu-label">Recurring Event</span>
+		    </a>
+		</li>
+	</ul>
+	</div>		
+</div>
+	
+<div class="umb-dialog-footer btn-toolbar umb-btn-toolbar">
+		<button class="btn" ng-click="nav.hideDialog(true)">
+			<localize key="buttons_somethingElse">Do something else</localize>
+		</button>
+</div>

@@ -1,6 +1,7 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
 @using EventCalendarBelle
 @using EventCalendarBelle.Models
+@using System.Globalization
 @{
     Layout = "";
     int id = 0;
@@ -30,10 +31,11 @@
         </style>
 		<link type="text/css" href="@Url.Content("~/css/EventCalendar/fullcalendar.css")" rel="stylesheet" />
         <link type="text/css" href="http://cdn.jsdelivr.net/qtip2/2.2.0/jquery.qtip.min.css" rel="stylesheet" />
-        <link type="text/css" href="@Url.Content("~/css/EventCalendar/custom.css")" rel="stylesheet" />
 		<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script type="text/javascript" src="@Url.Content("~/scripts/EventCalendar/moment.min.js")"></script>
 		<script type="text/javascript" src="@Url.Content("~/scripts/EventCalendar/fullcalendar.min.js")"></script>
         <script type="text/javascript" src="@Url.Content("~/scripts/EventCalendar/gcal.js")"></script>
+        <script type="text/javascript" src="@Url.Content("~/scripts/EventCalendar/lang-all.js")"></script>
         <script type="text/javascript" src="http://cdn.jsdelivr.net/qtip2/2.2.0/jquery.qtip.min.js"></script>
 		<script type="text/javascript">
 		    var selectedCats = [];
@@ -43,10 +45,10 @@
 		            var index = $.inArray(text, selectedCats);
 		            if (index > -1) {
 		                selectedCats.splice(index, 1);
-		                $(this).removeClass("active");
+		                $(this).removeClass("active label-success");
 		            } else {
 		                selectedCats.push(text);
-		                $(this).addClass("active");
+		                $(this).removeClass("label-default").addClass("active label-success");
 		                console.log($(this));
 		            }
 		            $('#calendar').fullCalendar('refetchEvents');
@@ -67,6 +69,7 @@
 		                    center: 'title',
 		                    right: 'month,basicWeek,basicDay'
 		                },
+		                lang: '@CultureInfo.CurrentCulture.TwoLetterISOLanguageName.ToLower()',
 		                eventSources: data,		                
 		                eventClick: function (event) {
 		                    if (event.url) {
@@ -86,7 +89,7 @@
 		                        if (event.end != null) {
 		                            element.qtip({
 		                                content: {
-		                                    text: "<h1>" + event.title + "</h1><h5>Start:" + event.start.toLocaleDateString() + "</h5><h5>End:" + event.end.toLocaleDateString() + "</h5><div>" + event.description + "</div>",
+		                                    text: "<h2>" + event.title + "</h2><h5>Start:" + event.start.format('llll') + "</h5><h5>End:" + event.end.format('llll') + "</h5><div>" + event.description + "</div>",
 		                                    title: event.title
 		                                },
 		                                style: "qtip-blue"
@@ -94,7 +97,7 @@
 		                        } else {
 		                            element.qtip({
 		                                content: {
-		                                    text: "<h1>" + event.title + "</h1><h5>Start:" + event.start.toLocaleDateString() + "</h5><div>" + event.description + "</div>",
+		                                    text: "<h2>" + event.title + "</h2><h5>Start:" + event.start.format('llll') + "</h5><div>" + event.description + "</div>",
 		                                    title: event.title
 		                                },
 		                                style: "qtip-blue"
@@ -103,8 +106,8 @@
 		                    } else {
 		                        element.qtip({
 		                            content: {
-		                                text: "<h1>" + event.title + "</h1><h5>Start:" + event.start.toLocaleDateString() + "</h5><div>" + event.description + "</div>",
-		                                title: event.title
+		                                text: "<h2>" + event.title + "</h2><h5>Start:" + event.start.format('ll') + "</h5><div>" + event.description + "</div>",
+                                        title: event.title
 		                            },
 		                            style: "qtip-blue"
 		                        });
@@ -128,7 +131,7 @@
 
 		                    $('#catList').empty();
 		                    distinct.forEach(function (cat) {
-		                        $('#catList').append('<li><a class="catSelector" id="' + cat + '" href="#">' + cat + '<span class="circle pull-right"></span></a></li>');
+		                        $('#catList').append('<li><a class="catSelector label label-default" id="' + cat + '" href="#">' + cat + '<span class="circle pull-right"></span></a></li>');
 		                    });
 
 		                    if (selectedCats.length > 0) {
@@ -138,7 +141,7 @@
 		                                event.categories.split(',').forEach(function (cat) {
 		                                    if ($.inArray(cat, selectedCats) > -1) {
 		                                        included = true;
-		                                        $('a.catSelector#' + cat).addClass("active");
+		                                        $('a.catSelector#' + cat).removeClass("label-default").addClass("active label-success");
 		                                    }
 		                                });
 		                            }

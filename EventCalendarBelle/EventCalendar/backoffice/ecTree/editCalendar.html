@@ -10,40 +10,101 @@
         </div>
         <div class="span8">
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
-                        <a href class="btn btn-primary" ng-click="save(calendar)" prevent-default>Save</a>
+                        <a href class="btn btn-primary" ng-click="save(calendar)" prevent-default><localize key="buttons_save">Save</localize></a>
                 </div>
         </div>
     </umb-header>
 
     <div class="umb-panel-body">
-        <div class="umb-pane">
-            <umb-control-group label="GCal" description="Do you want to use a Gcal Feed?">
-                <input type="checkbox" class="umb-editor umb-textstring" ng-model="calendar.isGCal" />
-            </umb-control-group>
+        <div class="umb-pane form-horizontal">
 
-            <umb-control-group label="Verstecken?" description="Should the Calendar be hidden on front end?">
-                <input type="checkbox" class="umb-editor umb-textstring" ng-model="calendar.displayOnSite" />
-            </umb-control-group>
-                        
-            <umb-control-group label="GCal Feed Url" description="The feed url of your google calendar feed">
-                <input type="url" class="umb-editor umb-textstring" ng-model="calendar.gcalFeedUrl" />
-            </umb-control-group>
+            <div class="umb-property">
+                <div class="control-group umb-control-group">
+                    <div class="umb-el-wrap">
+                        <label class="control-label" for="">
+                            <eventcalendar-localize key="calendar_gcal_label">Google Calendar</eventcalendar-localize>
+                            <small><eventcalendar-localize key="calendar_gcal_description">Do you want to use a Gcal Feed?</eventcalendar-localize></small>
+                        </label>
+                        <div class="controls controls-row">            
+                            <input type="checkbox" class="umb-editor umb-textstring" ng-model="calendar.isGCal" />
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-            <umb-control-group label="Color" description="The unique color this calendar should use">
-                <input type="hidden" id="color_field" class="umb-editor umb-textstring" ng-model="calendar.color" />
-                <div id="colorSelector"><div style="background-color: {{calendar.color}}"></div></div>
-            </umb-control-group>
+            <div class="umb-property">
+                <div class="control-group umb-control-group">
+                    <div class="umb-el-wrap">
+                        <label class="control-label" for="">
+                            <eventcalendar-localize key="calendar_hide_label">Hide?</eventcalendar-localize>
+                            <small><eventcalendar-localize key="calendar_hide_description">Should the Calendar be hidden on front end?</eventcalendar-localize></small>
+                        </label>
+                        <div class="controls controls-row">            
+                            <input type="checkbox" class="umb-editor umb-textstring" ng-model="calendar.displayOnSite" />
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-            <umb-control-group label="Text-Color" description="The unique text-color this calendar should use">
-                <input type="hidden" id="color_text_field" class="umb-editor umb-textstring" ng-model="calendar.textColor" />
-                <div id="colorSelector2"><div style="background-color: {{calendar.textColor}}"></div></div>
-            </umb-control-group>
+            <div class="umb-property">
+                <div class="control-group umb-control-group">
+                    <div class="umb-el-wrap">
+                        <label class="control-label" for="">
+                            <eventcalendar-localize key="calendar_feedurl_label">Google Calendar Feed Url</eventcalendar-localize>
+                            <small><eventcalendar-localize key="calendar_feedurl_description">The feed url of your google calendar feed.</eventcalendar-localize></small>
+                        </label>
+                        <div class="controls controls-row">            
+                            <input type="url" class="umb-editor umb-textstring" ng-model="calendar.gCalFeedUrl" />
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-            <umb-control-group label="ViewMode" description="Set the initial view mode for this calendar">
-                <input type="radio" ng-model="calendar.viewMode" value="month">  Month <br />
-                <input type="radio" ng-model="calendar.viewMode" value="basicWeek"> Week <br />
-                <input type="radio" ng-model="calendar.viewMode" value="basicDay"> Day <br />
-            </umb-control-group>
+            <div class="umb-property">
+                <div class="control-group umb-control-group">
+                    <div class="umb-el-wrap">
+                        <label class="control-label" for="">
+                            <eventcalendar-localize key="calendar_color_label">Background Color</eventcalendar-localize>
+                            <small><eventcalendar-localize key="calendar_color_description">The unique color this calendar should use for its events.</eventcalendar-localize></small>
+                        </label>
+                        <div class="controls controls-row">            
+                            <input type="hidden" id="Hidden2" class="umb-editor umb-textstring" ng-model="calendar.color" />
+                            <div id="colorSelector"><div style="background-color: {{calendar.color}}"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="umb-property">
+                <div class="control-group umb-control-group">
+                    <div class="umb-el-wrap">
+                        <label class="control-label" for="">
+                            <eventcalendar-localize key="calendar_textcolor_label">Text Color</eventcalendar-localize>
+                            <small><eventcalendar-localize key="calendar_textcolor_description">The unique color this calendar should use for its text.</eventcalendar-localize></small>
+                        </label>
+                        <div class="controls controls-row">            
+                            <input type="hidden" id="Hidden1" class="umb-editor umb-textstring" ng-model="calendar.textColor" />
+                            <div id="colorSelector2"><div style="background-color: {{calendar.textColor}}"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="umb-property">
+                <div class="control-group umb-control-group">
+                    <div class="umb-el-wrap">
+                        <label class="control-label" for="">
+                            <eventcalendar-localize key="calendar_viewmode_label">ViewMode</eventcalendar-localize>
+                            <small><eventcalendar-localize key="calendar_viewmode_description">Set the initial view mode for this calendar.</eventcalendar-localize></small>
+                        </label>
+                        <div class="controls controls-row">            
+                            <input type="radio" ng-model="calendar.viewMode" value="month">  <eventcalendar-localize key="calendar_viewmode_month">Month</eventcalendar-localize> <br />
+                            <input type="radio" ng-model="calendar.viewMode" value="basicWeek"> <eventcalendar-localize key="calendar_viewmode_week">Week</eventcalendar-localize> <br />
+                            <input type="radio" ng-model="calendar.viewMode" value="basicDay"> <eventcalendar-localize key="calendar_viewmode_day">Day</eventcalendar-localize> <br />
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </umb-panel>

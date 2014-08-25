@@ -13,6 +13,7 @@ using Umbraco.Core.Persistence.Migrations;
 using Umbraco.Core.Logging;
 using System.Configuration;
 using System.IO;
+using umbraco.BusinessLogic;
 
 namespace EventCalendarBelle
 {
@@ -61,20 +62,11 @@ namespace EventCalendarBelle
         {
             try
             {
-
                 var runner = new MigrationRunner(this.oldVersion, this.newVersion, "UpdateEventCalendarTables"+this.newVersion.ToString());
                 var upgraded = runner.Execute(this._db, true);
                 LogHelper.Info<installer>("Done doing migration for version " + this.newVersion.ToString());
             }
             catch (Exception ex) { LogHelper.Error<installer>("Failed to do the migration for a version", ex); }
-
-            //try
-            //{
-            //    var runner = new MigrationRunner(this.oldVersion, this.newVersion, "UpdateEventCalendarTables2.0.2");
-            //    var upgraded = runner.Execute(this._db, true);
-            //    LogHelper.Info<installer>("Done doing migration for version 2.0.2" + upgraded.ToString());
-            //}
-            //catch (Exception ex) { LogHelper.Error<installer>("Failed to do the migration for a version", ex); }
         }
 
         private void CreateSection()
@@ -92,6 +84,15 @@ namespace EventCalendarBelle
                 //So let's create it the section
                 sectionService.MakeNew("EventCalendar", "eventCalendar", "icon-calendar-alt");
                 this.BulletedList1.Items.Add(new ListItem("Done creating the section."));
+
+                //Add the section to the allowed once for the admin
+                var admin = new User(0);
+                if (!admin.Applications.Any(x => x.alias == "eventCalendar"))
+                {
+                    admin.AddApplication("eventCalendar");
+                    admin.Save();
+                }
+                this.BulletedList1.Items.Add(new ListItem("Added Admin to the section."));
             }            
         }
 

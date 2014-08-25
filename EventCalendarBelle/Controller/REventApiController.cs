@@ -32,6 +32,19 @@ namespace EventCalendarBelle.Controller
             else
             {
                 DatabaseContext.Database.Save(nevent);
+
+                //Create the new descriptions for the new event
+                var query2 = new Sql().Select("*").From("ec_eventdescriptions").Where<EventDescription>(x => x.CalendarId == nevent.calendarId && x.EventId == nevent.Id && x.Type == (int)EventType.Recurring);
+                nevent.descriptions = DatabaseContext.Database.Fetch<EventDescription>(query2);
+
+                var ls = Services.LocalizationService;
+                foreach (var lang in ls.GetAllLanguages())
+                {
+                    if (nevent.descriptions.SingleOrDefault(x => x.CultureCode == lang.CultureInfo.ToString()) == null)
+                    {
+                        nevent.descriptions.Add(new EventDescription() { CalendarId = nevent.calendarId, EventId = nevent.Id, CultureCode = lang.CultureInfo.ToString(), Id = 0, Type = (int)EventType.Recurring });
+                    }
+                }
             }
 
             return nevent;

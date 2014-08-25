@@ -56,6 +56,7 @@ namespace EventCalendarBelle
             mainDictionary.Add("locationBaseUrl", urlHelper.GetUmbracoApiServiceBaseUrl<LocationApiController>(controller => controller.PostSave(null)));
             mainDictionary.Add("eventBaseUrl", urlHelper.GetUmbracoApiServiceBaseUrl<EventApiController>(controller => controller.PostSave(null)));
             mainDictionary.Add("reventBaseUrl", urlHelper.GetUmbracoApiServiceBaseUrl<REventApiController>(controller => controller.PostSave(null)));
+            mainDictionary.Add("localizationBaseUrl", urlHelper.GetUmbracoApiServiceBaseUrl<LocalizationApiController>(controller => controller.GetCurrentDateFormat(null)));
 
             e.Add("eventCalendar", mainDictionary);
         }

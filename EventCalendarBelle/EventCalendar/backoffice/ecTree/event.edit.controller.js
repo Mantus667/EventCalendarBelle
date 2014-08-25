@@ -1,22 +1,88 @@
 ﻿angular.module("umbraco").controller("EventCalendar.EventEditController",
-        function ($scope, $routeParams, eventResource, locationResource, notificationsService, assetsService, tinyMceService, $timeout, dialogService, angularHelper) {           
+        function ($scope, $routeParams, eventResource, locationResource, notificationsService, assetsService, tinyMceService, $timeout, dialogService, navigationService, userService, eventCalendarLocalizationService, angularHelper) {           
 
-            $scope.categories = { view: 'tags', label: "Categories", description: 'Specify categories which the event is related to.'};
-            var tag_scope = undefined;
+            $scope.event = { id: 0, calendarid: 0, allday: false, descriptions: {} };
+            var locale = 'en-US';
+            var dateformat = 'MM/DD/YYYY HH:mm:ss';
+            
+            var initAssets = function () {
+                assetsService.loadCss("/App_Plugins/EventCalendar/css/bootstrap-datetimepicker.min.css");
+                assetsService.loadCss("/App_Plugins/EventCalendar/css/bootstrap-switch.css");
+                assetsService.loadCss("/App_Plugins/EventCalendar/css/eventcalendar.custom.css");
+                assetsService.loadCss("/App_Plugins/EventCalendar/css/bootstrap-tagsinput.css");
 
-            //get a calendar id -> service
-            eventResource.getById($routeParams.id.replace("e-","")).then(function (response) {
-                $scope.event = response.data;
-                
-                //Get the scope for the tags editor
-                $("div.umb-tags").ready(function () {
-                    tag_scope = angular.element($("div.umb-tags")).scope();
-                    if($scope.event.categories != null) {
-                        tag_scope.currentTags = $scope.event.categories.split(',');
-                    }
-                });
+                //Get the current user locale
+                userService.getCurrentUser().then(function (user) {
+                    locale = user.locale;
+                });                
 
-                //Create the tabs for every language etc
+                assetsService
+                    .loadJs("/App_Plugins/EventCalendar/scripts/bootstrap-tagsinput.min.js")
+                    .then(function () {
+                        $('input#tags').on('itemAdded', function (event) {
+                            // event.item: contains the item
+                            if ($scope.event.categories === "") {
+                                $scope.event.categories += event.item;
+                            } else {
+                                $scope.event.categories += "," + event.item;
+                            }
+                        });
+                    });
+
+                //Load js library add set the date values for starttime/endtime
+                assetsService
+                    .loadJs("/App_Plugins/EventCalendar/scripts/moment-with-locales.js")
+                    .then(function () {
+                        //Set the right local of the current user in moment
+                        moment.locale([locale,'en']);
+
+                        //Get the right format for displaying
+                        //dateformat = moment.localeData()._longDateFormat.L.replace("DD","dd").replace("YYYY","yyyy") + " " + moment.localeData()._longDateFormat.LT.replace("[", "").replace("]", "");
+
+                        if ($routeParams.create == "true") {
+                            $scope.event.starttime = moment();
+                            $scope.event.endtime = moment();
+                        }
+
+                        assetsService
+                           .loadJs("/App_Plugins/EventCalendar/scripts/bootstrap-datetimepicker.js")
+                           .then(function () {
+                               //this function will execute when all dependencies have loaded
+                               $('#datetimepicker1').datetimepicker({
+                                   language: locale
+                               });
+                               $('#datetimepicker1 input').val(moment($scope.event.starttime).format('l LT'));
+
+                               $('#datetimepicker2').datetimepicker({
+                                   language: locale
+                               });
+                               $('#datetimepicker2 input').val(moment($scope.event.endtime).format('l LT'));
+
+                               $('#datetimepicker1').on('changeDate', function (e) {
+                                   var d = moment(e.date); //.format('MM/DD/YYYY HH:mm:ss');
+                                   //$('#datetimepicker1 input').val(d.format('l LT'));
+                                   $scope.event.starttime = d.format('MM/DD/YYYY HH:mm:ss');
+                               });
+                               $('#datetimepicker2').on('changeDate', function (e) {
+                                   var d = moment(e.date);
+                                   //$('#datetimepicker2 input').val(d.format('l LT'));
+                                   $scope.event.endtime = d.format('MM/DD/YYYY HH:mm:ss');
+                               });
+                           });
+                    });                               
+
+                assetsService
+                   .loadJs("/App_Plugins/EventCalendar/scripts/bootstrap-switch.min.js")
+                   .then(function () {
+                       $('#allday').bootstrapSwitch('setState', $scope.event.allday, true);
+                       $('#allday').on('switch-change', function (e, data) {
+                           $scope.event.allday = data.value;
+                       });
+                   });
+            };
+
+            var initRTE = function () {
+                //Create the tabs for every language etc | length
                 $scope.tabs = [{ id: "Content", label: "Content" }];
                 angular.forEach($scope.event.descriptions, function (value, key) {
                     this.push({ id: key, label: value.culture });
@@ -36,28 +102,7 @@
                         }
                     };
                 });
-
-                //Load js library add set the date values for starttime/endtime
-                assetsService
-                    .loadJs("/App_Plugins/EventCalendar/scripts/moment.min.js")
-                    .then(function () {
-                        $('#datetimepicker1 input').val(moment($scope.event.starttime).format('MM/DD/YYYY HH:mm:ss'));
-                        $('#datetimepicker2 input').val(moment($scope.event.endtime).format('MM/DD/YYYY HH:mm:ss'));
-                    });
-
-                assetsService
-                .loadJs("/App_Plugins/EventCalendar/scripts/bootstrap-switch.min.js")
-                .then(function () {
-                    if ($scope.event) {
-                        $('#allday').bootstrapSwitch('setState', $scope.event.allday, true);
-                    }
-                    $('#allday').on('switch-change', function (e, data) {
-                        $scope.event.allday = data.value;
-                    });
-                });
-            }, function (response) {
-                notificationsService.error("Error", $scope.currentNode.name + " could not be loaded");
-            });
+            };
 
             //Load all locations
             locationResource.getall().then(function (response) {
@@ -66,36 +111,30 @@
                 notificationsService.error("Error", "Could not load locations");
             });
 
-            assetsService.loadCss("/App_Plugins/EventCalendar/css/bootstrap-datetimepicker.min.css");
-            assetsService.loadCss("/App_Plugins/EventCalendar/css/bootstrap-switch.css");
-            assetsService.loadCss("/App_Plugins/EventCalendar/css/eventcalendar.custom.css");            
+            if ($routeParams.create == "true") {
+                $scope.event.calendarid = $routeParams.id.replace("c-", "");
+                initAssets();
+            } else {
+                //get a calendar id -> service
+                eventResource.getById($routeParams.id.replace("e-","")).then(function (response) {
+                    $scope.event = response.data;                
 
-            assetsService
-                .loadJs("/App_Plugins/EventCalendar/scripts/bootstrap-datetimepicker.min.js")
-                .then(function () {
-                    //this function will execute when all dependencies have loaded
-                    $('#datetimepicker1').datetimepicker({
-                        language: 'en'
-                    });
+                    initRTE();
 
-                    $('#datetimepicker2').datetimepicker({
-                        language: 'en'
-                    });
+                    initAssets();
 
-                    $('#datetimepicker1').on('changeDate', function (e) {
-                        var d = moment(e.date).format('MM/DD/YYYY HH:mm:ss');
-                        $scope.event.starttime = d;
-                    });
-                    $('#datetimepicker2').on('changeDate', function (e) {
-                        var d = moment(e.date).format('MM/DD/YYYY HH:mm:ss');
-                        $scope.event.endtime = d;
-                    });
-                });            
+                }, function (response) {
+                    notificationsService.error("Error", $scope.currentNode.name + " could not be loaded");
+                });
+            }                                 
 
             $scope.save = function (event) {
-                tag_scope = angular.element($("div.umb-tags")).scope();
-                event.categories = tag_scope.currentTags.join();
+                //console.log(event);
                 eventResource.save(event).then(function (response) {
+                    if ($routeParams.create == "true") {
+                        window.location = "#/eventCalendar/ecTree/editEvent/e-" + response.data.id;
+                    }
+                    navigationService.syncTree({ tree: 'ecTree', path: ["-1", "calendarTree", "c-" + $scope.event.calendarid], forceReload: true });
                     notificationsService.success("Success", event.title + " has been saved");
                 }, function (response) {
                     notificationsService.error("Error", event.title + " could not be saved");

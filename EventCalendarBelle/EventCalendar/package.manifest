@@ -17,6 +17,8 @@
 
 			'~/App_Plugins/EventCalendar/Editors/calendar.editor.controller.js',
 
+			'~/App_Plugins/EventCalendar/localization.js',
+
             '~/App_Plugins/EventCalendar/backoffice/ectree/calendar.edit.controller.js',
 			'~/App_Plugins/EventCalendar/backoffice/ectree/calendar.create.controller.js',
 			'~/App_Plugins/EventCalendar/backoffice/ectree/calendar.delete.controller.js',

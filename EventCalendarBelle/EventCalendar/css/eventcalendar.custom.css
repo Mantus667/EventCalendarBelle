@@ -29,3 +29,7 @@
 #editEventForm input.ng-valid.umb-headline {
     border: none;
 }
+
+div.bootstrap-tagsinput .label-info {
+background-color: #5bc0de;
+}

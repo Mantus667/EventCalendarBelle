@@ -62,7 +62,7 @@ namespace EventCalendarBelle
         {
             try
             {
-                var runner = new MigrationRunner(this.oldVersion, this.newVersion, "UpdateEventCalendarTables"+this.newVersion.ToString());
+                var runner = new MigrationRunner(this.oldVersion, this.newVersion, "UpdateEventCalendarTables");
                 var upgraded = runner.Execute(this._db, true);
                 LogHelper.Info<installer>("Done doing migration for version " + this.newVersion.ToString());
             }
@@ -249,6 +249,20 @@ namespace EventCalendarBelle
                     if (!this._db.TableExist("ec_eventdescriptions"))
                     {
                         this._db.CreateTable<EventDescription>(false);
+                        this.BulletedList1.Items.Add(new ListItem("Successfully created table."));
+                    }
+                }
+                catch (Exception ex) { this.BulletedList1.Items.Add(new ListItem(ex.Message)); }
+
+                //Creating UserSettings table
+                try
+                {
+                    this.BulletedList1.Items.Add(new ListItem("Creating user settings table."));
+                    if (!this._db.TableExist("ec_usettings"))
+                    {
+                        this._db.CreateTable<UserSettings>(false);
+                        //Auto install the settings for superadmin
+                        this._db.Save(new UserSettings() { UserId = 0, CanCreateCalendar = true, CanCreateEvents = true, CanCreateLocations = true, CanDeleteCalendar = true, CanDeleteEvents = true, CanDeleteLocations = true });
                         this.BulletedList1.Items.Add(new ListItem("Successfully created table."));
                     }
                 }

@@ -20,6 +20,7 @@ using Umbraco.Web.WebServices;
 using System.Web;
 using System.Web.Routing;
 using Umbraco.Web;
+using Umbraco.Core.Persistence;
 
 namespace EventCalendarBelle
 {
@@ -42,6 +43,11 @@ namespace EventCalendarBelle
     {
         protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
+            //if (!ApplicationContext.Current.DatabaseContext.Database.TableExist("ec_usettings"))
+            //{
+            //    ApplicationContext.Current.DatabaseContext.Database.CreateTable<UserSettings>(false);
+            //    ApplicationContext.Current.DatabaseContext.Database.Save(new UserSettings() { UserId = 0, CanCreateCalendar = true, CanCreateEvents = true, CanCreateLocations = true, CanDeleteCalendar = true, CanDeleteEvents = true, CanDeleteLocations = true });
+            //}
             ServerVariablesParser.Parsing += Parsing;
             base.ApplicationStarted(umbracoApplication, applicationContext);
         }
@@ -56,7 +62,7 @@ namespace EventCalendarBelle
             mainDictionary.Add("locationBaseUrl", urlHelper.GetUmbracoApiServiceBaseUrl<LocationApiController>(controller => controller.PostSave(null)));
             mainDictionary.Add("eventBaseUrl", urlHelper.GetUmbracoApiServiceBaseUrl<EventApiController>(controller => controller.PostSave(null)));
             mainDictionary.Add("reventBaseUrl", urlHelper.GetUmbracoApiServiceBaseUrl<REventApiController>(controller => controller.PostSave(null)));
-            mainDictionary.Add("localizationBaseUrl", urlHelper.GetUmbracoApiServiceBaseUrl<LocalizationApiController>(controller => controller.GetCurrentDateFormat(null)));
+            mainDictionary.Add("userBaseUrl", urlHelper.GetUmbracoApiServiceBaseUrl<UserApiController>(controller => controller.PostSave(null)));
 
             e.Add("eventCalendar", mainDictionary);
         }

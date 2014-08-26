@@ -1,0 +1,124 @@
+﻿<umb-panel ng-controller="EventCalendar.UserEditController">
+    <umb-header>
+        <div class="span4">
+            <input type="text"
+                    class="umb-headline" 
+                    localize="placeholder"
+                    select-on-focus 
+                    placeholder="@placeholders_entername" 
+                    ng-model="username"
+                    readonly />
+        </div>
+        <div class="span8">
+                <div class="btn-toolbar pull-right umb-btn-toolbar">
+                        <a href class="btn btn-primary" ng-click="save(user)" prevent-default><localize key="buttons_save">Save</localize></a>
+                </div>
+        </div>
+    </umb-header>
+
+    <div class="umb-panel-body">
+        <div class="umb-pane form-horizontal"> 
+            
+            <div class="umb-property">
+                <div class="control-group umb-control-group">
+                    <div class="umb-el-wrap">
+                        <label class="control-label" for="">
+                            <eventcalendar-localize key="user_createcalendar_label">Create Calendar</eventcalendar-localize>
+                            <small><eventcalendar-localize key="user_createcalendar_description">User is allowed to create calendar.</eventcalendar-localize></small>
+                        </label>
+                        <div class="controls controls-row">            
+                            <input type="checkbox" class="umb-editor umb-textstring" ng-model="user.canCreateCalendar">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="umb-property">
+                <div class="control-group umb-control-group">
+                    <div class="umb-el-wrap">
+                        <label class="control-label" for="">
+                            <eventcalendar-localize key="user_deletecalendar_label">Delete Calendar</eventcalendar-localize>
+                            <small><eventcalendar-localize key="user_deletecalendar_description">User is allowed to delete calendar.</eventcalendar-localize></small>
+                        </label>
+                        <div class="controls controls-row">            
+                            <input type="checkbox" class="umb-editor umb-textstring" ng-model="user.canDeleteCalendar">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="umb-property">
+                <div class="control-group umb-control-group">
+                    <div class="umb-el-wrap">
+                        <label class="control-label" for="">
+                            <eventcalendar-localize key="user_createlocations_label">Create Locations</eventcalendar-localize>
+                            <small><eventcalendar-localize key="user_createlocations_description">User is allowed to create locations.</eventcalendar-localize></small>
+                        </label>
+                        <div class="controls controls-row">            
+                            <input type="checkbox" class="umb-editor umb-textstring" ng-model="user.canCreateLocations">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="umb-property">
+                <div class="control-group umb-control-group">
+                    <div class="umb-el-wrap">
+                        <label class="control-label" for="">
+                            <eventcalendar-localize key="user_deletelocations_label">Delete Locations</eventcalendar-localize>
+                            <small><eventcalendar-localize key="user_deletelocations_description">User is allowed to delete locations.</eventcalendar-localize></small>
+                        </label>
+                        <div class="controls controls-row">            
+                            <input type="checkbox" class="umb-editor umb-textstring" ng-model="user.canDeleteLocations">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="umb-property">
+                <div class="control-group umb-control-group">
+                    <div class="umb-el-wrap">
+                        <label class="control-label" for="">
+                            <eventcalendar-localize key="user_createevents_label">Create Events</eventcalendar-localize>
+                            <small><eventcalendar-localize key="user_createevents_description">User is allowed to create events.</eventcalendar-localize></small>
+                        </label>
+                        <div class="controls controls-row">            
+                            <input type="checkbox" class="umb-editor umb-textstring" ng-model="user.canCreateEvents">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="umb-property">
+                <div class="control-group umb-control-group">
+                    <div class="umb-el-wrap">
+                        <label class="control-label" for="">
+                            <eventcalendar-localize key="user_deleteevents_label">Delete Events</eventcalendar-localize>
+                            <small><eventcalendar-localize key="user_deleteevents_description">User is allowed to delete events.</eventcalendar-localize></small>
+                        </label>
+                        <div class="controls controls-row">            
+                            <input type="checkbox" class="umb-editor umb-textstring" ng-model="user.canDeleteEvents">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="umb-property">
+                <div class="control-group umb-control-group">
+                    <div class="umb-el-wrap">
+                        <label class="control-label" for="">
+                            <eventcalendar-localize key="user_calendar_label">Allowed Calendar</eventcalendar-localize>
+                            <small><eventcalendar-localize key="user_calendar_description">The calendar the user has access to.</eventcalendar-localize></small>
+                        </label>
+                        <div class="controls controls-row">            
+                            <label ng-repeat="calendar in calendars">
+                              <input type="checkbox" checklist-model="user.calendar" checklist-value="calendar.id"> {{calendar.calendarname}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</umb-panel>

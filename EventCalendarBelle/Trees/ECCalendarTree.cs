@@ -10,6 +10,7 @@ using Umbraco.Web.Trees;
 using EventCalendarBelle.Controller;
 using EventCalendarBelle.Models;
 using Umbraco.Web;
+using umbraco.BusinessLogic.Actions;
 
 namespace EventCalendarBelle.Trees
 {
@@ -19,42 +20,74 @@ namespace EventCalendarBelle.Trees
     {
         protected override Umbraco.Web.Models.Trees.MenuItemCollection GetMenuForNode(string id, System.Net.Http.Formatting.FormDataCollection queryStrings)
         {
-
             var menu = new MenuItemCollection();
+            var currentUser = Security.CurrentUser;
+            var ctrl = new UserApiController();
+
+            var settings = ctrl.GetById(currentUser.Id);
+            
             if (id == global::Umbraco.Core.Constants.System.Root.ToInvariantString())
             {
-                menu.Items.Add(new MenuItem("createCalendar", "Create Calendar") { Icon = "add" });
-                menu.Items.Add(new MenuItem("createLocation", "Create Location") { Icon = "add" });
+                if (settings.CanCreateCalendar)
+                {
+                    menu.Items.Add(new MenuItem("createCalendar", "Create Calendar") { Icon = "add" });
+                }
+                if (settings.CanCreateLocations)
+                {
+                    menu.Items.Add(new MenuItem("createLocation", "Create Location") { Icon = "add" });
+                }
             }
             else if (id == "calendarTree")
             {
-                menu.DefaultMenuAlias = "createCalendar";
-                menu.Items.Add(new MenuItem("createCalendar", "Create Calendar") { Icon = "add" });
+                if (settings.CanCreateCalendar)
+                {
+                    menu.DefaultMenuAlias = "createCalendar";
+                    menu.Items.Add(new MenuItem("createCalendar", "Create Calendar") { Icon = "add" });
+                }
+                menu.Items.Add<ActionRefresh>("Refresh");
             }
             else if (id == "locationTree")
             {
-                menu.DefaultMenuAlias = "createLocation";
-                menu.Items.Add(new MenuItem("createLocation", "Create Location") { Icon = "add" });
+                if (settings.CanCreateLocations)
+                {
+                    menu.DefaultMenuAlias = "createLocation";
+                    menu.Items.Add(new MenuItem("createLocation", "Create Location") { Icon = "add" });
+                }
+                menu.Items.Add<ActionRefresh>("Refresh");
             }
             else if (id.Contains("c-"))
             {
-                menu.DefaultMenuAlias = "createEvents";
-                menu.Items.Add(new MenuItem("createEvents", "Create") { Icon = "add" });
-                //menu.Items.Add(new MenuItem("createEvent", "Create Event"));
-                //menu.Items.Add(new MenuItem("createREvent", "Create recurring Event"));
-                menu.Items.Add(new MenuItem("deleteCalendar", "Delete Calendar") { Icon = "delete" });
+                if (settings.CanCreateEvents)
+                {
+                    menu.DefaultMenuAlias = "createEvents";
+                    menu.Items.Add(new MenuItem("createEvents", "Create") { Icon = "add" });
+                }
+                if (settings.CanDeleteCalendar)
+                {
+                    menu.Items.Add(new MenuItem("deleteCalendar", "Delete Calendar") { Icon = "delete" });
+                }
+                menu.Items.Add<ActionRefresh>("Refresh");
             }
             else if (id.Contains("l-"))
             {
-                menu.Items.Add(new MenuItem("deleteLocation", "Delete Location") { Icon = "delete" });
+                if (settings.CanDeleteLocations)
+                {
+                    menu.Items.Add(new MenuItem("deleteLocation", "Delete Location") { Icon = "delete" });
+                }
             }
             else if (id.Contains("re-"))
             {
-                menu.Items.Add(new MenuItem("deleteREvent", "Delete Recurring Event") { Icon = "delete" });
+                if (settings.CanDeleteEvents)
+                {
+                    menu.Items.Add(new MenuItem("deleteREvent", "Delete Recurring Event") { Icon = "delete" });
+                }
             }
             else if (id.Contains("e-"))
             {
-                menu.Items.Add(new MenuItem("deleteEvent", "Delete Event") { Icon = "delete" });
+                if (settings.CanDeleteEvents)
+                {
+                    menu.Items.Add(new MenuItem("deleteEvent", "Delete Event") { Icon = "delete" });
+                }
             }
             
             
@@ -69,6 +102,10 @@ namespace EventCalendarBelle.Trees
                 var tree = new TreeNodeCollection();
                 tree.Add(CreateTreeNode("calendarTree", id, queryStrings, "Calendar", "icon-calendar-alt", true, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/overviewCalendar/all"));
                 tree.Add(CreateTreeNode("locationTree", id, queryStrings, "Locations", "icon-globe-alt", true, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/overviewLocation/all"));
+                if (Security.CurrentUser.Id == 0)
+                {
+                    tree.Add(CreateTreeNode("security",id,queryStrings,"Security","icon-combination-lock",true, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/overviewSecurity/all"));
+                }
                 return tree;
             }
 
@@ -94,6 +131,23 @@ namespace EventCalendarBelle.Trees
                 foreach (var loc in locations)
                 {
                     tree.Add(CreateTreeNode("l-" + loc.Id.ToString(), id, queryStrings, loc.LocationName, "icon-map-loaction", false, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/editLocation/" + loc.Id.ToString()));
+                }
+                return tree;
+            }
+
+            if (id == "security")
+            {
+                var us = Services.UserService;
+                var tree = new TreeNodeCollection();
+                var total = 0;
+                var users = us.GetAll(0, 1000, out total);
+                foreach (var user in users.Where(x => x.AllowedSections.Contains("eventCalendar")))
+                {
+                    //Only the superadmin should change the settings for superadmin
+                    if ((Security.CurrentUser.Id != 0 && user.Id != 0) || Security.CurrentUser.Id == 0)
+                    {
+                        tree.Add(CreateTreeNode("u-" + user.Id.ToString(), id, queryStrings, user.Name, "", false, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/editUser/" + user.Id.ToString()));
+                    }
                 }
                 return tree;
             }

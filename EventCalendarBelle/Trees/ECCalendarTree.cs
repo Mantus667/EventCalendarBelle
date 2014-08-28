@@ -112,12 +112,18 @@ namespace EventCalendarBelle.Trees
             if (id == "calendarTree")
             {
                 var ctrl = new CalendarApiController();
-                List<ECalendar> calendar = ctrl.GetAll().ToList();
+                var uctrl = new UserApiController();
                 var tree = new TreeNodeCollection();
+
+                List<ECalendar> calendar = ctrl.GetAll().ToList();
+                var user_settings = uctrl.GetById(Security.GetUserId());
 
                 foreach (var cal in calendar)
                 {
-                    tree.Add(CreateTreeNode("c-" + cal.Id.ToString(), id, queryStrings, cal.Calendarname, "icon-calendar", true, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/editCalendar/" + cal.Id));
+                    if (user_settings.AllowedCalendar.Contains(cal.Id.ToString()))
+                    {
+                        tree.Add(CreateTreeNode("c-" + cal.Id.ToString(), id, queryStrings, cal.Calendarname, "icon-calendar", true, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/editCalendar/" + cal.Id));
+                    }
                 }
                 return tree;
             }

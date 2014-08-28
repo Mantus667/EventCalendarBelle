@@ -19,9 +19,25 @@ namespace EventCalendarBelle.Controller
         public ECalendar PostSave(ECalendar calendar)
         {
             if (calendar.Id > 0)
+            {
                 DatabaseContext.Database.Update(calendar);
+            }
             else
+            {
                 DatabaseContext.Database.Save(calendar);
+
+                //Update usersettings and add the newly created calendar to the allowed calendar
+                var ctrl = new UserApiController();
+                var usettings = ctrl.GetById(Security.GetUserId());
+                if(!String.IsNullOrEmpty(usettings.calendar)) {
+                    usettings.calendar += "," + calendar.Id;
+                }
+                else
+                {
+                    usettings.calendar = calendar.Id.ToString();
+                }
+                ctrl.PostSave(usettings);
+            }
 
             return calendar;
         }

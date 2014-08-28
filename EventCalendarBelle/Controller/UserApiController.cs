@@ -44,5 +44,12 @@ namespace EventCalendarBelle.Controller
 
             return db.Fetch<UserSettings>(query);
         }
+
+        public string GetNameOfUser(int id)
+        {
+            var us = Services.UserService;
+            var user = us.GetByProviderKey(id);
+            return user.Username;
+        }
     }
 }

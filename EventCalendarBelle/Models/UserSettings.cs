@@ -51,21 +51,43 @@ namespace EventCalendarBelle.Models
         [Column("calendar")]
         [DataMember(Name = "calendar")]
         [NullSetting(NullSetting = NullSettings.Null)]
-        public string calendar { get; set; }
+        public string Calendar { get; set; }
 
         [Ignore]
         [DataMember(Name = "calendar_array")]
         public IEnumerable<string> AllowedCalendar { 
             get {
-                if (!String.IsNullOrEmpty(this.calendar))
+                if (!String.IsNullOrEmpty(this.Calendar))
                 {
-                    return this.calendar.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                    return this.Calendar.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList();
                 }
                 else
                 {
                     return Enumerable.Empty<string>();
                 }
             } 
+        }
+
+        [Column("locations")]
+        [DataMember(Name = "locations")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public string Locations { get; set; }
+
+        [Ignore]
+        [DataMember(Name = "locations_array")]
+        public IEnumerable<string> AllowedLocations
+        {
+            get
+            {
+                if (!String.IsNullOrEmpty(this.Locations))
+                {
+                    return this.Locations.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList();
+                }
+                else
+                {
+                    return Enumerable.Empty<string>();
+                }
+            }
         }
     }
 }

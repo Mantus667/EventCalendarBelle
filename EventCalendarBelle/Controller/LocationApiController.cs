@@ -18,9 +18,26 @@ namespace EventCalendarBelle.Controller
         public EventLocation PostSave(EventLocation location)
         {
             if (location.Id > 0)
+            {
                 DatabaseContext.Database.Update(location);
+            }
             else
+            {
                 DatabaseContext.Database.Save(location);
+
+                //Update usersettings and add the newly created location to the allowed locations
+                var ctrl = new UserApiController();
+                var usettings = ctrl.GetById(Security.GetUserId());
+                if (!String.IsNullOrEmpty(usettings.Locations))
+                {
+                    usettings.Locations += "," + location.Id;
+                }
+                else
+                {
+                    usettings.Calendar = location.Id.ToString();
+                }
+                ctrl.PostSave(usettings);
+            }
 
             return location;
         }

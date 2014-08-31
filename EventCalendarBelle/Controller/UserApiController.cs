@@ -34,7 +34,7 @@ namespace EventCalendarBelle.Controller
             if(result != null) {
                 return result;
             }
-            return new UserSettings() { Id = 0, UserId = id, CanDeleteLocations = false, CanDeleteEvents = false, CanCreateCalendar = false, CanCreateEvents = false, CanCreateLocations = false, CanDeleteCalendar = false, calendar = "" };
+            return new UserSettings() { Id = 0, UserId = id, CanDeleteLocations = false, CanDeleteEvents = false, CanCreateCalendar = false, CanCreateEvents = false, CanCreateLocations = false, CanDeleteCalendar = false, Calendar = "" };
         }
 
         public IEnumerable<UserSettings> GetAll()

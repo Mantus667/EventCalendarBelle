@@ -102,7 +102,7 @@ namespace EventCalendarBelle.Trees
                 var tree = new TreeNodeCollection();
                 tree.Add(CreateTreeNode("calendarTree", id, queryStrings, "Calendar", "icon-calendar-alt", true, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/overviewCalendar/all"));
                 tree.Add(CreateTreeNode("locationTree", id, queryStrings, "Locations", "icon-globe-alt", true, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/overviewLocation/all"));
-                if (Security.CurrentUser.Id == 0)
+                if (Security.CurrentUser.UserType.Alias.ToLower() == "admin")
                 {
                     tree.Add(CreateTreeNode("security",id,queryStrings,"Security","icon-combination-lock",true, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/overviewSecurity/all"));
                 }
@@ -120,7 +120,7 @@ namespace EventCalendarBelle.Trees
 
                 foreach (var cal in calendar)
                 {
-                    if (user_settings.AllowedCalendar.Contains(cal.Id.ToString()))
+                    if (Security.CurrentUser.UserType.Alias.ToLower() == "admin" || user_settings.AllowedCalendar.Contains(cal.Id.ToString()))
                     {
                         tree.Add(CreateTreeNode("c-" + cal.Id.ToString(), id, queryStrings, cal.Calendarname, "icon-calendar", true, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/editCalendar/" + cal.Id));
                     }
@@ -131,12 +131,18 @@ namespace EventCalendarBelle.Trees
             if (id == "locationTree")
             {
                 var ctrl = new LocationApiController();
-                List<EventLocation> locations = ctrl.GetAll().ToList();
+                var uctrl = new UserApiController();
                 var tree = new TreeNodeCollection();
+
+                List<EventLocation> locations = ctrl.GetAll().ToList();
+                var user_settings = uctrl.GetById(Security.GetUserId());
 
                 foreach (var loc in locations)
                 {
-                    tree.Add(CreateTreeNode("l-" + loc.Id.ToString(), id, queryStrings, loc.LocationName, "icon-map-loaction", false, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/editLocation/" + loc.Id.ToString()));
+                    if (Security.CurrentUser.UserType.Alias.ToLower() == "admin" || user_settings.AllowedLocations.Contains(loc.Id.ToString()))
+                    {
+                        tree.Add(CreateTreeNode("l-" + loc.Id.ToString(), id, queryStrings, loc.LocationName, "icon-map-loaction", false, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/editLocation/" + loc.Id.ToString()));
+                    }
                 }
                 return tree;
             }

@@ -118,6 +118,22 @@
                     </div>
                 </div>
             </div>
+
+            <div class="umb-property">
+                <div class="control-group umb-control-group">
+                    <div class="umb-el-wrap">
+                        <label class="control-label" for="">
+                            <eventcalendar-localize key="user_location_label">Allowed Locations</eventcalendar-localize>
+                            <small><eventcalendar-localize key="user_location_description">The locations the user has access to.</eventcalendar-localize></small>
+                        </label>
+                        <div class="controls controls-row">
+                            <label ng-repeat="location in locations">
+                                <input type="checkbox" checklist-model="user.locations" checklist-value="location.id"> {{location.name}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
             
         </div>
     </div>

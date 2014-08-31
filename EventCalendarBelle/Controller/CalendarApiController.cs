@@ -29,12 +29,12 @@ namespace EventCalendarBelle.Controller
                 //Update usersettings and add the newly created calendar to the allowed calendar
                 var ctrl = new UserApiController();
                 var usettings = ctrl.GetById(Security.GetUserId());
-                if(!String.IsNullOrEmpty(usettings.calendar)) {
-                    usettings.calendar += "," + calendar.Id;
+                if(!String.IsNullOrEmpty(usettings.Calendar)) {
+                    usettings.Calendar += "," + calendar.Id;
                 }
                 else
                 {
-                    usettings.calendar = calendar.Id.ToString();
+                    usettings.Calendar = calendar.Id.ToString();
                 }
                 ctrl.PostSave(usettings);
             }

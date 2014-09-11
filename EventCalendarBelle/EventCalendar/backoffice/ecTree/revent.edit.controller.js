@@ -1,5 +1,5 @@
 ﻿angular.module("umbraco").controller("EventCalendar.REventEditController",
-        function ($scope, $routeParams, reventResource, locationResource, notificationsService, navigationService, assetsService) {
+        function ($scope, $routeParams, reventResource, locationResource, notificationsService, navigationService, assetsService, userService) {
 
             $scope.event = { id: 0, calendarid: 0, allDay: false };
 
@@ -8,9 +8,57 @@
                 assetsService.loadCss("/App_Plugins/EventCalendar/css/eventcalendar.custom.css");
                 assetsService.loadCss("/App_Plugins/EventCalendar/css/bootstrap-tagsinput.css");
 
-                assetsService
+                //Get the current user locale
+                userService.getCurrentUser().then(function (user) {
+                    locale = user.locale;
+
+                    //Load js library add set the date values for starttime/endtime
+                    assetsService
+                        .loadJs("/App_Plugins/EventCalendar/scripts/moment-with-locales.js")
+                        .then(function () {
+                            //Set the right local of the current user in moment
+                            moment.locale([locale, 'en']);
+
+                            if ($routeParams.create == "true") {
+                                $scope.event.starttime = moment();
+                                $scope.event.endtime = moment();
+                            }
+
+                            assetsService
+                               .loadJs("/App_Plugins/EventCalendar/scripts/bootstrap-datetimepicker.js")
+                               .then(function () {
+                                   //this function will execute when all dependencies have loaded
+                                   $('#datetimepicker1').datetimepicker({
+                                       language: locale,
+                                       pickDate: false
+                                   });
+                                   $('#datetimepicker1 input').val(moment.utc($scope.event.starttime).format('LT'));
+
+                                   $('#datetimepicker2').datetimepicker({
+                                       language: locale,
+                                       pickDate: false
+                                   });
+                                   $('#datetimepicker2 input').val(moment.utc($scope.event.endtime).format('LT'));
+
+                                   $('#datetimepicker1').on('dp.change', function (e) {
+                                       var d = moment(e.date); //.format('MM/DD/YYYY HH:mm:ss');
+                                       console.log(d);
+                                       //$('#datetimepicker1 input').val(d.format('l LT'));
+                                       $scope.event.starttime = d.format('HH:mm:ss');
+                                   });
+                                   $('#datetimepicker2').on('dp.change', function (e) {
+                                       var d = moment(e.date);
+                                       console.log(d);
+                                       //$('#datetimepicker2 input').val(d.format('l LT'));
+                                       $scope.event.endtime = d.format('HH:mm:ss');
+                                   });
+                               });
+                        });
+
+                    assetsService
                     .loadJs("/App_Plugins/EventCalendar/scripts/bootstrap-tagsinput.min.js")
                     .then(function () {
+                        $('input#tags').tagsinput();
                         $('input#tags').on('itemAdded', function (event) {
                             // event.item: contains the item
                             if ($scope.event.categories === "") {
@@ -21,14 +69,16 @@
                         });
                     });
 
-                assetsService
-                    .loadJs("/App_Plugins/EventCalendar/scripts/bootstrap-switch.min.js")
-                    .then(function () {
-                        $('#allday').bootstrapSwitch('setState', $scope.event.allday, true);
-                        $('#allday').on('switch-change', function (e, data) {
-                            $scope.event.allday = data.value;
+                    assetsService
+                        .loadJs("/App_Plugins/EventCalendar/scripts/bootstrap-switch.min.js")
+                        .then(function () {
+                            $('#allday').bootstrapSwitch();
+                            $('#allday').bootstrapSwitch('setState', $scope.event.allday, true);
+                            $('#allday').on('switch-change', function (e, data) {
+                                $scope.event.allday = data.value;
+                            });
                         });
-                    });
+                });                
             };
 
             var initRTE = function () {                
@@ -79,7 +129,10 @@
             } else {
                 //get a calendar id -> service
                 reventResource.getById($routeParams.id.replace("re-", "")).then(function (response) {
-                    $scope.event = response.data;                    
+                    $scope.event = response.data;
+
+                    console.log($scope.event.starttime);
+                    console.log($scope.event.endtime);
 
                     initRTE();
 

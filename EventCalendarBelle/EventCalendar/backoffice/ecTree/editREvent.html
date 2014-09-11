@@ -86,6 +86,46 @@
                     <div class="control-group umb-control-group">
                         <div class="umb-el-wrap">
                             <label class="control-label" for="">
+                                <eventcalendar-localize key="revent_start_label">Start time</eventcalendar-localize>
+                                <small><eventcalendar-localize key="revent_start_description">The starting time of your event.</eventcalendar-localize></small>
+                            </label>
+                            <div class="controls controls-row">            
+                                <div id="datetimepicker1" class="input-append">
+                                    <input required name="start" type="text" />                                    
+                                    <span class="add-on datepickerbutton">
+                                        <i class="icon icon-calendar"></i>
+                                    </span>
+                                </div>
+                                <span ng-show="form.start.$dirty && frmRegister.start.$error.required">Start is required</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="umb-property">
+                    <div class="control-group umb-control-group">
+                        <div class="umb-el-wrap">
+                            <label class="control-label" for="">
+                                <eventcalendar-localize key="revent_end_label">End time</eventcalendar-localize>
+                                <small><eventcalendar-localize key="revent_end_description">The ending time of your event.</eventcalendar-localize></small>
+                            </label>
+                            <div class="controls controls-row">            
+                                <div id="datetimepicker2" class="input-append">
+                                    <input required name="end" type="text" />
+                                    <span class="add-on">
+                                        <i class="icon icon-calendar"></i>
+                                    </span>
+                                </div>
+                                <span ng-show="form.end.$dirty && frmRegister.end.$error.required">End is required</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="umb-property">
+                    <div class="control-group umb-control-group">
+                        <div class="umb-el-wrap">
+                            <label class="control-label" for="">
                                 <eventcalendar-localize key="event_location_label">Location</eventcalendar-localize>
                                 <small><eventcalendar-localize key="event_location_description">Where does the event take place?</eventcalendar-localize></small>
                             </label>

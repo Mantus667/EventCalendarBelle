@@ -43,11 +43,6 @@ namespace EventCalendarBelle
     {
         protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
-            //if (!ApplicationContext.Current.DatabaseContext.Database.TableExist("ec_usettings"))
-            //{
-            //    ApplicationContext.Current.DatabaseContext.Database.CreateTable<UserSettings>(false);
-            //    ApplicationContext.Current.DatabaseContext.Database.Save(new UserSettings() { UserId = 0, CanCreateCalendar = true, CanCreateEvents = true, CanCreateLocations = true, CanDeleteCalendar = true, CanDeleteEvents = true, CanDeleteLocations = true });
-            //}
             ServerVariablesParser.Parsing += Parsing;
             base.ApplicationStarted(umbracoApplication, applicationContext);
         }

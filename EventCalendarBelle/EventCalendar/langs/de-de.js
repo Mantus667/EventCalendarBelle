@@ -43,5 +43,26 @@
     "event_frequency_label": "Frequenz",
     "event_frequency_description": "In welcher Frequenz wiederholt sich das Event?",
     "event_monthly_label": "Monatliches Interval",
-    "event_monthly_description": "Monatliches Interval. (Nur benötigt wenn die Freuqnz des Events 'monatlich' ist.)"
+    "event_monthly_description": "Monatliches Interval. (Nur benötigt wenn die Freuqnz des Events 'monatlich' ist.)",
+    "revent_start_label": "Startzeit",
+    "revent_start_description": "Die Uhrzeit wann das Event beginnt.",
+    "revent_end_label": "Endzeit",
+    "revent_end_description": "Die Uhrzeit wann das Event beendet ist.",
+
+    "user_createcalendar_label": "Kalender erstellen",
+    "user_createcalendar_description": "Kann der Benutzer Kalender erstellen?",
+    "user_deletecalendar_label": "Kalender löschen",
+    "user_deletecalendar_description": "Kann der Benutzer Kalender löschen?",
+    "user_createlocations_label": "Orte erstellen",
+    "user_createlocations_description": "Kann der Benutzer Orte erstellen?",
+    "user_deletelocations_label": "Orte löschen",
+    "user_deletelocations_description": "Kann der Benutzer Orte löschen?",
+    "user_createevents_label": "Events erstellen",
+    "user_createevents_description": "Kann der Benutzer Events erstellen?",
+    "user_deleteevents_label": "Events löschen",
+    "user_deleteevents_description": "Kann der Benutzer Events löschen?",
+    "user_calendar_label": "Erlaubte Kalender",
+    "user_calendar_description": "Zu welchen Kalendern hat der Benutzer Zugriff?",
+    "user_location_label": "Erlaubte Orte",
+    "user_location_description": "Zu welchen Orten hat der Benutzer Zugriff?"
 }

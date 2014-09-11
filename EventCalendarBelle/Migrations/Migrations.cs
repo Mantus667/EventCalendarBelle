@@ -48,4 +48,20 @@ namespace EventCalendarBelle.Migrations
             Alter.Table("ec_calendars").AddColumn("textcolor").AsString(255).Nullable();
         }
     }
+
+    [Migration("2.0.2", 1, "UpdateEventCalendarTables")]
+    public class RecurringEventsTimesMigration : MigrationBase
+    {
+        public override void Down()
+        {
+            Delete.Column("start").FromTable("ec_recevents");
+            Delete.Column("end").FromTable("ec_recevents");
+        }
+
+        public override void Up()
+        {
+            Alter.Table("ec_recevents").AddColumn("start").AsDateTime().Nullable();
+            Alter.Table("ec_recevents").AddColumn("end").AsDateTime().Nullable();
+        }
+    }
 }

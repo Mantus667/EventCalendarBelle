@@ -59,7 +59,7 @@ namespace EventCalendarBelle.Controller
                 if (e.locationId != 0)
                 {
                     l = lctrl.GetById(e.locationId);
-                }
+                }                
 
                 Schedule schedule = new Schedule(new ScheduleWidget.ScheduledEvents.Event()
                 {
@@ -67,16 +67,29 @@ namespace EventCalendarBelle.Controller
                     DaysOfWeekOptions = (DayOfWeekEnum)e.day,
                     FrequencyTypeOptions = (FrequencyTypeEnum)e.frequency,
                     MonthlyIntervalOptions = (MonthlyIntervalEnum)e.monthly_interval
-                });                
+                });               
 
                 evm = new EventDetailsModel()
                 {
                     Title = e.title,
                     LocationId = e.locationId,
                     Location = l,
-                    StartDate = ((DateTime)schedule.NextOccurrence(DateTime.Now)).ToString("F", CultureInfo.CurrentCulture),
+                    //StartDate = ((DateTime)schedule.NextOccurrence(DateTime.Now)).ToString("F", CultureInfo.CurrentCulture),
+                    //EndDate = ((DateTime)schedule.NextOccurrence(DateTime.Now)).ToString("F", CultureInfo.CurrentCulture),
                     Descriptions = e.descriptions
                 };
+
+                if (null != e.start)
+                {
+                    var start = ((DateTime)schedule.NextOccurrence(DateTime.Now));
+                    evm.StartDate = new DateTime(start.Year, start.Month, start.Day, e.start.Hour, e.start.Minute, 0).ToString("F", CultureInfo.CurrentCulture);
+
+                }
+                if (null != e.end)
+                {
+                    var end = ((DateTime)schedule.NextOccurrence(DateTime.Now));
+                    evm.EndDate = new DateTime(end.Year, end.Month, end.Day, e.end.Hour, e.end.Minute, 0).ToString("F", CultureInfo.CurrentCulture);
+                }
             }
 
             return PartialView("EventDetails", evm);

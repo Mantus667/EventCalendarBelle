@@ -55,6 +55,16 @@ namespace EventCalendarBelle.Models
         [NullSetting(NullSetting = NullSettings.Null)]
         public string categories { get; set; }
 
+        [Column("start")]
+        [DataMember(Name = "starttime")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public DateTime start { get; set; }
+
+        [Column("end")]
+        [DataMember(Name = "endtime")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public DateTime end { get; set; }
+
         [Ignore]
         [DataMember(Name = "descriptions")]
         public List<EventDescription> descriptions { get; set; }

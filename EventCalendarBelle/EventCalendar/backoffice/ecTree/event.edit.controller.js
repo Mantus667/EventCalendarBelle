@@ -1,7 +1,7 @@
 ﻿angular.module("umbraco").controller("EventCalendar.EventEditController",
         function ($scope, $routeParams, eventResource, locationResource, notificationsService, assetsService, tinyMceService, $timeout, dialogService, navigationService, userService, eventCalendarLocalizationService, angularHelper) {           
-
-            $scope.event = { id: 0, calendarid: 0, allday: false, descriptions: {} };
+            //name : null, id : null, icon: "icon-user"
+            $scope.event = { id: 0, calendarid: 0, allday: false, descriptions: {}, organisator: {} };
             var locale = 'en-US';
             var dateformat = 'MM/DD/YYYY HH:mm:ss';
             
@@ -103,6 +103,10 @@
                 });
             };
 
+            $scope.populate = function(data) {
+                $scope.event.organisator = { name: data.name, id: data.id, icon: data.icon };
+            };
+
             //Load all locations
             locationResource.getall().then(function (response) {
                 $scope.locations = response.data;
@@ -116,7 +120,8 @@
             } else {
                 //get a calendar id -> service
                 eventResource.getById($routeParams.id.replace("e-","")).then(function (response) {
-                    $scope.event = response.data;                
+                    $scope.event = response.data;
+                    $scope.event.organisator = {};
 
                     initRTE();
 
@@ -125,7 +130,18 @@
                 }, function (response) {
                     notificationsService.error("Error", $scope.currentNode.name + " could not be loaded");
                 });
-            }                                 
+            }
+
+            $scope.openMemberPicker = function () {
+                dialogService.memberPicker({
+                    multiPicker: false,
+                    callback: $scope.populate
+                });
+            };
+
+            $scope.deleteOrganisator = function () {
+                $scope.event.organisator = {};
+            }
 
             $scope.save = function (event) {
                 //console.log(event);

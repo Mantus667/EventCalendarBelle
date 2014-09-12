@@ -105,6 +105,43 @@
                         </div>
                     </div>
                 </div>
+                <div class="umb-property">
+                    <div class="control-group umb-control-group">
+                        <div class="umb-el-wrap">
+                            <label class="control-label" for="">
+                                Organisator
+                                <small>Blub</small>
+                            </label>
+                            <div class="controls controls-row">
+                                <ul class="unstyled list-icons" ng-if="event.organisator">
+                                       <li>
+                                           <i class="icon icon-delete red hover-show pull-right" ng-click="deleteOrganisator()"></i>
+                               
+                                           <i class="icon {{event.organisator.icon}} hover-hide"></i>
+                                           {{event.organisator.name}}
+                                       </li>
+                                   </ul>
+                                <ul class="unstyled list-icons">
+                                 <li>
+                                     <i class="icon icon-add blue"></i>
+                                     <a href ng-click="openMemberPicker()" prevent-default>
+                                         Select
+                                     </a>
+                                 </li>
+                             </ul>       
+                                <!--<p>
+                                    <span ng-show="event.organisator.name">
+                                        <i class="icon {{event.organisator.icon}} hover-hide"></i>
+                                        <i class="icon icon-delete red hover-show pull-right" ng-click="deleteOrganisator()"></i>
+                                        {{event.organisator.name}}
+                                    </span>
+                                    
+                                    <a href="#" ng-click="openMemberPicker()" prevent-default="">Select...</a>-->
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                     
             </div>
         </umb-tab>

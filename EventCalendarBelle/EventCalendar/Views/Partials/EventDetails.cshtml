@@ -38,6 +38,10 @@
             </div>
         </div>
         <div class="row-fluid">
+            <hr />
+            <h3><a href="mailto:@Model.Organisator.Email">Organisator: @Model.Organisator.Name</a></h3>
+        </div>
+        <div class="row-fluid">
             @if (showLocation)
             {
                 <hr />
@@ -67,6 +71,13 @@
             <hr />
             <div class="span12" id="description">
                 @Html.Raw(Model.GetDescription(CultureInfo.CurrentCulture.ToString()))
+            </div>
+            <div class="span12">
+                <div class="btn-group">
+                    @Html.ActionLink("Download Event", "GetIcsForEvent", "ECSurface", new { area = "EventCalendar", id = Request["id"], type = Request["type"] }, new { @class = "btn btn-primary" })
+                    @Html.ActionLink("Download Calendar","GetIcsForCalendar", "ECSurface", new { area = "EventCalendar", id = Model.CalendarId }, new { @class = "btn btn-success" })
+                </div
+                
             </div>
         </div>
     </div>

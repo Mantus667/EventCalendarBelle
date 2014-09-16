@@ -60,6 +60,9 @@
     <Reference Include="CookComputing.XmlRpcV2">
       <HintPath>..\packages\xmlrpcnet.2.5.0\lib\net20\CookComputing.XmlRpcV2.dll</HintPath>
     </Reference>
+    <Reference Include="DDay.iCal">
+      <HintPath>..\packages\DDay.iCal.1.0.2.575\lib\DDay.iCal.dll</HintPath>
+    </Reference>
     <Reference Include="Examine, Version=0.1.57.2941, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Examine.0.1.57.2941\lib\Examine.dll</HintPath>
@@ -285,6 +288,7 @@
     </Content>
     <Content Include="EventCalendar\css\bootstrap-datetimepicker.min.css" />
     <Content Include="EventCalendar\css\bootstrap-switch.css" />
+    <Content Include="EventCalendar\css\bootstrap-switch.min.css" />
     <Content Include="EventCalendar\css\bootstrap-tagsinput.css" />
     <Content Include="EventCalendar\css\DT_bootstrap.css" />
     <Content Include="EventCalendar\css\jquery-gmaps-latlon-picker.css" />

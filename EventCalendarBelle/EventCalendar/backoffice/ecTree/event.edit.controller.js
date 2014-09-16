@@ -1,5 +1,5 @@
 ﻿angular.module("umbraco").controller("EventCalendar.EventEditController",
-        function ($scope, $routeParams, eventResource, locationResource, notificationsService, assetsService, tinyMceService, $timeout, dialogService, navigationService, userService, eventCalendarLocalizationService, angularHelper) {           
+        function ($scope, $routeParams, eventResource, locationResource, notificationsService, assetsService, tinyMceService, $timeout, dialogService, navigationService, userService, eventCalendarLocalizationService, entityResource, angularHelper) {           
             //name : null, id : null, icon: "icon-user"
             $scope.event = { id: 0, calendarid: 0, allday: false, descriptions: {}, organisator: {} };
             var locale = 'en-US';
@@ -7,7 +7,7 @@
             
             var initAssets = function () {
                 assetsService.loadCss("/App_Plugins/EventCalendar/css/bootstrap-datetimepicker.min.css");
-                assetsService.loadCss("/App_Plugins/EventCalendar/css/bootstrap-switch.css");
+                assetsService.loadCss("/App_Plugins/EventCalendar/css/bootstrap-switch.min.css");
                 assetsService.loadCss("/App_Plugins/EventCalendar/css/eventcalendar.custom.css");
                 assetsService.loadCss("/App_Plugins/EventCalendar/css/bootstrap-tagsinput.css");
 
@@ -69,14 +69,21 @@
                         });
 
                     assetsService
-                   .loadJs("/App_Plugins/EventCalendar/scripts/bootstrap-switch.min.js")
-                   .then(function () {
-                       $('#allday').bootstrapSwitch();
-                       $('#allday').bootstrapSwitch('setState', $scope.event.allday, true);
-                       $('#allday').on('switch-change', function (e, data) {
-                           $scope.event.allday = data.value;
+                       .loadJs("/App_Plugins/EventCalendar/scripts/bootstrap-switch.min.js")
+                       .then(function () {
+                           $('#allday').bootstrapSwitch({
+                               onColor: "success",
+                               onText: "<i class='icon-check icon-white'></i>",
+                               offText: "<i class='icon-delete'></i>",
+                               onSwitchChange: function (event, state) {
+                                   $scope.event.allday = state;
+                               }
+                           });
+                           //$('#allday').bootstrapSwitch('state', $scope.event.allday, true);
+                           //$('#allday').on('switch-change', function (e, data) {
+                           //    $scope.event.allday = data.value;
+                           //});
                        });
-                   });
                 });
             };
 
@@ -103,7 +110,8 @@
                 });
             };
 
-            $scope.populate = function(data) {
+            $scope.populate = function (data) {
+                $scope.event.organisator_id = data.id;
                 $scope.event.organisator = { name: data.name, id: data.id, icon: data.icon };
             };
 
@@ -126,6 +134,11 @@
                     initRTE();
 
                     initAssets();
+
+                    entityResource.getById($scope.event.organisator_id, "Member")
+                   .then(function (data) {
+                       $scope.event.organisator = { name: data.name, id: data.id, icon: data.icon };
+                   });
 
                 }, function (response) {
                     notificationsService.error("Error", $scope.currentNode.name + " could not be loaded");

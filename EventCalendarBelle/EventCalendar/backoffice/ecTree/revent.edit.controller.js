@@ -1,10 +1,10 @@
 ﻿angular.module("umbraco").controller("EventCalendar.REventEditController",
-        function ($scope, $routeParams, reventResource, locationResource, notificationsService, navigationService, assetsService, userService) {
+        function ($scope, $routeParams, reventResource, locationResource, notificationsService, navigationService, assetsService, userService, entityResource, dialogService) {
 
-            $scope.event = { id: 0, calendarid: 0, allDay: false };
+            $scope.event = { id: 0, calendarid: 0, allDay: false, organisator: {} };
 
             var initAssets = function () {
-                assetsService.loadCss("/App_Plugins/EventCalendar/css/bootstrap-switch.css");
+                assetsService.loadCss("/App_Plugins/EventCalendar/css/bootstrap-switch.min.css");
                 assetsService.loadCss("/App_Plugins/EventCalendar/css/eventcalendar.custom.css");
                 assetsService.loadCss("/App_Plugins/EventCalendar/css/bootstrap-tagsinput.css");
 
@@ -72,10 +72,13 @@
                     assetsService
                         .loadJs("/App_Plugins/EventCalendar/scripts/bootstrap-switch.min.js")
                         .then(function () {
-                            $('#allday').bootstrapSwitch();
-                            $('#allday').bootstrapSwitch('setState', $scope.event.allday, true);
-                            $('#allday').on('switch-change', function (e, data) {
-                                $scope.event.allday = data.value;
+                            $('#allday').bootstrapSwitch({
+                                onColor: "success",
+                                onText: "<i class='icon-check icon-white'></i>",
+                                offText: "<i class='icon-delete'></i>",
+                                onSwitchChange: function (event, state) {
+                                    $scope.event.allday = state;
+                                }
                             });
                         });
                 });                
@@ -123,6 +126,22 @@
                 $scope.MonthlyIntervals = response.data;
             });
 
+            $scope.populate = function (data) {
+                $scope.event.organisator_id = data.id;
+                $scope.event.organisator = { name: data.name, id: data.id, icon: data.icon };
+            };
+
+            $scope.openMemberPicker = function () {
+                dialogService.memberPicker({
+                    multiPicker: false,
+                    callback: $scope.populate
+                });
+            };
+
+            $scope.deleteOrganisator = function () {
+                $scope.event.organisator = {};
+            }
+
             if ($routeParams.create == "true") {
                 $scope.event.calendarid = $routeParams.id.replace("c-", "");
                 initAssets();
@@ -130,13 +149,16 @@
                 //get a calendar id -> service
                 reventResource.getById($routeParams.id.replace("re-", "")).then(function (response) {
                     $scope.event = response.data;
-
-                    console.log($scope.event.starttime);
-                    console.log($scope.event.endtime);
+                    $scope.event.organisator = {};
 
                     initRTE();
 
                     initAssets();
+
+                    entityResource.getById($scope.event.organisator_id, "Member")
+                       .then(function (data) {
+                           $scope.event.organisator = { name: data.name, id: data.id, icon: data.icon };
+                       });
 
                 }, function (response) {
                     notificationsService.error("Error", $scope.currentNode.name + " could not be loaded");

@@ -1,5 +1,9 @@
-﻿<form novalidate name="form" id="editEventForm">
-<umb-panel ng-controller="EventCalendar.REventEditController">
+﻿<form novalidate 
+    name="form" 
+    id="editEventForm"
+    ng-controller="EventCalendar.REventEditController"
+    ng-submit="save(event)">
+<umb-panel >
     <umb-header tabs="tabs">
         <div class="span4">
                 <input type="text"
@@ -12,7 +16,9 @@
         </div>
         <div class="span8">
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
-                        <a href class="btn btn-primary" ng-click="save(event)" prevent-default><localize key="buttons_save">Save</localize></a>
+                    <button type="submit" data-hotkey="ctrl+s" class="btn btn-success">
+                        <localize key="buttons_save">Save</localize>
+                    </button>
                 </div>
         </div>
     </umb-header>
@@ -146,6 +152,32 @@
                             </label>
                             <div class="controls controls-row">            
                                 <input type="text" id="tags" ng-model="event.categories" data-role="tagsinput" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="umb-property">
+                    <div class="control-group umb-control-group">
+                        <div class="umb-el-wrap">
+                            <label class="control-label" for="">
+                                <eventcalendar-localize key="event_organisator_label">Organisator</eventcalendar-localize>
+                                <small><eventcalendar-localize key="event_organisator_description">Who is the organisator of this event?</eventcalendar-localize></small>
+                            </label>
+                            <div class="controls controls-row">
+                                <ul class="unstyled list-icons" ng-if="event.organisator.name">
+                                    <li>
+                                        <i class="icon icon-delete red hover-show pull-right" ng-click="deleteOrganisator()"></i>
+                                        <i class="icon icon-user hover-hide"></i>
+                                        <span>{{event.organisator.name}}</span>
+                                    </li>
+                                </ul>
+                                <ul class="unstyled list-icons">
+                                    <li>
+                                        <i class="icon icon-add blue"></i>                                 
+                                        <a href="#" ng-click="openMemberPicker()" prevent-default>Select</a>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </div>

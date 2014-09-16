@@ -50,6 +50,11 @@ namespace EventCalendarBelle.Models
         [DataMember(Name = "categories")]
         public string categories { get; set; }
 
+        [Column("organisator")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        [DataMember(Name = "organisator_id")]
+        public int Organisator { get; set; }
+
         [Ignore]
         [DataMember(Name = "descriptions")]
         public List<EventDescription> descriptions { get; set; }

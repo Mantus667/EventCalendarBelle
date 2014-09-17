@@ -209,6 +209,44 @@ namespace EventCalendarBelle.Controller
                             break;
                         }
                 }
+                switch (e.day)
+                {
+                    case (int)DayOfWeekEnum.Mon:
+                        {
+                            rp.ByDay.Add(new WeekDay(DayOfWeek.Monday));
+                            break;
+                        }
+                    case (int)DayOfWeekEnum.Tue:
+                        {
+                            rp.ByDay.Add(new WeekDay(DayOfWeek.Tuesday));
+                            break;
+                        }
+                    case (int)DayOfWeekEnum.Wed:
+                        {
+                            rp.ByDay.Add(new WeekDay(DayOfWeek.Wednesday));
+                            break;
+                        }
+                    case (int)DayOfWeekEnum.Thu:
+                        {
+                            rp.ByDay.Add(new WeekDay(DayOfWeek.Thursday));
+                            break;
+                        }
+                    case (int)DayOfWeekEnum.Fri:
+                        {
+                            rp.ByDay.Add(new WeekDay(DayOfWeek.Friday));
+                            break;
+                        }
+                    case (int)DayOfWeekEnum.Sat:
+                        {
+                            rp.ByDay.Add(new WeekDay(DayOfWeek.Saturday));
+                            break;
+                        }
+                    case (int)DayOfWeekEnum.Sun:
+                        {
+                            rp.ByDay.Add(new WeekDay(DayOfWeek.Sunday));
+                            break;
+                        }
+                }
                 evt.RecurrenceRules.Add(rp);
 
                 Schedule schedule = new Schedule(new ScheduleWidget.ScheduledEvents.Event()
@@ -261,12 +299,15 @@ namespace EventCalendarBelle.Controller
         public ActionResult GetIcsForCalendar(int id)
         {
             DDay.iCal.iCalendar iCal = new DDay.iCal.iCalendar();
+            
 
             var lctrl = new LocationApiController();
             var calctrl = new CalendarApiController();
             var cal = calctrl.GetById(id);
 
             EventLocation l = null;
+
+            iCal.Properties.Add(new CalendarProperty("X-WR-CALNAME", cal.Calendarname));
 
             //Get normal events for calendar
             var nectrl = new EventApiController();
@@ -286,6 +327,7 @@ namespace EventCalendarBelle.Controller
                 evt.Description = this.GetDescription(e, CultureInfo.CurrentCulture.ToString());
                 evt.Summary = e.title;
                 evt.IsAllDay = e.allDay;
+                evt.Categories.AddRange(e.categories.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList());
 
                 //If it has a location fetch it
                 if (e.locationId != 0)
@@ -325,6 +367,7 @@ namespace EventCalendarBelle.Controller
                 evt.Description = this.GetDescription(e, CultureInfo.CurrentCulture.ToString());
                 evt.Summary = e.title;
                 evt.IsAllDay = e.allDay;
+                evt.Categories.AddRange(e.categories.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList());
 
                 //If it has a location fetch it
                 if (e.locationId != 0)
@@ -361,6 +404,44 @@ namespace EventCalendarBelle.Controller
                     default:
                         {
                             rp = new RecurrencePattern(FrequencyType.Monthly);
+                            break;
+                        }
+                }
+                switch (e.day)
+                {
+                    case (int)DayOfWeekEnum.Mon:
+                        {
+                            rp.ByDay.Add(new WeekDay(DayOfWeek.Monday));
+                            break;
+                        }
+                    case (int)DayOfWeekEnum.Tue:
+                        {
+                            rp.ByDay.Add(new WeekDay(DayOfWeek.Tuesday));
+                            break;
+                        }
+                    case (int)DayOfWeekEnum.Wed:
+                        {
+                            rp.ByDay.Add(new WeekDay(DayOfWeek.Wednesday));
+                            break;
+                        }
+                    case (int)DayOfWeekEnum.Thu:
+                        {
+                            rp.ByDay.Add(new WeekDay(DayOfWeek.Thursday));
+                            break;
+                        }
+                    case (int)DayOfWeekEnum.Fri:
+                        {
+                            rp.ByDay.Add(new WeekDay(DayOfWeek.Friday));
+                            break;
+                        }
+                    case (int)DayOfWeekEnum.Sat:
+                        {
+                            rp.ByDay.Add(new WeekDay(DayOfWeek.Saturday));
+                            break;
+                        }
+                    case (int)DayOfWeekEnum.Sun:
+                        {
+                            rp.ByDay.Add(new WeekDay(DayOfWeek.Sunday));
                             break;
                         }
                 }

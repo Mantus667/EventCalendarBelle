@@ -66,5 +66,10 @@
     "user_calendar_label": "Erlaubte Kalender",
     "user_calendar_description": "Zu welchen Kalendern hat der Benutzer Zugriff?",
     "user_location_label": "Erlaubte Orte",
-    "user_location_description": "Zu welchen Orten hat der Benutzer Zugriff?"
+    "user_location_description": "Zu welchen Orten hat der Benutzer Zugriff?",
+
+    "import_file_label": "Datei",
+    "import_file_description": "Die Datei im ics Fomrat die den Kalender und die Events beinhaltet.",
+    "import_calendar_label": "Kalender auswählen",
+    "import_calendar_description": "Vorhanden Kalender zum importieren wählen oder einen neuen Kalender erstellen."
 }

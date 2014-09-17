@@ -135,10 +135,12 @@
 
                     initAssets();
 
-                    entityResource.getById($scope.event.organisator_id, "Member")
-                   .then(function (data) {
-                       $scope.event.organisator = { name: data.name, id: data.id, icon: data.icon };
-                   });
+                    if ($scope.event.organisator_id != 0) {
+                        entityResource.getById($scope.event.organisator_id, "Member")
+                       .then(function (data) {
+                           $scope.event.organisator = { name: data.name, id: data.id, icon: data.icon };
+                       });
+                    }
 
                 }, function (response) {
                     notificationsService.error("Error", $scope.currentNode.name + " could not be loaded");

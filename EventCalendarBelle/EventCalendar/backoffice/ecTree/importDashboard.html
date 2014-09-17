@@ -1,0 +1,34 @@
+﻿<umb-panel ng-controller="EventCalendar.ImportController">
+        <div class="umb-pane">
+            <h1>Import ics file</h1>
+            <form ng-submit="upload(file)" class="form-horizontal">
+                <div class="umb-property">
+                    <div class="control-group umb-control-group">
+                        <div class="umb-el-wrap">
+                            <label class="control-label" for="">
+                                <eventcalendar-localize key="import_file_label">Select a file</eventcalendar-localize>
+                                <small><eventcalendar-localize key="import_file_description">Select an ics file containing your calendar and events.</eventcalendar-localize></small>
+                            </label>
+                            <div class="controls controls-row">            
+                                <input type="file" class="umb-editor umb-textstring" onchange="angular.element(this).scope().filesChanged(this)" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="umb-property">
+                    <div class="control-group umb-control-group">
+                        <div class="umb-el-wrap">
+                            <label class="control-label" for="">
+                                <eventcalendar-localize key="import_calendar_label">Select a calendar</eventcalendar-localize>
+                                <small><eventcalendar-localize key="import_calendar_description">Select an existing calendar or select if a new calendar should be created.</eventcalendar-localize></small>
+                            </label>
+                            <div class="controls controls-row">            
+                                <select ng-model="data.calendarID" ng-options="c.id as c.calendarname for c in calendars" required></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>                
+                <input type="submit" class="btn btn-success" value="Upload" />
+            </form>
+        </div>
+</umb-panel>

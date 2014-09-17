@@ -229,6 +229,7 @@
     <Compile Include="Controller\ECApiController.cs" />
     <Compile Include="Controller\ECSurfaceController.cs" />
     <Compile Include="Controller\EventApiController.cs" />
+    <Compile Include="Controller\ImportApiController.cs" />
     <Compile Include="Controller\LocalizationApiController.cs" />
     <Compile Include="Controller\LocationApiController.cs" />
     <Compile Include="Controller\REventApiController.cs" />
@@ -273,6 +274,8 @@
     <Content Include="EventCalendar\backoffice\ecTree\dashboard.html" />
     <Content Include="EventCalendar\backoffice\ecTree\deleteREvent.html" />
     <Content Include="EventCalendar\backoffice\ecTree\editUser.html" />
+    <Content Include="EventCalendar\backoffice\ecTree\import.controller.js" />
+    <Content Include="EventCalendar\backoffice\ecTree\importDashboard.html" />
     <Content Include="EventCalendar\backoffice\ecTree\location.overview.controller.js" />
     <Content Include="EventCalendar\backoffice\ecTree\overviewLocation.html" />
     <Content Include="EventCalendar\backoffice\ecTree\overviewCalendar.html" />

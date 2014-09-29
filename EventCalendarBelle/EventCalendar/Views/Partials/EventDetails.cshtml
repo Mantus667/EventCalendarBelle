@@ -37,10 +37,12 @@
                 }
             </div>
         </div>
-        <div class="row-fluid">
-            <hr />
-            <h3><a href="mailto:@Model.Organisator.Email">Organisator: @Model.Organisator.Name</a></h3>
-        </div>
+        @if(Model.Organisator != null) {
+            <div class="row-fluid">
+                <hr />
+                <h3><a href="mailto:@Model.Organisator.Email">Organisator: @Model.Organisator.Name</a></h3>
+            </div>
+        }
         <div class="row-fluid">
             @if (showLocation)
             {

@@ -291,44 +291,80 @@ namespace EventCalendarBelle
 
             //Load settings.config XML file
             XmlDocument dashboardXml = new XmlDocument();
-            dashboardXml.Load(dashboardFilePath);
 
-            // Section Node
-            XmlNode findSection = dashboardXml.SelectSingleNode("//section [@alias='EventCalendarDashboardSection']");
-
-            //Couldn't find it
-            if (findSection == null)
+            try
             {
-                //Let's add the xml
-                var xmlToAdd = "<section alias='EventCalendarDashboardSection'>" +
-                                    "<areas>" +
-                                        "<area>eventCalendar</area>" +
-                                    "</areas>" +
-                                    "<tab caption='EventCalendar'>" +
-                                        "<control addPanel='true' panelCaption=''>/App_Plugins/EventCalendar/backoffice/ecTree/dashboard.html</control>" +
-                                    "</tab>" +
-                               "</section>";
+                dashboardXml.Load(dashboardFilePath);
 
-                //Get the main root <dashboard> node
-                XmlNode dashboardNode = dashboardXml.SelectSingleNode("//dashBoard");
+                // Section Node
+                XmlNode findSection = dashboardXml.SelectSingleNode("//section [@alias='EventCalendarDashboardSection']");
 
-                if (dashboardNode != null)
+                //Couldn't find it
+                if (findSection == null)
                 {
-                    //Load in the XML string above
-                    XmlDocument xmlNodeToAdd = new XmlDocument();
-                    xmlNodeToAdd.LoadXml(xmlToAdd);
+                    //Let's add the xml
+                    var xmlToAdd = "<section alias='EventCalendarDashboardSection'>" +
+                                        "<areas>" +
+                                            "<area>eventCalendar</area>" +
+                                        "</areas>" +
+                                        "<tab caption='EventCalendar'>" +
+                                            "<control addPanel='true' panelCaption=''>/App_Plugins/EventCalendar/backoffice/ecTree/dashboard.html</control>" +
+                                        "</tab>" +
+                                        "<tab caption='Import'>" +
+                                            "<control addPanel='true' panelCaption=''>/App_Plugins/EventCalendar/backoffice/ecTree/importDashboard.html</control>" +
+                                        "</tab>" +
+                                   "</section>";
 
-                    //Append the xml above to the dashboard node
-                    try
+                    //Get the main root <dashboard> node
+                    XmlNode dashboardNode = dashboardXml.SelectSingleNode("//dashBoard");
+
+                    if (dashboardNode != null)
                     {
-                        dashboardNode.AppendChild(xmlNodeToAdd);
-                        //Save the file flag to true
-                        saveFile = true;
-                    }
-                    catch (Exception ex) { LogHelper.Error<installer>("Couldn't add dashboard section", ex); } 
+                        //Load in the XML string above
+                        XmlDocument xmlNodeToAdd = new XmlDocument();
+                        xmlNodeToAdd.LoadXml(xmlToAdd);
 
-                    
+                        //Append the xml above to the dashboard node
+                        try
+                        {
+                            var copiedNode = dashboardXml.ImportNode(xmlNodeToAdd.DocumentElement, true);
+                            dashboardNode.AppendChild(copiedNode);
+                            //Save the file flag to true
+                            saveFile = true;
+                        }
+                        catch (Exception ex) { LogHelper.Error<installer>("Couldn't add dashboard section", ex); }
+                    }
                 }
+                else
+                {
+                    //Check if the import dashboard is there
+                    XmlNode importTab = findSection.SelectSingleNode("//tab [@caption='Import']");
+
+                    if (importTab == null)
+                    {
+                        var xmlToAdd = "<tab caption='Import'>" +
+                                            "<control addPanel='true' panelCaption=''>/App_Plugins/EventCalendar/backoffice/ecTree/importDashboard.html</control>" +
+                                        "</tab>";
+
+                        //Load in the XML string above
+                        XmlDocument xmlNodeToAdd = new XmlDocument();
+                        xmlNodeToAdd.LoadXml(xmlToAdd);
+
+                        //Append the xml above to the dashboard node
+                        try
+                        {
+                            var copiedNode = dashboardXml.ImportNode(xmlNodeToAdd.DocumentElement, true);
+                            findSection.AppendChild(copiedNode);
+                            //Save the file flag to true
+                            saveFile = true;
+                        }
+                        catch (Exception ex) { LogHelper.Error<installer>("Couldn't add dashboard section", ex); }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error<installer>("Couldn't add dashboard section", ex);
             }
 
             //If saveFile flag is true then save the file

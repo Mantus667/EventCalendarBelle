@@ -45,10 +45,10 @@ namespace EventCalendarBelle.Controller
         }
 
         [HttpGet]
-        public List<string> GetCalendarSources(int id = 0)
+        public List<object> GetCalendarSources(int id = 0)
         {
             var db = UmbracoContext.Application.DatabaseContext.Database;
-            List<string> sources = new List<string>();
+            List<object> sources = new List<object>();
 
             //Check if we got an id, otherwise get all calendar
             if (id != 0)
@@ -75,7 +75,7 @@ namespace EventCalendarBelle.Controller
                 {
                     if (cal.IsGCal)
                     {
-                        sources.Add(cal.GCalFeedUrl);
+                        sources.Add(new { googleCalendarApiKey = cal.GoogleAPIKey, googleCalendarId = cal.GCalFeedUrl });
                     }
                     else
                     {

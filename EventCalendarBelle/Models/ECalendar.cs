@@ -46,6 +46,13 @@ namespace EventCalendarBelle.Models
         [DataMember(Name = "gcalFeedUrl")]
         public string GCalFeedUrl { get; set; }
 
+        [Column("apikey")]
+        [Display(Name = "Google Api Key")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        [StringLength(255)]
+        [DataMember(Name = "apikey")]
+        public string GoogleAPIKey { get; set; }
+
         [Column("color")]
         [NullSetting(NullSetting = NullSettings.Null)]
         [Display(Name = "Event-Color")]

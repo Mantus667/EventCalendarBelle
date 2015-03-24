@@ -16,21 +16,7 @@
     </umb-header>
 
     <div class="umb-panel-body">
-        <div class="umb-pane form-horizontal">
-
-            <div class="umb-property">
-                <div class="control-group umb-control-group">
-                    <div class="umb-el-wrap">
-                        <label class="control-label" for="">
-                            <eventcalendar-localize key="calendar_gcal_label">Google Calendar</eventcalendar-localize>
-                            <small><eventcalendar-localize key="calendar_gcal_description">Do you want to use a Gcal Feed?</eventcalendar-localize></small>
-                        </label>
-                        <div class="controls controls-row">            
-                            <input type="checkbox" class="umb-editor umb-textstring" ng-model="calendar.isGCal" />
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="umb-pane form-horizontal">            
 
             <div class="umb-property">
                 <div class="control-group umb-control-group">
@@ -50,11 +36,39 @@
                 <div class="control-group umb-control-group">
                     <div class="umb-el-wrap">
                         <label class="control-label" for="">
-                            <eventcalendar-localize key="calendar_feedurl_label">Google Calendar Feed Url</eventcalendar-localize>
-                            <small><eventcalendar-localize key="calendar_feedurl_description">The feed url of your google calendar feed.</eventcalendar-localize></small>
+                            <eventcalendar-localize key="calendar_gcal_label">Google Calendar</eventcalendar-localize>
+                            <small><eventcalendar-localize key="calendar_gcal_description">Do you want to use a Gcal Feed?</eventcalendar-localize></small>
                         </label>
                         <div class="controls controls-row">            
-                            <input type="url" class="umb-editor umb-textstring" ng-model="calendar.gCalFeedUrl" />
+                            <input type="checkbox" class="umb-editor umb-textstring" ng-model="calendar.isGCal" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="umb-property hidden" data-ng-show="calendar.isGCal">
+                <div class="control-group umb-control-group">
+                    <div class="umb-el-wrap">
+                        <label class="control-label" for="">
+                            <eventcalendar-localize key="calendar_api_key_label">Google Calendar API Key</eventcalendar-localize>
+                            <small><eventcalendar-localize key="calendar_api_key_description">The api key for google calendar.</eventcalendar-localize></small>
+                        </label>
+                        <div class="controls controls-row">            
+                            <input type="text" class="umb-editor umb-textstring" ng-model="calendar.apikey" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="umb-property hidden" data-ng-show="calendar.isGCal">
+                <div class="control-group umb-control-group">
+                    <div class="umb-el-wrap">
+                        <label class="control-label" for="">
+                            <eventcalendar-localize key="calendar_feedurl_label">Google Calendar ID</eventcalendar-localize>
+                            <small><eventcalendar-localize key="calendar_feedurl_description">The id of your google calendar.</eventcalendar-localize></small>
+                        </label>
+                        <div class="controls controls-row">            
+                            <input type="text" class="umb-editor umb-textstring" ng-model="calendar.gcalFeedUrl" />
                         </div>
                     </div>
                 </div>

@@ -80,4 +80,18 @@ namespace EventCalendarBelle.Migrations
             Alter.Table("ec_events").AddColumn("organisator").AsInt32().Nullable();
         }
     }
+
+    [Migration("2.0.4", 0, "UpdateEventCalendarTables")]
+    public class CalendarGoogleApiKeyMigration : MigrationBase
+    {
+        public override void Down()
+        {
+            Delete.Column("apikey").FromTable("ec_calendars");
+        }
+
+        public override void Up()
+        {
+            Alter.Table("ec_calendars").AddColumn("apikey").AsString(255).Nullable();
+        }
+    }
 }

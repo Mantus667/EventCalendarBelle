@@ -7,7 +7,7 @@
 
                 getall: function () {
                     return $http.get(Umbraco.Sys.ServerVariables.eventCalendar.eventBaseUrl + "GetAll");
-                },
+                },                
 
                 save: function (calendar) {
                     return $http.post(Umbraco.Sys.ServerVariables.eventCalendar.eventBaseUrl + "PostSave", angular.toJson(calendar));

@@ -60,7 +60,15 @@ namespace EventCalendarBelle
             mainDictionary.Add("userBaseUrl", urlHelper.GetUmbracoApiServiceBaseUrl<UserApiController>(controller => controller.PostSave(null)));
             mainDictionary.Add("importBaseUrl", urlHelper.GetUmbracoApiServiceBaseUrl<ImportApiController>(controller => controller.Import()));
 
-            e.Add("eventCalendar", mainDictionary);
+            if (!e.Keys.Contains("eventCalendar"))
+            {
+                e.Add("eventCalendar", mainDictionary);
+            }
+            else
+            {
+                e.Remove("eventCalendar");
+                e.Add("eventCalendar", mainDictionary);
+            }
         }
     }
 }

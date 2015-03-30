@@ -81,7 +81,7 @@ namespace EventCalendarBelle.Migrations
         }
     }
 
-    [Migration("2.0.4", 0, "UpdateEventCalendarTables")]
+    [Migration("2.0.5", 0, "UpdateEventCalendarTables")]
     public class CalendarGoogleApiKeyMigration : MigrationBase
     {
         public override void Down()

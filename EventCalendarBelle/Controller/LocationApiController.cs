@@ -34,7 +34,7 @@ namespace EventCalendarBelle.Controller
                 }
                 else
                 {
-                    usettings.Calendar = location.Id.ToString();
+                    usettings.Locations = location.Id.ToString();
                 }
                 ctrl.PostSave(usettings);
             }

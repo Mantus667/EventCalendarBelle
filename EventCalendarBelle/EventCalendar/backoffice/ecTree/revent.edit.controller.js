@@ -57,15 +57,19 @@
 
                     assetsService
                     .loadJs("/App_Plugins/EventCalendar/scripts/bootstrap-tagsinput.min.js")
-                    .then(function () {
+                    .then(function () {                        
                         $('input#tags').tagsinput();
+                        var tags = $scope.event.categories.split(",");
+                        angular.forEach(tags, function (value) {
+                            $('input#tags').tagsinput('add', value);
+                        });
                         $('input#tags').on('itemAdded', function (event) {
                             // event.item: contains the item
-                            if ($scope.event.categories === "") {
-                                $scope.event.categories += event.item;
-                            } else {
-                                $scope.event.categories += "," + event.item;
-                            }
+                            $scope.event.categories = $("input#tags").val();
+                        });
+                        $('input#tags').on('itemRemoved', function (event) {
+                            // event.item: contains the item
+                            $scope.event.categories = $("input#tags").val();
                         });
                     });
 
@@ -150,7 +154,7 @@
                 reventResource.getById($routeParams.id.replace("re-", "")).then(function (response) {
                     $scope.event = response.data;
                     $scope.event.organisator = {};
-
+                    console.log($scope.event.categories);
                     initRTE();
 
                     initAssets();

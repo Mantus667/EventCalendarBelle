@@ -104,7 +104,6 @@ namespace EventCalendarBelle.Trees
                 tree.Add(CreateTreeNode("locationTree", id, queryStrings, "Locations", "icon-globe-alt", true, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/overviewLocation/all"));
                 if (Security.CurrentUser.UserType.Alias.ToLower() == "admin")
                 {
-                    //tree.Add(CreateTreeNode("security",id,queryStrings,"Security","icon-combination-lock",true, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/overviewSecurity/all"));
                     tree.Add(CreateTreeNode("security", id, queryStrings, "Security", "icon-combination-lock", true));
                 }
                 return tree;

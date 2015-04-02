@@ -1,0 +1,38 @@
+﻿<form name="ecelForm" novalidate class="ecel-dialog umb-panel" ng-controller="EventCalendar.GridEditors.Dialogs.EventListDialogController">
+    
+    <div class="umb-panel-body no-header with-footer umb-scrollable">
+        
+        <umb-control-group label="Title">
+            <input type="text" ng-model="dialogData.title" required />
+        </umb-control-group>
+
+        <umb-control-group label="Choose a calendar">
+            <select ng-model="dialogData.calendar" ng-options="c.id as c.calendarname for c in calendars" required></select>
+        </umb-control-group>
+
+        <umb-control-group label="How many events?">
+            <input type="number" ng-model="dialogData.count" required />
+        </umb-control-group>
+
+        <umb-control-group label="Show teaser text?">
+            <input type="checkbox" ng-model="dialogData.teaser" />
+        </umb-control-group>
+
+    </div>
+
+    <div class="umb-panel-footer">
+        <div class="umb-el-wrap umb-panel-buttons">
+            <div class="btn-toolbar umb-btn-toolbar">
+                
+                <a href ng-click="close()" class="btn btn-link">
+	        		<localize key="general_cancel">Cancel</localize>
+				</a>
+
+				<button class="btn btn-primary" ng-click="save()">
+				    <localize key="buttons_save">Save</localize>
+				</button>
+
+            </div>
+        </div>
+    </div>
+</form>

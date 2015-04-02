@@ -1,0 +1,8 @@
+﻿@using System.Web.Mvc.Html
+@using EventCalendarBelle.Extensions
+@inherits Umbraco.Web.Mvc.UmbracoViewPage<dynamic>
+@if (Model.value != null)
+{
+    string value = Model.value.ToString();
+    @Html.RenderUpcomingEventsList(value)
+}

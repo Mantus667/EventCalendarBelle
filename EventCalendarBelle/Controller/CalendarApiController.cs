@@ -9,6 +9,7 @@ using EventCalendarBelle.Models;
 using Umbraco.Core.Persistence;
 using Newtonsoft.Json;
 using System.Web.Http;
+using EventCalendarBelle.Services;
 
 namespace EventCalendarBelle.Controller
 {
@@ -18,50 +19,53 @@ namespace EventCalendarBelle.Controller
         [HttpPost]
         public ECalendar PostSave(ECalendar calendar)
         {
+            var db = UmbracoContext.Application.DatabaseContext.Database;
             if (calendar.Id > 0)
             {
-                DatabaseContext.Database.Update(calendar);
+                return CalendarService.UpdateCalendar(calendar);
             }
             else
             {
-                DatabaseContext.Database.Save(calendar);
-
-                //Update usersettings and add the newly created calendar to the allowed calendar
-                var ctrl = new UserApiController();
-                var usettings = ctrl.GetById(Security.GetUserId());
-                if(!String.IsNullOrEmpty(usettings.Calendar)) {
-                    usettings.Calendar += "," + calendar.Id;
-                }
-                else
-                {
-                    usettings.Calendar = calendar.Id.ToString();
-                }
-                ctrl.PostSave(usettings);
+                return CalendarService.CreateCalendar(calendar, Security.GetUserId());
             }
-
-            return calendar;
         }
 
         public int DeleteById(int id)
         {
-            var db = UmbracoContext.Application.DatabaseContext.Database;
-            return db.Delete<ECalendar>(id);
+            return CalendarService.DeleteCalendarById(id);
         }
 
         public ECalendar GetById(int id)
         {
-            var db = UmbracoContext.Application.DatabaseContext.Database;
-            var query = new Sql().Select("*").From("ec_calendars").Where<ECalendar>(x => x.Id == id);
-
-            return db.Fetch<ECalendar>(query).FirstOrDefault();
+            return CalendarService.GetCalendarById(id);
         }
 
         public IEnumerable<ECalendar> GetAll()
         {
-            var db = UmbracoContext.Application.DatabaseContext.Database;
-            var query = new Sql().Select("*").From("ec_calendars");
+            return CalendarService.GetAllCalendar();
+        }
 
-            return db.Fetch<ECalendar>(query);
+        public IEnumerable<EventsOverviewModel> GetEvents(int id,bool forward, int quantity = 0)
+        {
+            var ctrl = new ECApiController();
+            var events = new List<EventsOverviewModel>();
+
+            events = ctrl.GetCalendarEvents(DateTime.Now, DateTime.Now.AddYears(1), id).ToList();
+            if (forward)
+            {
+                events = ctrl.GetCalendarEvents(DateTime.Now, DateTime.Now.AddYears(1), id).ToList();
+                events = events.OrderBy(x => x.start).ToList();
+            }
+            else
+            {
+                events = ctrl.GetCalendarEvents(DateTime.Now, DateTime.Now.AddYears(-1), id).ToList();
+                events = events.OrderByDescending(x => x.start).ToList();
+            }
+            if (quantity != 0)
+            {
+                return events.Take(quantity);
+            }
+            return events;
         }
     }
 }

@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
-using EventCalendarBelle.Controller;
-using EventCalendarBelle.Models;
+using EventCalendar.Core.Models;
 using Umbraco.Core;
 using Umbraco.Core.Persistence;
+using EventCalendar.Core.EventArgs;
 
-namespace EventCalendarBelle.Services
+namespace EventCalendar.Core.Services
 {
     public static class CalendarService
     {        
@@ -59,20 +59,21 @@ namespace EventCalendarBelle.Services
         {
             var db = ApplicationContext.Current.DatabaseContext.Database;
 
+            var args = new CalendarCreationEventArgs { Calendar = calendar };
+            OnCreating(args);
+
+            if (args.Cancel)
+            {
+                return calendar;
+            }
+
             db.Save(calendar);
 
             //Update usersettings and add the newly created calendar to the allowed calendar
-            var ctrl = new UserApiController();
-            var usettings = ctrl.GetById(creatorId);
-            if (!String.IsNullOrEmpty(usettings.Calendar))
-            {
-                usettings.Calendar += "," + calendar.Id;
-            }
-            else
-            {
-                usettings.Calendar = calendar.Id.ToString();
-            }
-            ctrl.PostSave(usettings);
+            SecurityService.AddCalendarToUser(creatorId, calendar.Id);
+
+            var args2 = new CalendarCreatedEventArgs { Calendar = calendar };
+            OnCreated(args2);
 
             return calendar;
         }
@@ -102,19 +103,34 @@ namespace EventCalendarBelle.Services
             db.Update(calendar);
 
             //Update usersettings and add the newly created calendar to the allowed calendar
-            var ctrl = new UserApiController();
-            var usettings = ctrl.GetById(creatorId);
-            if (!String.IsNullOrEmpty(usettings.Calendar))
-            {
-                usettings.Calendar += "," + calendar.Id;
-            }
-            else
-            {
-                usettings.Calendar = calendar.Id.ToString();
-            }
-            ctrl.PostSave(usettings);
+            SecurityService.AddCalendarToUser(creatorId, calendar.Id);
 
             return calendar;
         }
+
+        #region EventHandler Delegates
+        public static void OnCreating(CalendarCreationEventArgs e)
+        {
+            EventHandler<CalendarCreationEventArgs> handler = Creating;
+            if (handler != null)
+            {
+                handler(null, e);
+            }
+        }
+
+        public static void OnCreated(CalendarCreatedEventArgs e)
+        {
+            EventHandler<CalendarCreatedEventArgs> handler = Created;
+            if (handler != null)
+            {
+                handler(null, e);
+            }
+        }
+        #endregion
+
+        #region EventHandler
+        public static event EventHandler<CalendarCreationEventArgs> Creating;
+        public static event EventHandler<CalendarCreatedEventArgs> Created;
+        #endregion
     }
 }

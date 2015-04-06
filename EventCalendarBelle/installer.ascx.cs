@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Umbraco.Core.Persistence;
-using EventCalendarBelle.Models;
+using EventCalendar.Core.Models;
 using System.Web.Hosting;
 using System.Xml;
 using System.Web.Configuration;
@@ -191,7 +191,7 @@ namespace EventCalendarBelle
                     this.BulletedList1.Items.Add(new ListItem("Creating calendar tables."));
                     if (!this._db.TableExist("ec_calendars"))
                     {
-                        this._db.CreateTable<EventCalendarBelle.Models.ECalendar>(false);
+                        this._db.CreateTable<EventCalendar.Core.Models.ECalendar>(false);
                         this.BulletedList1.Items.Add(new ListItem("Successfully created tables."));
                     }
                 }

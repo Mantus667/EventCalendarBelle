@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Umbraco.Core.Persistence;
 using Umbraco.Core.Persistence.DatabaseAnnotations;
 
-namespace EventCalendarBelle.Models
+namespace EventCalendar.Core.Models
 {
     [TableName("ec_usettings")]
     [PrimaryKey("id", autoIncrement = true)]

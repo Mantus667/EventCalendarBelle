@@ -1,4 +1,4 @@
-﻿using EventCalendarBelle.Models;
+﻿using EventCalendar.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +8,7 @@ using System.Web.Http;
 using Umbraco.Core.Persistence;
 using Umbraco.Web.Editors;
 using Umbraco.Web.Mvc;
+using EventCalendar.Core.Services;
 
 namespace EventCalendarBelle.Controller
 {
@@ -18,33 +19,28 @@ namespace EventCalendarBelle.Controller
         public EventDescription PostSave(EventDescription description)
         {
             if (description.Id > 0)
-                DatabaseContext.Database.Update(description);
+            {
+                return DescriptionService.UpdateDescription(description);
+            }
             else
-                DatabaseContext.Database.Save(description);
-
-            return description;
+            {
+                return DescriptionService.CreateDescription(description);
+            }
         }
 
         public int DeleteById(int id)
         {
-            var db = UmbracoContext.Application.DatabaseContext.Database;
-            return db.Delete<EventDescription>(id);
+            return DescriptionService.DeleteDescription(id);
         }
 
         public EventDescription GetById(int id)
         {
-            var db = UmbracoContext.Application.DatabaseContext.Database;
-            var query = new Sql().Select("*").From("ec_eventdescriptions").Where<EventDescription>(x => x.Id == id);
-
-            return db.Fetch<EventDescription>(query).FirstOrDefault(); ;
+            return DescriptionService.GetDescriptionById(id);
         }
 
         public IEnumerable<EventDescription> GetAll()
         {
-            var db = UmbracoContext.Application.DatabaseContext.Database;
-            var query = new Sql().Select("*").From("ec_eventdescriptions");
-
-            return db.Fetch<EventDescription>(query);
+            return DescriptionService.GetAllDescriptions();
         }
     }
 }

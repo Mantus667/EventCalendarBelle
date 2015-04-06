@@ -8,7 +8,7 @@ using System.Web.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 
-namespace EventCalendarBelle.Models
+namespace EventCalendar.Core.Models
 {
     [TableName("ec_eventdescriptions")]
     [PrimaryKey("id", autoIncrement = true)]

@@ -1,4 +1,4 @@
-﻿using EventCalendarBelle.Models;
+﻿using EventCalendar.Core.Models;
 using Newtonsoft.Json;
 using ScheduleWidget.Enums;
 using ScheduleWidget.ScheduledEvents;
@@ -97,7 +97,7 @@ namespace EventCalendarBelle.Controller
             //Handle normal events
             List<EventsOverviewModel> events = new List<EventsOverviewModel>();
             var calendar = db.SingleOrDefault<ECalendar>(id);
-            var normal_events = db.Fetch<EventCalendarBelle.Models.Event>("SELECT * FROM ec_events WHERE ec_events.calendarId = @0", id).ToList();
+            var normal_events = db.Fetch<EventCalendar.Core.Models.Event>("SELECT * FROM ec_events WHERE ec_events.calendarId = @0", id).ToList();
             foreach (var ne in normal_events.Where(x => x.start <= endDate && x.end >= startDate))
             {
                 List<EventDescription> descriptions = db.Query<EventDescription>("SELECT * FROM ec_eventdescriptions WHERE eventid = @0 AND calendarid = @1 AND type = @2", ne.Id, ne.calendarId, (int)EventType.Normal).ToList();

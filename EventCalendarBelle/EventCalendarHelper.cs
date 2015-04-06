@@ -1,4 +1,4 @@
-﻿using EventCalendarBelle.Models;
+﻿using EventCalendar.Core.Models;
 using EventCalendarBelle.Controller;
 using System;
 using System.Collections.Generic;
@@ -62,11 +62,6 @@ namespace EventCalendarBelle
 
             if (!e.Keys.Contains("eventCalendar"))
             {
-                e.Add("eventCalendar", mainDictionary);
-            }
-            else
-            {
-                e.Remove("eventCalendar");
                 e.Add("eventCalendar", mainDictionary);
             }
         }

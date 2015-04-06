@@ -1,4 +1,5 @@
-﻿using EventCalendarBelle.Models;
+﻿using EventCalendar.Core.Models;
+using EventCalendar.Core.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,78 +18,31 @@ namespace EventCalendarBelle.Controller
         [HttpPost]
         public Event PostSave(Event nevent)
         {
-            var ctrl = new DescriptionApiController();
-
             if (nevent.Id > 0)
             {
                 //Update the event
-                DatabaseContext.Database.Update(nevent);
-
-                //Save the event descriptions                
-                foreach (var desc in nevent.descriptions)
-                {
-                    ctrl.PostSave(desc);
-                }
+                return EventService.UpdateEvent(nevent);
             }
             else
             {
                 //Insert the event
-                DatabaseContext.Database.Save(nevent);
-
-                //Create the new descriptions for the new event
-                var query2 = new Sql().Select("*").From("ec_eventdescriptions").Where<EventDescription>(x => x.CalendarId == nevent.calendarId && x.EventId == nevent.Id && x.Type == (int)EventType.Normal);
-                nevent.descriptions = DatabaseContext.Database.Fetch<EventDescription>(query2);
-
-                var ls = Services.LocalizationService;
-                foreach (var lang in ls.GetAllLanguages())
-                {
-                    if (nevent.descriptions.SingleOrDefault(x => x.CultureCode == lang.CultureInfo.ToString()) == null)
-                    {
-                        nevent.descriptions.Add(new EventDescription() { CalendarId = nevent.calendarId, EventId = nevent.Id, CultureCode = lang.CultureInfo.ToString(), Id = 0, Type = (int)EventType.Normal });
-                    }
-                }
+                return EventService.CreateEvent(nevent);
             }
-
-            return nevent;
         }
 
         public int DeleteById(int id)
         {
-            var db = UmbracoContext.Application.DatabaseContext.Database;
-            return db.Delete<Event>(id);
+            return EventService.DeleteEvent(id);
         }
 
         public Event GetById(int id)
         {
-            var db = UmbracoContext.Application.DatabaseContext.Database;
-            var query = new Sql().Select("*").From("ec_events").Where<Event>(x => x.Id == id);
-            
-            Event current = db.Fetch<Event>(query).FirstOrDefault();
-
-            if (current != null)
-            {
-                var query2 = new Sql().Select("*").From("ec_eventdescriptions").Where<EventDescription>(x => x.CalendarId == current.calendarId && x.EventId == current.Id && x.Type == (int)EventType.Normal);
-                current.descriptions = db.Fetch<EventDescription>(query2);
-
-                var ls = Services.LocalizationService;
-                foreach (var lang in ls.GetAllLanguages())
-                {
-                    if (current.descriptions.SingleOrDefault(x => x.CultureCode == lang.CultureInfo.ToString()) == null)
-                    {
-                        current.descriptions.Add(new EventDescription() { CalendarId = current.calendarId, EventId = current.Id, CultureCode = lang.CultureInfo.ToString(), Id = 0, Type = (int)EventType.Normal });
-                    }
-                }
-            }
-
-            return current;
+            return EventService.GetEvent(id);
         }
 
         public IEnumerable<Event> GetAll()
         {
-            var db = UmbracoContext.Application.DatabaseContext.Database;
-            var query = new Sql().Select("*").From("ec_events");
-
-            return db.Fetch<Event>(query);
+            return EventService.GetAllEvents();
         }
     }
 }

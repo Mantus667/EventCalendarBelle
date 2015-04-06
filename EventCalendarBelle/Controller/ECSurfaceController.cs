@@ -1,4 +1,4 @@
-﻿using EventCalendarBelle.Models;
+﻿using EventCalendar.Core.Models;
 using ScheduleWidget.Enums;
 using ScheduleWidget.ScheduledEvents;
 using System;
@@ -502,7 +502,7 @@ namespace EventCalendarBelle.Controller
             return PartialView(data);
         }
 
-        private string GetDescription(EventCalendarBelle.Models.Event e, string culture)
+        private string GetDescription(EventCalendar.Core.Models.Event e, string culture)
         {
             if (e.descriptions != null && e.descriptions.Any(x => x.CultureCode == culture))
             {
@@ -513,7 +513,7 @@ namespace EventCalendarBelle.Controller
                 return "";
             }
         }
-        private string GetDescription(EventCalendarBelle.Models.RecurringEvent e, string culture)
+        private string GetDescription(EventCalendar.Core.Models.RecurringEvent e, string culture)
         {
             if (e.descriptions != null && e.descriptions.Any(x => x.CultureCode == culture))
             {

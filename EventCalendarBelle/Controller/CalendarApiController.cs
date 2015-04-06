@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Umbraco.Web.Editors;
 using Umbraco.Web.Mvc;
-using EventCalendarBelle.Models;
+using EventCalendar.Core.Models;
 using Umbraco.Core.Persistence;
 using Newtonsoft.Json;
 using System.Web.Http;
-using EventCalendarBelle.Services;
+using EventCalendar.Core.Services;
 
 namespace EventCalendarBelle.Controller
 {

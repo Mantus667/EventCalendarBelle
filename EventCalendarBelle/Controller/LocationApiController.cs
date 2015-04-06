@@ -1,4 +1,5 @@
-﻿using EventCalendarBelle.Models;
+﻿using EventCalendar.Core.Services;
+using EventCalendar.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,49 +20,27 @@ namespace EventCalendarBelle.Controller
         {
             if (location.Id > 0)
             {
-                DatabaseContext.Database.Update(location);
+                return LocationService.UpdateLocation(location);
             }
             else
             {
-                DatabaseContext.Database.Save(location);
-
-                //Update usersettings and add the newly created location to the allowed locations
-                var ctrl = new UserApiController();
-                var usettings = ctrl.GetById(Security.GetUserId());
-                if (!String.IsNullOrEmpty(usettings.Locations))
-                {
-                    usettings.Locations += "," + location.Id;
-                }
-                else
-                {
-                    usettings.Locations = location.Id.ToString();
-                }
-                ctrl.PostSave(usettings);
+                return LocationService.CreateLocation(location, Security.GetUserId());
             }
-
-            return location;
         }
 
         public int DeleteById(int id)
         {
-            var db = UmbracoContext.Application.DatabaseContext.Database;
-            return db.Delete<EventLocation>(id);
+            return LocationService.DeleteLocation(id);
         }
 
         public EventLocation GetById(int id)
         {
-            var db = UmbracoContext.Application.DatabaseContext.Database;
-            var query = new Sql().Select("*").From("ec_locations").Where<EventLocation>(x => x.Id == id);
-
-            return db.Fetch<EventLocation>(query).FirstOrDefault();
+            return LocationService.GetLocation(id);
         }
 
         public IEnumerable<EventLocation> GetAll()
         {
-            var db = UmbracoContext.Application.DatabaseContext.Database;
-            var query = new Sql().Select("*").From("ec_locations");
-
-            return db.Fetch<EventLocation>(query);
+            return LocationService.GetAllLocations();
         }
     }
 }

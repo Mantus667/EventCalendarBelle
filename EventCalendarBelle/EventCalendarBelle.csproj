@@ -231,10 +231,6 @@
     <Compile Include="EventCalendarHelper.cs" />
     <Compile Include="Extensions\HtmlHelperExtensions.cs" />
     <Compile Include="Migrations\Migrations.cs" />
-    <Compile Include="Models\EventsOverviewModel.cs" />
-    <Compile Include="Models\GridListModel.cs" />
-    <Compile Include="Models\UserSettings.cs" />
-    <Compile Include="Services\CalendarService.cs" />
     <Compile Include="Trees\ECCalendarTree.cs" />
     <Compile Include="installer.ascx.cs">
       <DependentUpon>installer.ascx</DependentUpon>
@@ -243,12 +239,6 @@
     <Compile Include="installer.ascx.designer.cs">
       <DependentUpon>installer.ascx.cs</DependentUpon>
     </Compile>
-    <Compile Include="Models\Event.cs" />
-    <Compile Include="Models\ECalendar.cs" />
-    <Compile Include="Models\EventDescription.cs" />
-    <Compile Include="Models\EventDetailsModel.cs" />
-    <Compile Include="Models\EventLocation.cs" />
-    <Compile Include="Models\RecurringEvent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -394,7 +384,12 @@
     <Content Include="Scripts\EventCalendar\lang-all.js" />
     <Content Include="Scripts\EventCalendar\moment.min.js" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\EventCalendar.Core\EventCalendar.Core.csproj">
+      <Project>{6c29f372-ac1c-40c9-8066-15a766849471}</Project>
+      <Name>EventCalendar.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

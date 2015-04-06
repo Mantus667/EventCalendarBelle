@@ -1,4 +1,5 @@
-﻿using EventCalendarBelle.Models;
+﻿using EventCalendar.Core.Models;
+using EventCalendar.Core.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,74 +22,27 @@ namespace EventCalendarBelle.Controller
 
             if (nevent.Id > 0)
             {
-                DatabaseContext.Database.Update(nevent);
-
-                //Save the event descriptions                
-                foreach (var desc in nevent.descriptions)
-                {
-                    ctrl.PostSave(desc);
-                }
+                return RecurringEventService.UpdateEvent(nevent);
             }
             else
             {
-                DatabaseContext.Database.Save(nevent);
-
-                //Create the new descriptions for the new event
-                var query2 = new Sql().Select("*").From("ec_eventdescriptions").Where<EventDescription>(x => x.CalendarId == nevent.calendarId && x.EventId == nevent.Id && x.Type == (int)EventType.Recurring);
-                nevent.descriptions = DatabaseContext.Database.Fetch<EventDescription>(query2);
-
-                var ls = Services.LocalizationService;
-                foreach (var lang in ls.GetAllLanguages())
-                {
-                    if (nevent.descriptions.SingleOrDefault(x => x.CultureCode == lang.CultureInfo.ToString()) == null)
-                    {
-                        nevent.descriptions.Add(new EventDescription() { CalendarId = nevent.calendarId, EventId = nevent.Id, CultureCode = lang.CultureInfo.ToString(), Id = 0, Type = (int)EventType.Recurring });
-                    }
-                }
+                return RecurringEventService.CreateEvent(nevent);
             }
-
-            return nevent;
         }
 
         public int DeleteById(int id)
         {
-            var db = UmbracoContext.Application.DatabaseContext.Database;
-            return db.Delete<RecurringEvent>(id);
+            return RecurringEventService.DeleteRecurringEvent(id);
         }
 
         public RecurringEvent GetById(int id)
         {
-            var db = UmbracoContext.Application.DatabaseContext.Database;
-            var query = new Sql().Select("*").From("ec_recevents").Where<RecurringEvent>(x => x.Id == id);
-
-            RecurringEvent current = db.Fetch<RecurringEvent>(query).FirstOrDefault();
-
-            if (current != null)
-            {
-                var query2 = new Sql().Select("*").From("ec_eventdescriptions").Where<EventDescription>(x => x.CalendarId == current.calendarId && x.EventId == current.Id && x.Type == (int)EventType.Recurring);
-                current.descriptions = db.Fetch<EventDescription>(query2);
-
-                var ls = Services.LocalizationService;
-                foreach (var lang in ls.GetAllLanguages())
-                {
-                    if (current.descriptions.SingleOrDefault(x => x.CultureCode == lang.CultureInfo.ToString()) == null)
-                    {
-                        current.descriptions.Add(new EventDescription() { CalendarId = current.calendarId, EventId = current.Id, CultureCode = lang.CultureInfo.ToString(), Id = 0, Type = (int)EventType.Recurring });
-                    }
-                }
-            }
-
-            return current;
-
-            //return db.Fetch<RecurringEvent>(query).FirstOrDefault();
+            return RecurringEventService.GetRecurringEvent(id);
         }
 
         public IEnumerable<RecurringEvent> GetAll()
         {
-            var db = UmbracoContext.Application.DatabaseContext.Database;
-            var query = new Sql().Select("*").From("ec_recevents");
-
-            return db.Fetch<RecurringEvent>(query);
+            return RecurringEventService.GetAllEvents();
         }
 
         [HttpGet]
@@ -98,7 +52,6 @@ namespace EventCalendarBelle.Controller
                 .Cast<ScheduleWidget.Enums.DayOfWeekEnum>()
                 .Select(t => new KeyValuePair<int,string>((int)t,t.ToString()));
             return pairs;
-            //return Enum.GetValues(typeof(ScheduleWidget.Enums.DayOfWeekEnum));
         }
 
         [HttpGet]
@@ -108,7 +61,6 @@ namespace EventCalendarBelle.Controller
                 .Cast<ScheduleWidget.Enums.FrequencyTypeEnum>()
                 .Select(t => new KeyValuePair<int, string>((int)t, t.ToString()));
             return pairs;
-            //return Enum.GetValues(typeof(ScheduleWidget.Enums.FrequencyTypeEnum));
         }
 
         [HttpGet]
@@ -118,7 +70,6 @@ namespace EventCalendarBelle.Controller
                 .Cast<ScheduleWidget.Enums.MonthlyIntervalEnum>()
                 .Select(t => new KeyValuePair<int, string>((int)t, t.ToString()));
             return pairs;
-            //return Enum.GetValues(typeof(ScheduleWidget.Enums.MonthlyIntervalEnum));
         }
     }
 }

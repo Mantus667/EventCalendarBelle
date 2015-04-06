@@ -6,7 +6,7 @@ using Umbraco.Core.Persistence;
 using Umbraco.Core.Persistence.DatabaseAnnotations;
 using System.Runtime.Serialization;
 
-namespace EventCalendarBelle.Models
+namespace EventCalendar.Core.Models
 {
     [TableName("ec_events")]
     [PrimaryKey("id", autoIncrement = true)]

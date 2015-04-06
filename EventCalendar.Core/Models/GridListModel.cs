@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EventCalendarBelle.Models
+namespace EventCalendar.Core.Models
 {
     public class GridEditorListValueModel
     {

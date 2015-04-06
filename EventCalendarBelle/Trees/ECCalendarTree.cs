@@ -8,7 +8,7 @@ using Umbraco.Web.Models.Trees;
 using Umbraco.Web.Mvc;
 using Umbraco.Web.Trees;
 using EventCalendarBelle.Controller;
-using EventCalendarBelle.Models;
+using EventCalendar.Core.Models;
 using Umbraco.Web;
 using umbraco.BusinessLogic.Actions;
 

@@ -12,7 +12,7 @@ using Umbraco.Web.Mvc;
 using DDay.iCal;
 using DDay.iCal.Serialization.iCalendar;
 using System.IO;
-using EventCalendarBelle.Models;
+using EventCalendar.Core.Models;
 using ScheduleWidget.Enums;
 
 namespace EventCalendarBelle.Controller
@@ -150,7 +150,7 @@ namespace EventCalendarBelle.Controller
                     }
                     else
                     {
-                        ectrl.PostSave(new EventCalendarBelle.Models.Event() { allDay = e.IsAllDay, calendarId = calendar_id, title = e.Summary, start = e.Start.Date, end = e.End.Date, Id = 0, categories = String.Join(",", e.Categories) });
+                        ectrl.PostSave(new EventCalendar.Core.Models.Event() { allDay = e.IsAllDay, calendarId = calendar_id, title = e.Summary, start = e.Start.Date, end = e.End.Date, Id = 0, categories = String.Join(",", e.Categories) });
                     }
                 }
             }
@@ -247,7 +247,7 @@ namespace EventCalendarBelle.Controller
                     }
                     else
                     {
-                        ectrl.PostSave(new EventCalendarBelle.Models.Event() { allDay = e.IsAllDay, calendarId = calendar.Id, title = e.Summary, start = e.Start.Date, end = e.End.Date, Id = 0, categories = String.Join(",", e.Categories) });
+                        ectrl.PostSave(new EventCalendar.Core.Models.Event() { allDay = e.IsAllDay, calendarId = calendar.Id, title = e.Summary, start = e.Start.Date, end = e.End.Date, Id = 0, categories = String.Join(",", e.Categories) });
                     }
                 }
             }

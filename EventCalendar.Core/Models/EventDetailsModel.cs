@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace EventCalendarBelle.Models
+namespace EventCalendar.Core.Models
 {
     public class EventDetailsModel
     {

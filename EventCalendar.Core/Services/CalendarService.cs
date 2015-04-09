@@ -108,6 +108,18 @@ namespace EventCalendar.Core.Services
             return calendar;
         }
 
+        /// <summary>
+        /// Returns all calendar that the specific user is allowed to see
+        /// </summary>
+        /// <param name="user">The id of the user</param>
+        /// <returns>List of calendar</returns>
+        public static IEnumerable<ECalendar> GetCalendarForUser(int user)
+        {
+            var settings = SecurityService.GetSecuritySettingsByUserId(user);
+            var calendar = GetAllCalendar();
+            return calendar.Where(x => settings.AllowedCalendar.Contains(x.Id.ToString()));
+        }
+
         #region EventHandler Delegates
         public static void OnCreating(CalendarCreationEventArgs e)
         {

@@ -63,6 +63,13 @@ namespace EventCalendar.Core.Services
             return location;
         }
 
+        public static IEnumerable<EventLocation> GetLocationsForUser(int user)
+        {
+            var settings = SecurityService.GetSecuritySettingsByUserId(user);
+            var locations = GetAllLocations();
+            return locations.Where(x => settings.Locations.Contains(x.Id.ToString()));
+        }
+
         #region EventHandler Delegates
         public static void OnCreating(LocationCreatingEventArgs e)
         {

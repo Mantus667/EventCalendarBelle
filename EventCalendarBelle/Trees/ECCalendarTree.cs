@@ -11,6 +11,7 @@ using EventCalendarBelle.Controller;
 using EventCalendar.Core.Models;
 using Umbraco.Web;
 using umbraco.BusinessLogic.Actions;
+using EventCalendar.Core.Services;
 
 namespace EventCalendarBelle.Trees
 {
@@ -22,9 +23,9 @@ namespace EventCalendarBelle.Trees
         {
             var menu = new MenuItemCollection();
             var currentUser = Security.CurrentUser;
-            var ctrl = new UserApiController();
+            //var ctrl = new UserApiController();
 
-            var settings = ctrl.GetById(currentUser.Id);
+            var settings = SecurityService.GetSecuritySettingsByUserId(currentUser.Id); //ctrl.GetById(currentUser.Id);
             
             if (id == global::Umbraco.Core.Constants.System.Root.ToInvariantString())
             {
@@ -111,19 +112,24 @@ namespace EventCalendarBelle.Trees
 
             if (id == "calendarTree")
             {
-                var ctrl = new CalendarApiController();
-                var uctrl = new UserApiController();
+                //var ctrl = new CalendarApiController();
+                //var uctrl = new UserApiController();
                 var tree = new TreeNodeCollection();
 
-                List<ECalendar> calendar = ctrl.GetAll().ToList();
-                var user_settings = uctrl.GetById(Security.GetUserId());
+                List<ECalendar> calendar = new List<ECalendar>(); ;//ctrl.GetAll().ToList();
+                //var user_settings = SecurityService.GetSecuritySettingsByUserId(Security.GetUserId());//uctrl.GetById(Security.GetUserId());
 
+                if (Security.CurrentUser.UserType.Alias.ToLower() == "admin")
+                {
+                    calendar = CalendarService.GetAllCalendar().ToList();
+                }
+                else
+                {
+                    calendar = CalendarService.GetCalendarForUser(Security.GetUserId()).ToList();
+                }
                 foreach (var cal in calendar)
                 {
-                    if (Security.CurrentUser.UserType.Alias.ToLower() == "admin" || user_settings.AllowedCalendar.Contains(cal.Id.ToString()))
-                    {
-                        tree.Add(CreateTreeNode("c-" + cal.Id.ToString(), id, queryStrings, cal.Calendarname, "icon-calendar", true, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/editCalendar/" + cal.Id));
-                    }
+                    tree.Add(CreateTreeNode("c-" + cal.Id.ToString(), id, queryStrings, cal.Calendarname, "icon-calendar", true, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/editCalendar/" + cal.Id));
                 }
                 return tree;
             }
@@ -131,18 +137,20 @@ namespace EventCalendarBelle.Trees
             if (id == "locationTree")
             {
                 var ctrl = new LocationApiController();
-                var uctrl = new UserApiController();
+                //var uctrl = new UserApiController();
                 var tree = new TreeNodeCollection();
 
-                List<EventLocation> locations = ctrl.GetAll().ToList();
-                var user_settings = uctrl.GetById(Security.GetUserId());
+                List<EventLocation> locations = new List<EventLocation>(); //ctrl.GetAll().ToList();
+                //var user_settings = uctrl.GetById(Security.GetUserId());
 
+                if (Security.CurrentUser.UserType.Alias.ToLower() == "admin"){
+                    locations = LocationService.GetAllLocations().ToList();
+                }else {
+                    locations = LocationService.GetLocationsForUser(Security.GetUserId()).ToList();
+                }
                 foreach (var loc in locations)
                 {
-                    if (Security.CurrentUser.UserType.Alias.ToLower() == "admin" || user_settings.AllowedLocations.Contains(loc.Id.ToString()))
-                    {
-                        tree.Add(CreateTreeNode("l-" + loc.Id.ToString(), id, queryStrings, loc.LocationName, "icon-map-loaction", false, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/editLocation/" + loc.Id.ToString()));
-                    }
+                    tree.Add(CreateTreeNode("l-" + loc.Id.ToString(), id, queryStrings, loc.LocationName, "icon-map-loaction", false, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/editLocation/" + loc.Id.ToString()));
                 }
                 return tree;
             }
@@ -166,16 +174,16 @@ namespace EventCalendarBelle.Trees
 
             if (id.Contains("c-"))
             {
-                var ctrl = new EventApiController();
-                List<Event> events = ctrl.GetAll().Where(x => x.calendarId.ToString() == id.Replace("c-","")).ToList();
+                //var ctrl = new EventApiController();
+                List<Event> events = EventService.GetAllEvents().Where(x => x.calendarId.ToString() == id.Replace("c-", "")).ToList();//ctrl.GetAll().Where(x => x.calendarId.ToString() == id.Replace("c-","")).ToList();
                 var tree = new TreeNodeCollection();
 
                 foreach(var e in events) {
                     tree.Add(CreateTreeNode("e-" + e.Id.ToString(), id, queryStrings, e.title, "icon-music", false, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/editEvent/" + e.Id));
                 }
 
-                var ctrl2 = new REventApiController();
-                List<RecurringEvent> revents = ctrl2.GetAll().Where(x => x.calendarId.ToString() == id.Replace("c-", "")).ToList();
+                //var ctrl2 = new REventApiController();
+                List<RecurringEvent> revents = RecurringEventService.GetAllEvents().Where(x => x.calendarId.ToString() == id.Replace("c-", "")).ToList();//ctrl2.GetAll().Where(x => x.calendarId.ToString() == id.Replace("c-", "")).ToList();
 
                 foreach (var e in revents)
                 {

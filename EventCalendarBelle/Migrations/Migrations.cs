@@ -94,4 +94,16 @@ namespace EventCalendarBelle.Migrations
             Alter.Table("ec_calendars").AddColumn("apikey").AsString(255).Nullable();
         }
     }
+
+    [Migration("2.1.0", 0, "UpdateEventCalendarTables")]
+    public class MigrationBugFixingMigration : MigrationBase
+    {
+        public override void Down()
+        {}
+
+        public override void Up()
+        {
+            Alter.Table("ec_calendars").AddColumn("apikey").AsString(255).Nullable();
+        }
+    }
 }

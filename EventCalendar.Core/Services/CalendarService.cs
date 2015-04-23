@@ -46,7 +46,21 @@ namespace EventCalendar.Core.Services
         public static int DeleteCalendarById(int id)
         {
             var db = ApplicationContext.Current.DatabaseContext.Database;
-            return db.Delete<ECalendar>(id);
+            var calendar = GetCalendarById(id);
+
+            var args = new CalendarDeletionEventArgs { Calendar = calendar };
+            OnDeleting(args);
+
+            if (args.Cancel)
+            {
+                return id;
+            }
+            var response = db.Delete<ECalendar>(id);
+
+            var args2 = new CalendarDeletedEventArgs { Calendar = calendar };
+            OnDeleted(args2);
+
+            return response;
         }
 
         /// <summary>
@@ -138,11 +152,31 @@ namespace EventCalendar.Core.Services
                 handler(null, e);
             }
         }
+
+        public static void OnDeleting(CalendarDeletionEventArgs e)
+        {
+            EventHandler<CalendarDeletionEventArgs> handler = Deleting;
+            if (handler != null)
+            {
+                handler(null, e);
+            }
+        }
+
+        public static void OnDeleted(CalendarDeletedEventArgs e)
+        {
+            EventHandler<CalendarDeletedEventArgs> handler = Deleted;
+            if (handler != null)
+            {
+                handler(null, e);
+            }
+        }
         #endregion
 
         #region EventHandler
         public static event EventHandler<CalendarCreationEventArgs> Creating;
         public static event EventHandler<CalendarCreatedEventArgs> Created;
+        public static event EventHandler<CalendarDeletionEventArgs> Deleting;
+        public static event EventHandler<CalendarDeletedEventArgs> Deleted;
         #endregion
     }
 }

@@ -1,6 +1,5 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
 @using EventCalendarBelle
-@using EventCalendarBelle.Models
 @using System.Globalization
 @{
     Layout = "";
@@ -38,8 +37,13 @@
 		<script type="text/javascript">
 		    var event_details_url = '@Model.Content.Down().Url';
 		    $(document).ready(function () {
+		        var csrfToken = $("input[name='__RequestVerificationToken']").val();
 		        var sources = [];
 		        $.get("/umbraco/EventCalendar/ECApi/GetCalendarSources/", { id: '@id' }, function (data) {
+		            $.each(data, function (key, data) {
+		                data.headers = { "X-XSRF-Token": csrfToken };
+		            });
+		            console.log(data);
 		            $('#calendar').fullCalendar({
 		                @if (null != calendar)
                         {
@@ -74,6 +78,7 @@
 		</script>
 	</head>
     <body>
+        @Html.AntiForgeryToken()
         <div class="container">
 		    <div id="calendar"></div>
         </div>

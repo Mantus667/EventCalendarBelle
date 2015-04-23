@@ -1,4 +1,5 @@
-﻿using EventCalendar.Core.Models;
+﻿using EventCalendar.Core.ActionFilter;
+using EventCalendar.Core.Models;
 using Newtonsoft.Json;
 using ScheduleWidget.Enums;
 using ScheduleWidget.ScheduledEvents;
@@ -19,25 +20,26 @@ namespace EventCalendarBelle.Controller
     public class ECApiController : UmbracoApiController
     {
 
-        [HttpGet]
-        public IEnumerable<EventsOverviewModel> GetCalendarEvents(DateTime start, DateTime end, int id = 0, string culture = "en-us")
+        [HttpPost]
+        [ValidateHttpAntiForgeryToken]
+        public IEnumerable<EventsOverviewModel> CalendarEvents(EventRange range)
         {
             var db = UmbracoContext.Application.DatabaseContext.Database;
 
             List<EventsOverviewModel> events = new List<EventsOverviewModel>();
 
-            if (id != 0)
+            if (range.id != 0)
             {
-                events.AddRange(this.GetNormalEvents(id,culture, start, end));
-                events.AddRange(this.GetRecurringEvents(id, culture, start, end));
+                events.AddRange(this.GetNormalEvents(range.id, range.culture ?? "en-us", range.start, range.end));
+                events.AddRange(this.GetRecurringEvents(range.id, range.culture ?? "en-us", range.start, range.end));
             }
             else
             {
                 var calendar = db.Query<ECalendar>("SELECT * FROM ec_calendars").ToList();
                 foreach (var cal in calendar)
                 {
-                    events.AddRange(this.GetNormalEvents(cal.Id, culture, start, end));
-                    events.AddRange(this.GetRecurringEvents(cal.Id, culture, start, end));
+                    events.AddRange(this.GetNormalEvents(cal.Id, range.culture ?? "en-us", range.start, range.end));
+                    events.AddRange(this.GetRecurringEvents(cal.Id, range.culture ?? "en-us", range.start, range.end));
                 }
             }
 
@@ -61,7 +63,11 @@ namespace EventCalendarBelle.Controller
                 }
                 else
                 {
-                    sources.Add("/umbraco/EventCalendar/ECApi/GetCalendarEvents/?id=" + calendar.Id);
+                    //sources.Add("{ url: '/umbraco/EventCalendar/ECApi/GetCalendarEvents/?id=" + calendar.Id);
+                    sources.Add(new EventSource { 
+                        url = "/umbraco/EventCalendar/ECApi/CalendarEvents/",
+                        data = new { id = calendar.Id }
+                    });
                 }
                 
             }
@@ -79,7 +85,12 @@ namespace EventCalendarBelle.Controller
                     }
                     else
                     {
-                        sources.Add("/umbraco/EventCalendar/ECApi/GetCalendarEvents/?id=" + cal.Id);
+                        //sources.Add("/umbraco/EventCalendar/ECApi/GetCalendarEvents/?id=" + cal.Id);
+                        sources.Add(new EventSource
+                        {
+                            url = "/umbraco/EventCalendar/ECApi/CalendarEvents/",
+                            data = new { id = cal.Id }
+                        });
                     }
                 }
             }

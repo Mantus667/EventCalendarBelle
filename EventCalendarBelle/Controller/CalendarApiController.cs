@@ -50,15 +50,15 @@ namespace EventCalendarBelle.Controller
             var ctrl = new ECApiController();
             var events = new List<EventsOverviewModel>();
 
-            events = ctrl.GetCalendarEvents(DateTime.Now, DateTime.Now.AddYears(1), id).ToList();
+            events = ctrl.CalendarEvents(new EventRange { start = DateTime.Now, end = DateTime.Now.AddYears(1), id = id }).ToList();
             if (forward)
             {
-                events = ctrl.GetCalendarEvents(DateTime.Now, DateTime.Now.AddYears(1), id).ToList();
+                events = ctrl.CalendarEvents(new EventRange { start = DateTime.Now, end = DateTime.Now.AddYears(1), id = id }).ToList();
                 events = events.OrderBy(x => x.start).ToList();
             }
             else
             {
-                events = ctrl.GetCalendarEvents(DateTime.Now, DateTime.Now.AddYears(-1), id).ToList();
+                events = ctrl.CalendarEvents(new EventRange { start = DateTime.Now, end = DateTime.Now.AddYears(-1), id = id }).ToList();
                 events = events.OrderByDescending(x => x.start).ToList();
             }
             if (quantity != 0)

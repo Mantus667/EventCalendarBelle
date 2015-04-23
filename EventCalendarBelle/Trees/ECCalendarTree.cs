@@ -112,12 +112,9 @@ namespace EventCalendarBelle.Trees
 
             if (id == "calendarTree")
             {
-                //var ctrl = new CalendarApiController();
-                //var uctrl = new UserApiController();
                 var tree = new TreeNodeCollection();
 
-                List<ECalendar> calendar = new List<ECalendar>(); ;//ctrl.GetAll().ToList();
-                //var user_settings = SecurityService.GetSecuritySettingsByUserId(Security.GetUserId());//uctrl.GetById(Security.GetUserId());
+                List<ECalendar> calendar = new List<ECalendar>();
 
                 if (Security.CurrentUser.UserType.Alias.ToLower() == "admin")
                 {
@@ -136,12 +133,9 @@ namespace EventCalendarBelle.Trees
 
             if (id == "locationTree")
             {
-                var ctrl = new LocationApiController();
-                //var uctrl = new UserApiController();
                 var tree = new TreeNodeCollection();
 
-                List<EventLocation> locations = new List<EventLocation>(); //ctrl.GetAll().ToList();
-                //var user_settings = uctrl.GetById(Security.GetUserId());
+                List<EventLocation> locations = new List<EventLocation>();
 
                 if (Security.CurrentUser.UserType.Alias.ToLower() == "admin"){
                     locations = LocationService.GetAllLocations().ToList();
@@ -174,7 +168,6 @@ namespace EventCalendarBelle.Trees
 
             if (id.Contains("c-"))
             {
-                //var ctrl = new EventApiController();
                 List<Event> events = EventService.GetAllEvents().Where(x => x.calendarId.ToString() == id.Replace("c-", "")).ToList();//ctrl.GetAll().Where(x => x.calendarId.ToString() == id.Replace("c-","")).ToList();
                 var tree = new TreeNodeCollection();
 
@@ -182,7 +175,6 @@ namespace EventCalendarBelle.Trees
                     tree.Add(CreateTreeNode("e-" + e.Id.ToString(), id, queryStrings, e.title, "icon-music", false, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/editEvent/" + e.Id));
                 }
 
-                //var ctrl2 = new REventApiController();
                 List<RecurringEvent> revents = RecurringEventService.GetAllEvents().Where(x => x.calendarId.ToString() == id.Replace("c-", "")).ToList();//ctrl2.GetAll().Where(x => x.calendarId.ToString() == id.Replace("c-", "")).ToList();
 
                 foreach (var e in revents)

@@ -118,11 +118,13 @@
       <Private>True</Private>
       <HintPath>..\packages\UmbracoCms.Core.7.2.4\lib\System.Data.SqlServerCe.Entity.dll</HintPath>
     </Reference>
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.4.0.30506.0\lib\net40\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.Helpers.dll</HintPath>
@@ -192,6 +194,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionFilter\ValidateHttpAntiForgeryToken.cs" />
     <Compile Include="EventArgs\CalendarEventArgs.cs" />
     <Compile Include="EventArgs\EventEventArgs.cs" />
     <Compile Include="EventArgs\LocationEventArgs.cs" />
@@ -201,6 +204,8 @@
     <Compile Include="Models\EventDescription.cs" />
     <Compile Include="Models\EventDetailsModel.cs" />
     <Compile Include="Models\EventLocation.cs" />
+    <Compile Include="Models\EventRange.cs" />
+    <Compile Include="Models\EventSource.cs" />
     <Compile Include="Models\EventsOverviewModel.cs" />
     <Compile Include="Models\GridListModel.cs" />
     <Compile Include="Models\RecurringEvent.cs" />
@@ -217,6 +222,7 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

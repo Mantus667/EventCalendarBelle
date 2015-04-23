@@ -15,7 +15,22 @@ namespace EventCalendar.Core.Services
         public static int DeleteLocation(int id)
         {
             var db = ApplicationContext.Current.DatabaseContext.Database;
-            return db.Delete<EventLocation>(id);
+            var location = GetLocation(id);
+
+            var args = new LocationDeletionEventArgs { Location = location };
+            OnDeleting(args);
+
+            if (args.Cancel)
+            {
+                return id;
+            }
+
+            var response = db.Delete<EventLocation>(id);
+
+            var args2 = new LocationDeletedEventArgs { Location = location };
+            OnDeleted(args2);
+
+            return response;
         }
 
         public static EventLocation GetLocation(int id)
@@ -88,11 +103,31 @@ namespace EventCalendar.Core.Services
                 handler(null, e);
             }
         }
+
+        public static void OnDeleting(LocationDeletionEventArgs e)
+        {
+            EventHandler<LocationDeletionEventArgs> handler = Deleting;
+            if (handler != null)
+            {
+                handler(null, e);
+            }
+        }
+
+        public static void OnDeleted(LocationDeletedEventArgs e)
+        {
+            EventHandler<LocationDeletedEventArgs> handler = Deleted;
+            if (handler != null)
+            {
+                handler(null, e);
+            }
+        }
         #endregion
 
         #region EventHandler
         public static event EventHandler<LocationCreatingEventArgs> Creating;
         public static event EventHandler<LocationCreatedEventArgs> Created;
+        public static event EventHandler<LocationDeletionEventArgs> Deleting;
+        public static event EventHandler<LocationDeletedEventArgs> Deleted;
         #endregion
     }
 }

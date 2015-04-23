@@ -17,6 +17,7 @@ namespace EventCalendar.Core.EventArgs
     {
         public ECalendar Calendar { get; set; }
     }
+    
     public class CalendarDeletionEventArgs : CancelEventArgs
     {
         public ECalendar Calendar { get; set; }

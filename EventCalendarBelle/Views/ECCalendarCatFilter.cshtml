@@ -1,6 +1,6 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
 @using EventCalendarBelle
-@using EventCalendarBelle.Models
+@using EventCalendar.Core.Models
 @using System.Globalization
 @{
     Layout = "";
@@ -40,6 +40,7 @@
 		<script type="text/javascript">
 		    var selectedCats = [];
 		    $(document).ready(function () {
+		        var csrfToken = $("input[name='__RequestVerificationToken']").val();
 		        $('#catList').on("click", 'a.catSelector', function (e) {
 		            var text = $(this).text();
 		            var index = $.inArray(text, selectedCats);
@@ -56,7 +57,10 @@
 		            e.preventDefault();
 		        });
 
-		        $.get("/umbraco/EventCalendar/ECApi/GetCalendarSources/",{ id: '@id' }, function (data) {
+		        $.get("/umbraco/EventCalendar/ECApi/GetCalendarSources/", { id: '@id' }, function (data) {
+		            $.each(data, function (key, data) {
+		                data.headers = { "X-XSRF-Token": csrfToken };
+		            });
 		            $('#calendar').fullCalendar({
 		                @if (null != calendar)
                         {
@@ -157,6 +161,7 @@
 		</script>
 	</head>
     <body>
+        @Html.AntiForgeryToken()
         <div class="container">
             <div class="col-md-3 col-lg-3 col-sm-4 col-xs-12">
                 <h2>Filter by category</h2>

@@ -63,7 +63,6 @@ namespace EventCalendarBelle.Controller
                 }
                 else
                 {
-                    //sources.Add("{ url: '/umbraco/EventCalendar/ECApi/GetCalendarEvents/?id=" + calendar.Id);
                     sources.Add(new EventSource { 
                         url = "/umbraco/EventCalendar/ECApi/CalendarEvents/",
                         data = new { id = calendar.Id }
@@ -85,7 +84,6 @@ namespace EventCalendarBelle.Controller
                     }
                     else
                     {
-                        //sources.Add("/umbraco/EventCalendar/ECApi/GetCalendarEvents/?id=" + cal.Id);
                         sources.Add(new EventSource
                         {
                             url = "/umbraco/EventCalendar/ECApi/CalendarEvents/",

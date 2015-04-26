@@ -11,6 +11,7 @@ using System.Web.Mvc;
 using Umbraco.Web.Mvc;
 using DDay.iCal;
 using DDay.iCal.Serialization;
+using EventCalendar.Core.Services;
 
 namespace EventCalendarBelle.Controller
 {
@@ -24,18 +25,15 @@ namespace EventCalendarBelle.Controller
             EventDetailsModel evm = null;
             var ms = Services.MemberService;
 
-            var lctrl = new LocationApiController();
-
             if (type == 0)
             {
                 //Fetch Event
-                var ectrl = new EventApiController();
-                var e = ectrl.GetById(id);
+                var e = EventService.GetEvent(id);
 
                 //If it has a location fetch it
                 if (e.locationId != 0)
                 {
-                    l = lctrl.GetById(e.locationId);
+                    l = LocationService.GetLocation(e.locationId);
                 }
                 
                 evm = new EventDetailsModel()
@@ -62,12 +60,11 @@ namespace EventCalendarBelle.Controller
             }
             else if (type == 1)
             {
-                var ectrl = new REventApiController();
-                var e = ectrl.GetById(id);
+                var e = RecurringEventService.GetRecurringEvent(id);
                 
                 if (e.locationId != 0)
                 {
-                    l = lctrl.GetById(e.locationId);
+                    l = LocationService.GetLocation(e.locationId);
                 }                
 
                 Schedule schedule = new Schedule(new ScheduleWidget.ScheduledEvents.Event()

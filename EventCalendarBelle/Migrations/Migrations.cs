@@ -103,7 +103,11 @@ namespace EventCalendarBelle.Migrations
 
         public override void Up()
         {
-            Alter.Table("ec_calendars").AddColumn("apikey").AsString(255).Nullable();
+            try
+            {
+                Alter.Table("ec_calendars").AddColumn("apikey").AsString(255).Nullable();
+            }
+            catch { }
         }
     }
 }

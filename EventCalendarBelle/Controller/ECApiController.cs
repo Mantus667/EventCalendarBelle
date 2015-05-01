@@ -9,6 +9,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Configuration;
 using System.Web.Http;
 using Umbraco.Core.Persistence;
 using Umbraco.Web.Mvc;
@@ -19,6 +20,14 @@ namespace EventCalendarBelle.Controller
     [PluginController("EventCalendar")]
     public class ECApiController : UmbracoApiController
     {
+        public string sourcePrefix { get; private set; }
+
+        public ECApiController()
+        {
+            if(WebConfigurationManager.AppSettings.AllKeys.Contains("EventCalendar:EventSourcePrefix")){
+                sourcePrefix = WebConfigurationManager.AppSettings["EventCalendar:EventSourcePrefix"];
+            }
+        }
 
         [HttpPost]
         [ValidateHttpAntiForgeryToken]
@@ -64,7 +73,7 @@ namespace EventCalendarBelle.Controller
                 else
                 {
                     sources.Add(new EventSource { 
-                        url = "/umbraco/EventCalendar/ECApi/CalendarEvents/",
+                        url = (sourcePrefix ?? String.Empty) + "/umbraco/EventCalendar/ECApi/CalendarEvents/",
                         data = new { id = calendar.Id }
                     });
                 }
@@ -86,7 +95,7 @@ namespace EventCalendarBelle.Controller
                     {
                         sources.Add(new EventSource
                         {
-                            url = "/umbraco/EventCalendar/ECApi/CalendarEvents/",
+                            url = (sourcePrefix ?? String.Empty) + "/umbraco/EventCalendar/ECApi/CalendarEvents/",
                             data = new { id = cal.Id }
                         });
                     }

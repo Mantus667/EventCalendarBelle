@@ -229,7 +229,6 @@
     <Compile Include="Controller\REventApiController.cs" />
     <Compile Include="Controller\UserApiController.cs" />
     <Compile Include="EventCalendarHelper.cs" />
-    <Compile Include="Extensions\HtmlHelperExtensions.cs" />
     <Compile Include="Migrations\Migrations.cs" />
     <Compile Include="Trees\ECCalendarTree.cs" />
     <Compile Include="installer.ascx.cs">
@@ -246,11 +245,9 @@
     <None Include="EventCalendar\calendar.resource.min.js.map">
       <DependentUpon>calendar.resource.js</DependentUpon>
     </None>
-    <None Include="EventCalendar\GridEditors\UpcomingEventsEditor.cshtml" />
     <None Include="EventCalendar\package.manifest" />
     <None Include="EventCalendar\scripts\bootstrap-tagsinput.min.js.map" />
     <None Include="EventCalendar\Views\Partials\EventDetails.cshtml" />
-    <None Include="EventCalendar\Views\Partials\RenderGridEditorList.cshtml" />
     <None Include="packages.config" />
     <None Include="Views\ECCalendar.cshtml" />
     <None Include="Views\ECEventDetails.cshtml" />
@@ -290,10 +287,6 @@
     <Content Include="EventCalendar\Editors\calendar.editor.controller.js" />
     <Content Include="EventCalendar\Editors\calendar.html" />
     <Content Include="EventCalendar\event.resource.js" />
-    <Content Include="EventCalendar\GridEditors\controller.js" />
-    <Content Include="EventCalendar\GridEditors\EventListDialog.html" />
-    <Content Include="EventCalendar\GridEditors\services.js" />
-    <Content Include="EventCalendar\GridEditors\UpcomingEventsEditor.html" />
     <Content Include="EventCalendar\images\sort_asc.png" />
     <Content Include="EventCalendar\images\sort_both.png" />
     <Content Include="EventCalendar\images\sort_desc.png" />

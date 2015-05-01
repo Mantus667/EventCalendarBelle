@@ -14,8 +14,6 @@
         }],
 		parameterEditors:[],
         javascript: [
-			'~/App_Plugins/EventCalendar/GridEditors/controller.js',
-			'~/App_Plugins/EventCalendar/GridEditors/services.js',
 
 			'~/App_Plugins/EventCalendar/Editors/calendar.editor.controller.js',
 

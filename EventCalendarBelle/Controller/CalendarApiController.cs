@@ -44,5 +44,28 @@ namespace EventCalendarBelle.Controller
         {
             return CalendarService.GetAllCalendar();
         }
+
+        public IEnumerable<EventsOverviewModel> GetEvents(int id,bool forward, int quantity = 0)
+        {
+            var ctrl = new ECApiController();
+            var events = new List<EventsOverviewModel>();
+
+            events = ctrl.CalendarEvents(new EventRange { start = DateTime.Now, end = DateTime.Now.AddYears(1), id = id }).ToList();
+            if (forward)
+            {
+                events = ctrl.CalendarEvents(new EventRange { start = DateTime.Now, end = DateTime.Now.AddYears(1), id = id }).ToList();
+                events = events.OrderBy(x => x.start).ToList();
+            }
+            else
+            {
+                events = ctrl.CalendarEvents(new EventRange { start = DateTime.Now, end = DateTime.Now.AddYears(-1), id = id }).ToList();
+                events = events.OrderByDescending(x => x.start).ToList();
+            }
+            if (quantity != 0)
+            {
+                return events.Take(quantity);
+            }
+            return events;
+        }
     }
 }

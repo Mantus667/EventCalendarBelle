@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
 // die mit einer Assembly verknüpft sind.
 [assembly: AssemblyTitle("EventCalendar.Core")]
-[assembly: AssemblyDescription("Core library of EventCalendar package")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("EventCalendar.Core")]

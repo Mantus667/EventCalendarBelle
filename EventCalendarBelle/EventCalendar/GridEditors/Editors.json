@@ -1,0 +1,21 @@
+﻿[
+    {
+        "name": "EventCalendar Eventlist",
+        "alias": "ecEventList",
+        "view": "/App_Plugins/EventCalendar/GridEditors/UpcomingEventsEditor.html",
+        "icon": "icon-item-arrangement",
+        "config": {
+            "enablePreview": true,
+            "defaultEventQuantity": 5
+        }
+    },
+    {
+        "name": "EventCalendar Calendar",
+        "alias": "ecCalendar",
+        "view": "/App_Plugins/EventCalendar/GridEditors/CalendarGridEditor.html",
+        "icon": "icon-calendar-alt",
+        "config": {
+            "enablePreview": true
+        }
+    }
+]

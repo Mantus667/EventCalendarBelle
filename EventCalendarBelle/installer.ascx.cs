@@ -385,7 +385,7 @@ namespace EventCalendarBelle
             try
             {
                 var src = HttpContext.Current.Server.MapPath("~/App_Plugins/EventCalendar/GridEditors/Editors.json");
-                var trg = HttpContext.Current.Server.MapPath("~/config/grid.editors.config");
+                var trg = HttpContext.Current.Server.MapPath("~/config/grid.editors.config.json");
 
                 if (!File.Exists(src) || !File.Exists(trg))
                     return;
@@ -406,7 +406,7 @@ namespace EventCalendarBelle
                 {
                     if (trgArr.Any(x => x["alias"] != obj["alias"]))
                     {
-                        trgArr.Add(srcObj);
+                        trgArr.Add(obj);
                     }
                 }
 

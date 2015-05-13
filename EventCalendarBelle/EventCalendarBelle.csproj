@@ -246,6 +246,7 @@
     <None Include="EventCalendar\calendar.resource.min.js.map">
       <DependentUpon>calendar.resource.js</DependentUpon>
     </None>
+    <None Include="EventCalendar\GridEditors\Editors.json" />
     <None Include="EventCalendar\GridEditors\UpcomingEventsEditor.cshtml" />
     <None Include="EventCalendar\package.manifest" />
     <None Include="EventCalendar\scripts\bootstrap-tagsinput.min.js.map" />
@@ -290,8 +291,10 @@
     <Content Include="EventCalendar\Editors\calendar.editor.controller.js" />
     <Content Include="EventCalendar\Editors\calendar.html" />
     <Content Include="EventCalendar\event.resource.js" />
+    <Content Include="EventCalendar\GridEditors\CalendarGridEditor.html" />
     <Content Include="EventCalendar\GridEditors\controller.js" />
-    <Content Include="EventCalendar\GridEditors\EventListDialog.html" />
+    <Content Include="EventCalendar\GridEditors\Dialogs\CalendarDialog.html" />
+    <Content Include="EventCalendar\GridEditors\Dialogs\EventListDialog.html" />
     <Content Include="EventCalendar\GridEditors\services.js" />
     <Content Include="EventCalendar\GridEditors\UpcomingEventsEditor.html" />
     <Content Include="EventCalendar\images\sort_asc.png" />

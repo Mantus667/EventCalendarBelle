@@ -66,17 +66,8 @@ namespace EventCalendarBelle.Controller
             {
                 var query = new Sql().Select("*").From("ec_calendars").Where<ECalendar>(x => x.Id == id);
                 var calendar = db.Fetch<ECalendar>(query).FirstOrDefault();
-                if (calendar.IsGCal)
-                {
-                    sources.Add(calendar.GCalFeedUrl);
-                }
-                else
-                {
-                    sources.Add(new EventSource { 
-                        url = (sourcePrefix ?? String.Empty) + "/umbraco/EventCalendar/ECApi/CalendarEvents/",
-                        data = new { id = calendar.Id }
-                    });
-                }
+
+                sources.Add(GetSourceForCalendar(calendar));
                 
             }
             else
@@ -87,22 +78,27 @@ namespace EventCalendarBelle.Controller
 
                 foreach (var cal in calendar)
                 {
-                    if (cal.IsGCal)
-                    {
-                        sources.Add(new { googleCalendarApiKey = cal.GoogleAPIKey, googleCalendarId = cal.GCalFeedUrl });
-                    }
-                    else
-                    {
-                        sources.Add(new EventSource
-                        {
-                            url = (sourcePrefix ?? String.Empty) + "/umbraco/EventCalendar/ECApi/CalendarEvents/",
-                            data = new { id = cal.Id }
-                        });
-                    }
+                    sources.Add(GetSourceForCalendar(cal));
                 }
             }
 
             return sources;
+        }
+
+        private object GetSourceForCalendar(ECalendar calendar)
+        {
+            if (calendar.IsGCal)
+            {
+                return new { googleCalendarApiKey = calendar.GoogleAPIKey, googleCalendarId = calendar.GCalFeedUrl };
+            }
+            else
+            {
+                return new EventSource
+                {
+                    url = (sourcePrefix ?? String.Empty) + "/umbraco/EventCalendar/ECApi/CalendarEvents/",
+                    data = new { id = calendar.Id }
+                };
+            }
         }
 
         private List<EventsOverviewModel> GetNormalEvents(int id,string culture, DateTime start, DateTime end)

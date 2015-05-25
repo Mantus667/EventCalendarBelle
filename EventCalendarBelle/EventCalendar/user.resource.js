@@ -15,6 +15,10 @@
 
                 save: function (user) {
                     return $http.post(Umbraco.Sys.ServerVariables.eventCalendar.userBaseUrl + "PostSave", angular.toJson(user));
+                },
+
+                getAllUser: function () {
+                    return $http.get(Umbraco.Sys.ServerVariables.eventCalendar.userBaseUrl + "GetAllUser");
                 }
             };
         });

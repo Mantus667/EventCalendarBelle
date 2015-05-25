@@ -39,6 +39,7 @@
 			'~/App_Plugins/EventCalendar/backoffice/ectree/revent.delete.controller.js',
 
 			'~/App_Plugins/EventCalendar/backoffice/ectree/user.edit.controller.js',
+			'~/App_Plugins/EventCalendar/backoffice/ectree/security.overview.controller.js',
 
 			'~/App_Plugins/EventCalendar/backoffice/ectree/import.controller.js',
 

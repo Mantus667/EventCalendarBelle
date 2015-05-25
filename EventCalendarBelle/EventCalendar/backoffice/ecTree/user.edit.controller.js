@@ -24,7 +24,6 @@
                     $scope.user = user;
 
                     userResource.getNameOfUser(user.user_id).then(function (response) {
-                        console.log(response.data);
                         $scope.username = response.data;
                     });
                 }, function (response) {

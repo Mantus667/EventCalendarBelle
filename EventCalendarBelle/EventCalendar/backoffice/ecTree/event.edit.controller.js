@@ -1,7 +1,7 @@
 ﻿angular.module("umbraco").controller("EventCalendar.EventEditController",
         function ($scope, $routeParams, eventResource, locationResource, notificationsService, assetsService, tinyMceService, $timeout, dialogService, navigationService, userService, eventCalendarLocalizationService, entityResource, angularHelper) {           
             //name : null, id : null, icon: "icon-user"
-            $scope.event = { id: 0, calendarid: 0, allday: false, descriptions: {}, organisator: {} };
+            $scope.event = { id: 0, calendarid: 0, allday: false, descriptions: {}, organiser: {} };
             var locale = 'en-US';
             var dateformat = 'MM/DD/YYYY HH:mm:ss';
             
@@ -113,8 +113,8 @@
             };
 
             $scope.populate = function (data) {
-                $scope.event.organisator_id = data.id;
-                $scope.event.organisator = { name: data.name, id: data.id, icon: data.icon };
+                $scope.event.organiser_id = data.id;
+                $scope.event.organiser = { name: data.name, id: data.id, icon: data.icon };
             };
 
             //Load all locations
@@ -131,16 +131,16 @@
                 //get a calendar id -> service
                 eventResource.getById($routeParams.id.replace("e-","")).then(function (response) {
                     $scope.event = response.data;
-                    $scope.event.organisator = {};
+                    $scope.event.organiser = {};
 
                     initRTE();
 
                     initAssets();
 
-                    if ($scope.event.organisator_id != 0) {
-                        entityResource.getById($scope.event.organisator_id, "Member")
+                    if ($scope.event.organiser_id != 0) {
+                        entityResource.getById($scope.event.organiser_id, "Member")
                        .then(function (data) {
-                           $scope.event.organisator = { name: data.name, id: data.id, icon: data.icon };
+                           $scope.event.organiser = { name: data.name, id: data.id, icon: data.icon };
                        });
                     }
 
@@ -157,11 +157,10 @@
             };
 
             $scope.deleteOrganisator = function () {
-                $scope.event.organisator = {};
+                $scope.event.organiser = {};
             }
 
             $scope.save = function (event) {
-                //console.log(event);
                 eventResource.save(event).then(function (response) {
                     if ($routeParams.create == "true") {
                         window.location = "#/eventCalendar/ecTree/editEvent/e-" + response.data.id;

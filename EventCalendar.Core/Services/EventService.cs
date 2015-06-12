@@ -48,7 +48,14 @@ namespace EventCalendar.Core.Services
             //Save the event descriptions                
             foreach (var desc in e.descriptions)
             {
-                DescriptionService.UpdateDescription(desc);
+                if (desc.Id > 0)
+                {
+                    DescriptionService.UpdateDescription(desc);
+                }
+                else
+                {
+                    DescriptionService.CreateDescription(desc);
+                }
             }
 
             return e;

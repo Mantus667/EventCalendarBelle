@@ -6,7 +6,6 @@
 
             //Load all calendar
             calendarResource.getall().then(function (response) {
-                //$scope.calendars = response.data;
                 angular.forEach(response.data, function (calendar) {
                     $scope.calendars.push({ id: calendar.id.toString(), calendarname: calendar.calendarname });
                 });

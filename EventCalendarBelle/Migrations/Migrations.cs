@@ -111,6 +111,7 @@ namespace EventCalendarBelle.Migrations
         }
     }
 
+    [Migration("2.1.2", 0, "UpdateEventCalendarTables")]
     public class OrganiserLanguageChangeMigration : MigrationBase
     {
         public override void Down()

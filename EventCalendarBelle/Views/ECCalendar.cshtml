@@ -74,7 +74,7 @@
                             //} else {
                             //    window.location.href = event_details_url + '?id=' + event.id + '&type=0&calendar=' + event.calendar;
                             //}
-                            window.location.href = event_details_url + event.title + '/' + event.calendar + '/' + event.id + '/' + event.type;
+                            window.location.href = event_details_url + event.title + '/[c-' + event.calendar + ']/[e-' + event.id + ']/[t-' + event.type + ']';
                             return false;
                         }
                     },

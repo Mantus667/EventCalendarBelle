@@ -55,7 +55,7 @@ namespace EventCalendarBelle.Controller
                 if (e.Organiser != null && e.Organiser != 0)
                 {
                     var member = ms.GetById(e.Organiser);
-                    evm.Organisor = new Organisor() { Name = member.Name, Email = member.Email };
+                    evm.Organiser = new Organiser() { Name = member.Name, Email = member.Email };
                 }
             }
             else if (type == 1)
@@ -98,7 +98,7 @@ namespace EventCalendarBelle.Controller
                 if (e.Organiser != null && e.Organiser != 0)
                 {
                     var member = ms.GetById(e.Organiser);
-                    evm.Organisor = new Organisor() { Name = member.Name, Email = member.Email };
+                    evm.Organiser = new Organiser() { Name = member.Name, Email = member.Email };
                 }
             }
 

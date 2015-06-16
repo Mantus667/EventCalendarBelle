@@ -19,7 +19,7 @@
                     .loadJs("/App_Plugins/EventCalendar/scripts/bootstrap-tagsinput.min.js")
                     .then(function () {
                         $('input#tags').tagsinput();
-                        if ($scope.event.categories != "" && $scope.event.categories != null && $scope.event.categories !== undefined) {
+                        if ($scope.event.categories !== "" && $scope.event.categories !== null && $scope.event.categories !== undefined) {
                             var tags = $scope.event.categories.split(",");
                             angular.forEach(tags, function (value) {
                                 $('input#tags').tagsinput('add', value);
@@ -42,7 +42,7 @@
                             //Set the right local of the current user in moment
                             moment.locale([locale, 'en']);
 
-                            if ($routeParams.create == "true") {
+                            if ($routeParams.create === "true") {
                                 $scope.event.starttime = moment();
                                 $scope.event.endtime = moment();
                             }
@@ -156,7 +156,7 @@
                 });
             };
 
-            $scope.deleteOrganisator = function () {
+            $scope.deleteOrganiser = function () {
                 $scope.event.organiser = {};
             }
 

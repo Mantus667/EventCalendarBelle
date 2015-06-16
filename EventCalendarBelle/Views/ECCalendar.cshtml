@@ -41,7 +41,7 @@
     <script type="text/javascript" src="@Url.Content("~/scripts/EventCalendar/lang-all.js")"></script>
     <script type="text/javascript" src="http://cdn.jsdelivr.net/qtip2/2.2.0/jquery.qtip.min.js"></script>
     <script type="text/javascript">
-        var event_details_url = '/EventCalendar/EventDetails/';
+        var event_details_url = '@Model.Content.Down().Url';
         $(document).ready(function () {
             var csrfToken = $("input[name='__RequestVerificationToken']").val();
             var sources = [];
@@ -69,12 +69,11 @@
                             window.open(event.url);
                             return false;
                         } else {
-                            //if (event.type == 1) {
-                            //    window.location.href = event_details_url + '?id=' + event.id + '&type=1&calendar=' + event.calendar;
-                            //} else {
-                            //    window.location.href = event_details_url + '?id=' + event.id + '&type=0&calendar=' + event.calendar;
-                            //}
-                            window.location.href = event_details_url + event.title + '/' + event.calendar + '/' + event.id + '/' + event.type;
+                            if (event.type == 1) {
+                                window.location.href = event_details_url + '?id=' + event.id + '&type=1&calendar=' + event.calendar;
+                            } else {
+                                window.location.href = event_details_url + '?id=' + event.id + '&type=0&calendar=' + event.calendar;
+                            }
                             return false;
                         }
                     },

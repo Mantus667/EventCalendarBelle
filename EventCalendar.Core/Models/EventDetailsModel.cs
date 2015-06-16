@@ -14,7 +14,7 @@ namespace EventCalendar.Core.Models
         public string EndDate { get; set; }
         public string Description { get; set; }
         public int LocationId { get; set; }
-        public Organisor Organisor { get; set; }
+        public Organiser Organiser { get; set; }
         public EventLocation Location { get; set; }
         public List<EventDescription> Descriptions { get; set; }
 
@@ -31,7 +31,7 @@ namespace EventCalendar.Core.Models
         }
     }
 
-    public class Organisor
+    public class Organiser
     {
         public string Name { get; set; }
         public string Email { get; set; }

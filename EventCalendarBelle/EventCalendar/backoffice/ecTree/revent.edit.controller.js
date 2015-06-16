@@ -144,7 +144,7 @@
                 });
             };
 
-            $scope.deleteOrganisator = function () {
+            $scope.deleteOrganiser = function () {
                 $scope.event.organiser = {};
             }
 

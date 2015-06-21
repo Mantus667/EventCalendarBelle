@@ -1,4 +1,4 @@
-﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<EventCalendarBelle.Models.EventDetailsModel>
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<EventCalendar.Core.Models.EventDetailsModel>
 @using System.Globalization
 @{
     var showLocation = (Model.LocationId != 0) ? true : false;
@@ -37,10 +37,10 @@
                 }
             </div>
         </div>
-        @if(Model.Organisator != null) {
+        @if(Model.Organiser != null) {
             <div class="row-fluid">
                 <hr />
-                <h3><a href="mailto:@Model.Organisator.Email">Organisator: @Model.Organisator.Name</a></h3>
+                <h3><a href="mailto:@Model.Organiser.Email">Organiser: @Model.Organiser.Name</a></h3>
             </div>
         }
         <div class="row-fluid">
@@ -78,8 +78,7 @@
                 <div class="btn-group">
                     @Html.ActionLink("Download Event", "GetIcsForEvent", "ECSurface", new { area = "EventCalendar", id = Request["id"], type = Request["type"] }, new { @class = "btn btn-primary" })
                     @Html.ActionLink("Download Calendar","GetIcsForCalendar", "ECSurface", new { area = "EventCalendar", id = Model.CalendarId }, new { @class = "btn btn-success" })
-                </div
-                
+                </div                
             </div>
         </div>
     </div>

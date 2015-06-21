@@ -115,15 +115,15 @@
                     <div class="control-group umb-control-group">
                         <div class="umb-el-wrap">
                             <label class="control-label" for="">
-                                <eventcalendar-localize key="event_organisator_label">Organisator</eventcalendar-localize>
-                                <small><eventcalendar-localize key="event_organisator_description">Who is the organisator of this event?</eventcalendar-localize></small>
+                                <eventcalendar-localize key="event_organiser_label">Organiser</eventcalendar-localize>
+                                <small><eventcalendar-localize key="event_organiser_description">Who is the organiser of this event?</eventcalendar-localize></small>
                             </label>
                             <div class="controls controls-row">
-                                <ul class="unstyled list-icons" ng-if="event.organisator.name">
+                                <ul class="unstyled list-icons" ng-if="event.organiser.name">
                                     <li>
-                                        <i class="icon icon-delete red hover-show pull-right" ng-click="deleteOrganisator()"></i>
+                                        <i class="icon icon-delete red hover-show pull-right" ng-click="deleteOrganiser()"></i>
                                         <i class="icon icon-user hover-hide"></i>
-                                        <span>{{event.organisator.name}}</span>
+                                        <span>{{event.organiser.name}}</span>
                                     </li>
                                 </ul>
                                 <ul class="unstyled list-icons">

@@ -50,10 +50,10 @@ namespace EventCalendar.Core.Models
         [DataMember(Name = "categories")]
         public string categories { get; set; }
 
-        [Column("organisator")]
+        [Column("organiser")]
         [NullSetting(NullSetting = NullSettings.Null)]
-        [DataMember(Name = "organisator_id")]
-        public int Organisator { get; set; }
+        [DataMember(Name = "organiser_id")]
+        public int Organiser { get; set; }
 
         [Ignore]
         [DataMember(Name = "descriptions")]

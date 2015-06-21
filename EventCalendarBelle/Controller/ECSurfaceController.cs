@@ -52,10 +52,10 @@ namespace EventCalendarBelle.Controller
                 {
                     evm.EndDate = ((DateTime)e.end).ToString("F", CultureInfo.CurrentCulture);
                 }
-                if (e.Organisator != null && e.Organisator != 0)
+                if (e.Organiser != null && e.Organiser != 0)
                 {
-                    var member = ms.GetById(e.Organisator);
-                    evm.Organisator = new Organisator() { Name = member.Name, Email = member.Email };
+                    var member = ms.GetById(e.Organiser);
+                    evm.Organiser = new Organiser() { Name = member.Name, Email = member.Email };
                 }
             }
             else if (type == 1)
@@ -95,10 +95,10 @@ namespace EventCalendarBelle.Controller
                     var end = ((DateTime)schedule.NextOccurrence(DateTime.Now));
                     evm.EndDate = new DateTime(end.Year, end.Month, end.Day, e.end.Hour, e.end.Minute, 0).ToString("F", CultureInfo.CurrentCulture);
                 }
-                if (e.Organisator != null && e.Organisator != 0)
+                if (e.Organiser != null && e.Organiser != 0)
                 {
-                    var member = ms.GetById(e.Organisator);
-                    evm.Organisator = new Organisator() { Name = member.Name, Email = member.Email };
+                    var member = ms.GetById(e.Organiser);
+                    evm.Organiser = new Organiser() { Name = member.Name, Email = member.Email };
                 }
             }
 
@@ -141,10 +141,10 @@ namespace EventCalendarBelle.Controller
 
                 var attendes = new List<IAttendee>();
 
-                if (e.Organisator != null && e.Organisator != 0)
+                if (e.Organiser != null && e.Organiser != 0)
                 {
                     var ms = Services.MemberService;
-                    var member = ms.GetById(e.Organisator);
+                    var member = ms.GetById(e.Organiser);
                     string attendee = "MAILTO:" + member.Email;
                     IAttendee reqattendee = new DDay.iCal.Attendee(attendee)
                     {
@@ -260,10 +260,10 @@ namespace EventCalendarBelle.Controller
 
                 var attendes = new List<IAttendee>();
 
-                if (e.Organisator != null && e.Organisator != 0)
+                if (e.Organiser != null && e.Organiser != 0)
                 {
                     var ms = Services.MemberService;
-                    var member = ms.GetById(e.Organisator);
+                    var member = ms.GetById(e.Organiser);
                     string attendee = "MAILTO:" + member.Email;
                     IAttendee reqattendee = new DDay.iCal.Attendee(attendee)
                     {
@@ -336,10 +336,10 @@ namespace EventCalendarBelle.Controller
 
                 var attendes = new List<IAttendee>();
 
-                if (e.Organisator != null && e.Organisator != 0)
+                if (e.Organiser != null && e.Organiser != 0)
                 {
                     var ms = Services.MemberService;
-                    var member = ms.GetById(e.Organisator);
+                    var member = ms.GetById(e.Organiser);
                     string attendee = "MAILTO:" + member.Email;
                     IAttendee reqattendee = new DDay.iCal.Attendee(attendee)
                     {
@@ -457,10 +457,10 @@ namespace EventCalendarBelle.Controller
 
                 var attendes = new List<IAttendee>();
 
-                if (e.Organisator != null && e.Organisator != 0)
+                if (e.Organiser != null && e.Organiser != 0)
                 {
                     var ms = Services.MemberService;
-                    var member = ms.GetById(e.Organisator);
+                    var member = ms.GetById(e.Organiser);
                     string attendee = "MAILTO:" + member.Email;
                     IAttendee reqattendee = new DDay.iCal.Attendee(attendee)
                     {

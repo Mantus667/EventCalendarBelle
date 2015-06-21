@@ -8,6 +8,7 @@ using System.Web.Http;
 using Umbraco.Core.Persistence;
 using Umbraco.Web.Editors;
 using Umbraco.Web.Mvc;
+using Umbraco.Core.Models.Membership;
 
 namespace EventCalendarBelle.Controller
 {
@@ -50,6 +51,14 @@ namespace EventCalendarBelle.Controller
             var us = Services.UserService;
             var user = us.GetByProviderKey(id);
             return user.Username;
+        }
+
+        public IEnumerable<IUser> GetAllUser()
+        {
+            var us = Services.UserService;
+            var total = 0;
+            var users = us.GetAll(0, 1000, out total);
+            return users;
         }
     }
 }

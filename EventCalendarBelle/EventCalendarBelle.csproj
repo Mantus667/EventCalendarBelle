@@ -273,8 +273,10 @@
     <Content Include="EventCalendar\backoffice\ecTree\editREvent.html" />
     <Content Include="EventCalendar\backoffice\ecTree\event.edit.controller.js" />
     <Content Include="EventCalendar\backoffice\ecTree\location.edit.controller.js" />
+    <Content Include="EventCalendar\backoffice\ecTree\overviewSecurity.html" />
     <Content Include="EventCalendar\backoffice\ecTree\revent.delete.controller.js" />
     <Content Include="EventCalendar\backoffice\ecTree\revent.edit.controller.js" />
+    <Content Include="EventCalendar\backoffice\ecTree\security.overview.controller.js" />
     <Content Include="EventCalendar\backoffice\ecTree\user.edit.controller.js" />
     <Content Include="EventCalendar\calendar.resource.min.js">
       <DependentUpon>calendar.resource.js</DependentUpon>

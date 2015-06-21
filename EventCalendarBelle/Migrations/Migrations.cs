@@ -110,4 +110,20 @@ namespace EventCalendarBelle.Migrations
             catch { }
         }
     }
+
+    [Migration("2.1.2", 0, "UpdateEventCalendarTables")]
+    public class OrganiserLanguageChangeMigration : MigrationBase
+    {
+        public override void Down()
+        {
+            Rename.Column("organiser").OnTable("ec_events").To("organisator");
+            Rename.Column("organiser").OnTable("ec_recevents").To("organisator");
+        }
+
+        public override void Up()
+        {
+            Rename.Column("organisator").OnTable("ec_events").To("organiser");
+            Rename.Column("organisator").OnTable("ec_recevents").To("organiser");
+        }
+    }
 }

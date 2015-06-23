@@ -23,7 +23,7 @@
                 },
 
                 getEventSources: function (id) {
-                    return $http.get(Umbraco.Sys.ServerVariables.eventCalendar.calendarBaseUrl + "GetEventSources?id=" + id);
+                    return $http.get(Umbraco.Sys.ServerVariables.eventCalendar.calendarBaseUrl + "GetCalendarSources?id=" + id);
                 }
             };
         });

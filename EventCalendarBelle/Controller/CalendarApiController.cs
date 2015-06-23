@@ -107,6 +107,7 @@ namespace EventCalendarBelle.Controller
             return sources;
         }
 
+        [HttpGet]
         public IEnumerable<EventsOverviewModel> CalendarEvents(EventRange range)
         {
             var db = UmbracoContext.Application.DatabaseContext.Database;
@@ -131,6 +132,12 @@ namespace EventCalendarBelle.Controller
             return events;
         }
 
+        [HttpGet]
+        public IEnumerable<EventsOverviewModel> CalendarEvents(int id, DateTime start, DateTime end)
+        {
+            return CalendarEvents(new EventRange { id = id, start = start, end = end });
+        }
+
         private object GetSourceForCalendar(ECalendar calendar)
         {
             if (calendar.IsGCal)
@@ -141,8 +148,7 @@ namespace EventCalendarBelle.Controller
             {
                 return new EventSource
                 {
-                    url = (sourcePrefix ?? String.Empty) + "/umbraco/backoffice/EventCalendar/CalendarApi/CalendarEvents/",
-                    data = new { id = calendar.Id },
+                    url = (sourcePrefix ?? String.Empty) + "/umbraco/backoffice/EventCalendar/CalendarApi/CalendarEvents/?id=" + calendar.Id,
                     type = "GET"
                 };
             }

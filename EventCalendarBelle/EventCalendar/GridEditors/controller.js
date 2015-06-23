@@ -108,7 +108,9 @@ angular.module("umbraco")
                     "http://cdn.jsdelivr.net/qtip2/2.2.0/jquery.qtip.min.js"
                 ]).then(function () {
                     calendarResource.getEventSources(model.calendar).then(function (data) {
+                        console.log(data);
                         $("#calendar").fullCalendar({
+                            defaultView: 'month',
                             header: {
                                 left: 'prev,next today',
                                 center: 'title',

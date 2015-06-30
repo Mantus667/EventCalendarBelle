@@ -193,6 +193,7 @@ namespace EventCalendarBelle.Controller
                         allDay = e.allDay,
                         description = description,
                         start = new DateTime(tmp.Year,tmp.Month,tmp.Day,e.start.Hour,e.start.Minute,0),
+                        end = new DateTime(tmp.Year, tmp.Month, tmp.Day, e.end.Hour, e.end.Minute, 0),
                         type = EventType.Recurring,
                         color = !String.IsNullOrEmpty(calendar.Color) ? calendar.Color : "",
                         textColor = !String.IsNullOrEmpty(calendar.TextColor) ? calendar.TextColor : "",

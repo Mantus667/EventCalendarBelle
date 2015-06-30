@@ -78,28 +78,18 @@
                         }
                     },
                     eventRender: function (event, element) {
-                        if (event.type == 0) {
-                            if (event.end != null) {
-                                element.qtip({
-                                    content: {
-                                        text: "<h2>" + event.title + "</h2><h5>Start:" + event.start.format('llll') + "</h5><h5>End:" + event.end.format('llll') + "</h5><div>" + event.description + "</div>",
-                                        title: event.title
-                                    },
-                                    style: "qtip-blue"
-                                });
-                            } else {
-                                element.qtip({
-                                    content: {
-                                        text: "<h2>" + event.title + "</h2><h5>Start:" + event.start.format('llll') + "</h5><div>" + event.description + "</div>",
-                                        title: event.title
-                                    },
-                                    style: "qtip-blue"
-                                });
-                            }
+                        if (event.end != null) {
+                            element.qtip({
+                                content: {
+                                    text: "<h2>" + event.title + "</h2><h5>Start: " + event.start.format('llll') + "</h5><h5>End: " + event.end.format('llll') + "</h5><div>" + event.description + "</div>",
+                                    title: event.title
+                                },
+                                style: "qtip-blue"
+                            });
                         } else {
                             element.qtip({
                                 content: {
-                                    text: "<h2>" + event.title + "</h2><h5>Start:" + event.start.format('ll') + "</h5><div>" + event.description + "</div>",
+                                    text: "<h2>" + event.title + "</h2><h5>Start: " + event.start.format('llll') + "</h5><div>" + event.description + "</div>",
                                     title: event.title
                                 },
                                 style: "qtip-blue"

@@ -40,7 +40,7 @@ namespace EventCalendar.Core.Models
 
         [Column("day")]
         [DataMember(Name = "day")]
-        public int day { get; set; }
+        public string day { get; set; }
 
         [Column("frequency")]
         [DataMember(Name = "frequency")]
@@ -48,7 +48,7 @@ namespace EventCalendar.Core.Models
 
         [Column("monthly")]
         [DataMember(Name = "monthly")]
-        public int monthly_interval { get; set; }
+        public string monthly_interval { get; set; }
 
         [Column("categories")]
         [DataMember(Name = "categories")]
@@ -69,6 +69,24 @@ namespace EventCalendar.Core.Models
         [NullSetting(NullSetting = NullSettings.Null)]
         [DataMember(Name = "organiser_id")]
         public int Organiser { get; set; }
+
+        [Column("rangeStart")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        [DataMember(Name = "range_start")]
+        public int range_start { get; set; }
+
+        [Column("rangeEnd")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        [DataMember(Name = "range_end")]
+        public int range_end { get; set; }
+
+        [Ignore]
+        [DataMember(Name = "days")]
+        public List<int> days { get; set; }
+
+        [Ignore]
+        [DataMember(Name = "intervals")]
+        public List<int> intervals { get; set; }
 
         [Ignore]
         [DataMember(Name = "descriptions")]

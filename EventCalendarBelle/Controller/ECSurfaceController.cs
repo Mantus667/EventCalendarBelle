@@ -65,15 +65,24 @@ namespace EventCalendarBelle.Controller
                 if (e.locationId != 0)
                 {
                     l = LocationService.GetLocation(e.locationId);
-                }                
+                }
 
-                Schedule schedule = new Schedule(new ScheduleWidget.ScheduledEvents.Event()
+                var tmp_event = new ScheduleWidget.ScheduledEvents.Event()
                 {
                     Title = e.title,
-                    DaysOfWeekOptions = (DayOfWeekEnum)e.day,
-                    FrequencyTypeOptions = (FrequencyTypeEnum)e.frequency,
-                    MonthlyIntervalOptions = (MonthlyIntervalEnum)e.monthly_interval
-                });               
+                    FrequencyTypeOptions = (FrequencyTypeEnum)e.frequency
+                };
+
+                foreach (var day in e.days)
+                {
+                    tmp_event.DaysOfWeekOptions = tmp_event.DaysOfWeekOptions | (DayOfWeekEnum)day;
+                }
+                foreach (var i in e.intervals)
+                {
+                    tmp_event.MonthlyIntervalOptions = tmp_event.MonthlyIntervalOptions | (MonthlyIntervalEnum)i;
+                }
+
+                Schedule schedule = new Schedule(tmp_event);               
 
                 evm = new EventDetailsModel()
                 {
@@ -164,7 +173,6 @@ namespace EventCalendarBelle.Controller
                 var ectrl = new REventApiController();
                 var e = ectrl.GetById(id);
 
-                //evt.Description = this.GetDescription(e, CultureInfo.CurrentCulture.ToString());
                 evt.Summary = e.title;
                 evt.IsAllDay = e.allDay;
 
@@ -173,10 +181,10 @@ namespace EventCalendarBelle.Controller
                 {
                     l = lctrl.GetById(e.locationId);
                     evt.Location = l.LocationName + "," + l.Street + "," + l.ZipCode + " " + l.City + "," + l.Country;
-                    //evt.GeographicLocation = new GeographicLocation(Convert.ToDouble(l.lat, CultureInfo.InvariantCulture), Convert.ToDouble(l.lon, CultureInfo.InvariantCulture));
                 }
 
                 RecurrencePattern rp = null;
+                rp = new RecurrencePattern();
                 var frequency = (FrequencyTypeEnum)e.frequency;
                 switch (frequency)
                 {
@@ -206,57 +214,29 @@ namespace EventCalendarBelle.Controller
                             break;
                         }
                 }
-                switch (e.day)
-                {
-                    case (int)DayOfWeekEnum.Mon:
-                        {
-                            rp.ByDay.Add(new WeekDay(DayOfWeek.Monday));
-                            break;
-                        }
-                    case (int)DayOfWeekEnum.Tue:
-                        {
-                            rp.ByDay.Add(new WeekDay(DayOfWeek.Tuesday));
-                            break;
-                        }
-                    case (int)DayOfWeekEnum.Wed:
-                        {
-                            rp.ByDay.Add(new WeekDay(DayOfWeek.Wednesday));
-                            break;
-                        }
-                    case (int)DayOfWeekEnum.Thu:
-                        {
-                            rp.ByDay.Add(new WeekDay(DayOfWeek.Thursday));
-                            break;
-                        }
-                    case (int)DayOfWeekEnum.Fri:
-                        {
-                            rp.ByDay.Add(new WeekDay(DayOfWeek.Friday));
-                            break;
-                        }
-                    case (int)DayOfWeekEnum.Sat:
-                        {
-                            rp.ByDay.Add(new WeekDay(DayOfWeek.Saturday));
-                            break;
-                        }
-                    case (int)DayOfWeekEnum.Sun:
-                        {
-                            rp.ByDay.Add(new WeekDay(DayOfWeek.Sunday));
-                            break;
-                        }
-                }
+                rp.ByDay.AddRange(e.days.Select(x => new WeekDay(x.ToString())));
+                
                 evt.RecurrenceRules.Add(rp);
 
-                Schedule schedule = new Schedule(new ScheduleWidget.ScheduledEvents.Event()
+                var tmp_event = new ScheduleWidget.ScheduledEvents.Event()
                 {
                     Title = e.title,
-                    DaysOfWeekOptions = (DayOfWeekEnum)e.day,
-                    FrequencyTypeOptions = (FrequencyTypeEnum)e.frequency,
-                    MonthlyIntervalOptions = (MonthlyIntervalEnum)e.monthly_interval
-                });
+                    FrequencyTypeOptions = (FrequencyTypeEnum)e.frequency
+                };
+
+                foreach (var day in e.days)
+                {
+                    tmp_event.DaysOfWeekOptions = tmp_event.DaysOfWeekOptions | (DayOfWeekEnum)day;
+                }
+                foreach (var i in e.intervals)
+                {
+                    tmp_event.MonthlyIntervalOptions = tmp_event.MonthlyIntervalOptions | (MonthlyIntervalEnum)i;
+                }
+
+                Schedule schedule = new Schedule(tmp_event);
 
                 var occurence = Convert.ToDateTime(schedule.NextOccurrence(DateTime.Now));
                 evt.Start = new iCalDateTime(new DateTime(occurence.Year, occurence.Month, occurence.Day, e.start.Hour, e.start.Minute, 0));
-                //evt.End = new iCalDateTime(new DateTime(occurence.Year, occurence.Month, occurence.Day, e.end.Hour, e.end.Minute, 0));
 
                 var attendes = new List<IAttendee>();
 
@@ -371,7 +351,6 @@ namespace EventCalendarBelle.Controller
                 {
                     l = lctrl.GetById(e.locationId);
                     evt.Location = l.LocationName + "," + l.Street + "," + l.ZipCode + " " + l.City + "," + l.Country;
-                    //evt.GeographicLocation = new GeographicLocation(Convert.ToDouble(l.lat, CultureInfo.InvariantCulture), Convert.ToDouble(l.lon, CultureInfo.InvariantCulture));
                 }
 
                 RecurrencePattern rp = null;
@@ -404,53 +383,26 @@ namespace EventCalendarBelle.Controller
                             break;
                         }
                 }
-                switch (e.day)
-                {
-                    case (int)DayOfWeekEnum.Mon:
-                        {
-                            rp.ByDay.Add(new WeekDay(DayOfWeek.Monday));
-                            break;
-                        }
-                    case (int)DayOfWeekEnum.Tue:
-                        {
-                            rp.ByDay.Add(new WeekDay(DayOfWeek.Tuesday));
-                            break;
-                        }
-                    case (int)DayOfWeekEnum.Wed:
-                        {
-                            rp.ByDay.Add(new WeekDay(DayOfWeek.Wednesday));
-                            break;
-                        }
-                    case (int)DayOfWeekEnum.Thu:
-                        {
-                            rp.ByDay.Add(new WeekDay(DayOfWeek.Thursday));
-                            break;
-                        }
-                    case (int)DayOfWeekEnum.Fri:
-                        {
-                            rp.ByDay.Add(new WeekDay(DayOfWeek.Friday));
-                            break;
-                        }
-                    case (int)DayOfWeekEnum.Sat:
-                        {
-                            rp.ByDay.Add(new WeekDay(DayOfWeek.Saturday));
-                            break;
-                        }
-                    case (int)DayOfWeekEnum.Sun:
-                        {
-                            rp.ByDay.Add(new WeekDay(DayOfWeek.Sunday));
-                            break;
-                        }
-                }
+                rp.ByDay.AddRange(e.days.Select(x => new WeekDay(x.ToString())));
+                
                 evt.RecurrenceRules.Add(rp);
 
-                Schedule schedule = new Schedule(new ScheduleWidget.ScheduledEvents.Event()
+                var tmp_event = new ScheduleWidget.ScheduledEvents.Event()
                 {
                     Title = e.title,
-                    DaysOfWeekOptions = (DayOfWeekEnum)e.day,
-                    FrequencyTypeOptions = (FrequencyTypeEnum)e.frequency,
-                    MonthlyIntervalOptions = (MonthlyIntervalEnum)e.monthly_interval
-                });
+                    FrequencyTypeOptions = (FrequencyTypeEnum)e.frequency
+                };
+
+                foreach (var day in e.days)
+                {
+                    tmp_event.DaysOfWeekOptions = tmp_event.DaysOfWeekOptions | (DayOfWeekEnum)day;
+                }
+                foreach (var i in e.intervals)
+                {
+                    tmp_event.MonthlyIntervalOptions = tmp_event.MonthlyIntervalOptions | (MonthlyIntervalEnum)i;
+                }
+
+                Schedule schedule = new Schedule(tmp_event);
 
                 var occurence = Convert.ToDateTime(schedule.NextOccurrence(DateTime.Now));
                 evt.Start = new iCalDateTime(new DateTime(occurence.Year, occurence.Month, occurence.Day, e.start.Hour, e.start.Minute, 0));

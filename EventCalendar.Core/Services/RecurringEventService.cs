@@ -23,7 +23,12 @@ namespace EventCalendar.Core.Services
             var db = ApplicationContext.Current.DatabaseContext.Database;
             var query = new Sql().Select("*").From("ec_recevents");
 
-            return db.Fetch<RecurringEvent>(query);
+            var events = db.Fetch<RecurringEvent>(query);
+            foreach(var e in events){
+                e.days = e.day.Split(new string[]{","}, StringSplitOptions.RemoveEmptyEntries).Select(x => int.Parse(x)).ToList();
+                e.intervals = e.monthly_interval.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(x => int.Parse(x)).ToList();
+            }
+            return events;
         }
 
         public static RecurringEvent GetRecurringEvent(int id)
@@ -35,6 +40,8 @@ namespace EventCalendar.Core.Services
 
             if (current != null)
             {
+                current.days = current.day.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(x => int.Parse(x)).ToList();
+                current.intervals = current.monthly_interval.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(x => int.Parse(x)).ToList();
                 current.descriptions = DescriptionService.GetDescriptionsForEvent(current.calendarId, current.Id, EventType.Recurring).ToList();
 
                 var ls = ApplicationContext.Current.Services.LocalizationService;

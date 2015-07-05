@@ -41,15 +41,11 @@
                                    $('#datetimepicker2 input').val(moment.utc($scope.event.endtime).format('LT'));
 
                                    $('#datetimepicker1').on('dp.change', function (e) {
-                                       var d = moment(e.date); //.format('MM/DD/YYYY HH:mm:ss');
-                                       console.log(d);
-                                       //$('#datetimepicker1 input').val(d.format('l LT'));
+                                       var d = moment(e.date);
                                        $scope.event.starttime = d.format('HH:mm:ss');
                                    });
                                    $('#datetimepicker2').on('dp.change', function (e) {
                                        var d = moment(e.date);
-                                       console.log(d);
-                                       //$('#datetimepicker2 input').val(d.format('l LT'));
                                        $scope.event.endtime = d.format('HH:mm:ss');
                                    });
                                });
@@ -92,7 +88,7 @@
 
             var initRTE = function () {                
                 //Create the tabs for every language etc
-                $scope.tabs = [{ id: "Content", label: "Content" }];
+                $scope.tabs = [{ id: "Content", label: "Content" }, { id: "Exceptions", label: "Exceptions" }];
                 angular.forEach($scope.event.descriptions, function (value, key) {
                     this.push({ id: key, label: value.culture });
                 }, $scope.tabs);
@@ -130,6 +126,10 @@
 
             reventResource.getMonthlyIntervalValues().then(function (response) {
                 $scope.MonthlyIntervals = response.data;
+            });
+
+            reventResource.getMonths().then(function (response) {
+                $scope.MonthRange = response.data;
             });
 
             $scope.populate = function (data) {

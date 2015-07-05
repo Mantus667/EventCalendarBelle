@@ -85,7 +85,7 @@ namespace EventCalendarBelle.Controller
                     if (e.RecurrenceRules.Count > 0)
                     {
                         var revent = new RecurringEvent(){ allDay = e.IsAllDay, title = e.Summary, start = e.Start.Date, end = e.Start.Date, calendarId = calendar_id, categories = String.Join(",", e.Categories), Id = 0};
-                        revent.monthly_interval = (int)MonthlyIntervalEnum.First;
+                        revent.monthly_interval = ((int)MonthlyIntervalEnum.First).ToString();
                         RecurrencePattern rp = (RecurrencePattern)e.RecurrenceRules[0];
                         switch (rp.Frequency)
                         {
@@ -112,37 +112,37 @@ namespace EventCalendarBelle.Controller
                         }
                         switch(e.Start.DayOfWeek) {
                             case DayOfWeek.Monday: {
-                                revent.day = (int)DayOfWeekEnum.Mon;
+                                revent.days.Add((int)DayOfWeekEnum.Mon);
                                 break;
                             }
                             case DayOfWeek.Tuesday:
                                 {
-                                    revent.day = (int)DayOfWeekEnum.Tue;
+                                    revent.days.Add((int)DayOfWeekEnum.Tue);
                                     break;
                                 }
                             case DayOfWeek.Wednesday:
                                 {
-                                    revent.day = (int)DayOfWeekEnum.Wed;
+                                    revent.days.Add((int)DayOfWeekEnum.Wed);
                                     break;
                                 }
                             case DayOfWeek.Thursday:
                                 {
-                                    revent.day = (int)DayOfWeekEnum.Thu;
+                                    revent.days.Add((int)DayOfWeekEnum.Thu);
                                     break;
                                 }
                             case DayOfWeek.Friday:
                                 {
-                                    revent.day = (int)DayOfWeekEnum.Fri;
+                                    revent.days.Add((int)DayOfWeekEnum.Fri);
                                     break;
                                 }
                             case DayOfWeek.Saturday:
                                 {
-                                    revent.day = (int)DayOfWeekEnum.Sat;
+                                    revent.days.Add((int)DayOfWeekEnum.Sat);
                                     break;
                                 }
                             case DayOfWeek.Sunday:
                                 {
-                                    revent.day = (int)DayOfWeekEnum.Sun;
+                                    revent.days.Add((int)DayOfWeekEnum.Sun);
                                     break;
                                 }
                         }
@@ -180,7 +180,7 @@ namespace EventCalendarBelle.Controller
                     if (e.RecurrenceRules.Count > 0)
                     {
                         var revent = new RecurringEvent() { allDay = e.IsAllDay, title = e.Summary, start = e.Start.Date, end = e.Start.Date, calendarId = calendar.Id, categories = String.Join(",", e.Categories), Id = 0 };
-                        revent.monthly_interval = (int)MonthlyIntervalEnum.First;
+                        revent.monthly_interval = ((int)MonthlyIntervalEnum.First).ToString();
                         RecurrencePattern rp = (RecurrencePattern)e.RecurrenceRules[0];
                         switch (rp.Frequency)
                         {
@@ -205,44 +205,8 @@ namespace EventCalendarBelle.Controller
                                     break;
                                 }
                         }
-                        switch (rp.ByDay[0].DayOfWeek)
-                        {
-                            case DayOfWeek.Monday:
-                                {
-                                    revent.day = (int)DayOfWeekEnum.Mon;
-                                    break;
-                                }
-                            case DayOfWeek.Tuesday:
-                                {
-                                    revent.day = (int)DayOfWeekEnum.Tue;
-                                    break;
-                                }
-                            case DayOfWeek.Wednesday:
-                                {
-                                    revent.day = (int)DayOfWeekEnum.Wed;
-                                    break;
-                                }
-                            case DayOfWeek.Thursday:
-                                {
-                                    revent.day = (int)DayOfWeekEnum.Thu;
-                                    break;
-                                }
-                            case DayOfWeek.Friday:
-                                {
-                                    revent.day = (int)DayOfWeekEnum.Fri;
-                                    break;
-                                }
-                            case DayOfWeek.Saturday:
-                                {
-                                    revent.day = (int)DayOfWeekEnum.Sat;
-                                    break;
-                                }
-                            case DayOfWeek.Sunday:
-                                {
-                                    revent.day = (int)DayOfWeekEnum.Sun;
-                                    break;
-                                }
-                        }
+                        revent.days.AddRange(rp.ByDay.Select(x => (int)x.DayOfWeek));
+                        
                         rectrl.PostSave(revent);
                     }
                     else

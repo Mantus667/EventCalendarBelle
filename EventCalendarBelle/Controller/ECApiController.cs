@@ -1,5 +1,6 @@
 ﻿using EventCalendar.Core.ActionFilter;
 using EventCalendar.Core.Models;
+using EventCalendar.Core.Services;
 using Newtonsoft.Json;
 using ScheduleWidget.Enums;
 using ScheduleWidget.ScheduledEvents;
@@ -161,18 +162,41 @@ namespace EventCalendarBelle.Controller
             range.EndDateTime = endDate;
 
             var calendar = db.SingleOrDefault<ECalendar>(id);
-            var recurring_events = db.Query<RecurringEvent>("SELECT * FROM ec_recevents WHERE calendarId = @0 ORDER BY id DESC", id).ToList();
+            var recurring_events = RecurringEventService.GetAllEvents().Where(x => x.calendarId == id);
+            
             foreach (var e in recurring_events)
             {
-                var schedule = new Schedule(
-                    new ScheduleWidget.ScheduledEvents.Event()
-                    {
-                        Title = e.title,
-                        ID = e.Id,
-                        DaysOfWeekOptions = (DayOfWeekEnum)e.day,
-                        FrequencyTypeOptions = (FrequencyTypeEnum)e.frequency,
-                        MonthlyIntervalOptions = (MonthlyIntervalEnum)e.monthly_interval
-                    });
+                RangeInYear rangeInYear = null;
+
+                if(e.range_start != 0 && e.range_end != 0){
+                    rangeInYear = new RangeInYear(){
+                        StartMonth = e.range_start,
+                        EndMonth = e.range_end
+                    };
+                }
+
+                var tmp_event = new ScheduleWidget.ScheduledEvents.Event() {
+                    Title = e.title,
+                    ID = e.Id,
+                    FrequencyTypeOptions = (FrequencyTypeEnum)e.frequency,
+                };
+
+                if (rangeInYear != null)
+                {
+                    tmp_event.RangeInYear = rangeInYear;
+                }
+
+                foreach (var day in e.days)
+                {
+                    tmp_event.DaysOfWeekOptions = tmp_event.DaysOfWeekOptions | (DayOfWeekEnum)day;
+                }
+                foreach (var i in e.intervals)
+                {
+                    tmp_event.MonthlyIntervalOptions = tmp_event.MonthlyIntervalOptions | (MonthlyIntervalEnum)i;
+                }
+
+                var schedule = new Schedule(tmp_event);
+
                 foreach (var tmp in schedule.Occurrences(range))
                 {
                     List<EventDescription> descriptions = db.Query<EventDescription>("SELECT * FROM ec_eventdescriptions WHERE eventid = @0 AND calendarid = @1 AND type = @2", e.Id, e.calendarId, (int)EventType.Recurring).ToList();

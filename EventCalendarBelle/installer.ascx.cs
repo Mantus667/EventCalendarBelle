@@ -20,7 +20,7 @@ namespace EventCalendarBelle
     public partial class installer : Umbraco.Web.UmbracoUserControl
     {
         private UmbracoDatabase _db = null;
-        protected Version newVersion = new Version("2.1.4");
+        protected Version newVersion = new Version("2.2.0");
         private Version oldVersion = new Version("2.0.0");
 
         protected void Page_Load(object sender, EventArgs e)

@@ -14,6 +14,7 @@ using Umbraco.Core.Logging;
 using System.Configuration;
 using System.IO;
 using umbraco.BusinessLogic;
+using EventCalendar.Core.Dto;
 
 namespace EventCalendarBelle
 {
@@ -191,7 +192,7 @@ namespace EventCalendarBelle
                     this.BulletedList1.Items.Add(new ListItem("Creating calendar tables."));
                     if (!this._db.TableExist("ec_calendars"))
                     {
-                        this._db.CreateTable<EventCalendar.Core.Models.ECalendar>(false);
+                        this._db.CreateTable<CalendarDto>(false);
                         this.BulletedList1.Items.Add(new ListItem("Successfully created tables."));
                     }
                 }
@@ -206,7 +207,7 @@ namespace EventCalendarBelle
                     this.BulletedList1.Items.Add(new ListItem("Creating events table."));
                     if (!this._db.TableExist("ec_events"))
                     {
-                        this._db.CreateTable<Event>(false);
+                        this._db.CreateTable<EventDto>(false);
                         this.BulletedList1.Items.Add(new ListItem("Successfully created table."));
                     }
                 }
@@ -221,7 +222,7 @@ namespace EventCalendarBelle
                     this.BulletedList1.Items.Add(new ListItem("Creating recurring events table."));
                     if (!this._db.TableExist("ec_recevents"))
                     {
-                        this._db.CreateTable<RecurringEvent>(false);
+                        this._db.CreateTable<RecurringEventDto>(false);
                         this.BulletedList1.Items.Add(new ListItem("Successfully created table."));
                     }
                 }
@@ -263,6 +264,18 @@ namespace EventCalendarBelle
                         this._db.CreateTable<UserSettings>(false);
                         //Auto install the settings for superadmin
                         this._db.Save(new UserSettings() { UserId = 0, CanCreateCalendar = true, CanCreateEvents = true, CanCreateLocations = true, CanDeleteCalendar = true, CanDeleteEvents = true, CanDeleteLocations = true });
+                        this.BulletedList1.Items.Add(new ListItem("Successfully created table."));
+                    }
+                }
+                catch (Exception ex) { this.BulletedList1.Items.Add(new ListItem(ex.Message)); }
+
+                //Creating date exceptions table
+                try
+                {
+                    this.BulletedList1.Items.Add(new ListItem("Creating date exceptions table."));
+                    if (!this._db.TableExist("ec_dateexceptions"))
+                    {
+                        this._db.CreateTable<DateExceptionDto>(false);
                         this.BulletedList1.Items.Add(new ListItem("Successfully created table."));
                     }
                 }

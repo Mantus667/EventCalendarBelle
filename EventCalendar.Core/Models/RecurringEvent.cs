@@ -2,95 +2,64 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using Umbraco.Core.Persistence;
-using Umbraco.Core.Persistence.DatabaseAnnotations;
 using ScheduleWidget.Enums;
-using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 using System.Runtime.Serialization;
+using System.ComponentModel.DataAnnotations;
 
 namespace EventCalendar.Core.Models
 {
-    [TableName("ec_recevents")]
-    [PrimaryKey("id", autoIncrement = true)]
-    [ExplicitColumns]
+    
     [DataContract(Name = "revent", Namespace = "")]
     public class RecurringEvent
     {
-        [Column("id")]
-        [PrimaryKeyColumn(AutoIncrement = true)]
         [DataMember(Name = "id")]
         public int Id { get; set; }
 
-        [Column("calendarid")]
         [DataMember(Name = "calendarid")]
         public int calendarId { get; set; }
 
-        [Column("locationId")]
         [DataMember(Name = "locationid")]
         public int locationId { get; set; }
 
-        [Column("title")]
         [DataMember(Name = "title")]
-        public string title { get; set; }
+        public string Title { get; set; }
 
-        [Column("allday")]
         [DataMember(Name = "allday")]
-        public bool allDay { get; set; }
+        public bool AllDay { get; set; }
 
-        [Column("day")]
-        [DataMember(Name = "day")]
-        public string day { get; set; }
-
-        [Column("frequency")]
         [DataMember(Name = "frequency")]
-        public int frequency { get; set; }
+        public int Frequency { get; set; }
 
-        [Column("monthly")]
-        [DataMember(Name = "monthly")]
-        public string monthly_interval { get; set; }
-
-        [Column("categories")]
         [DataMember(Name = "categories")]
-        [NullSetting(NullSetting = NullSettings.Null)]
-        public string categories { get; set; }
+        public string Categories { get; set; }
 
-        [Column("start")]
         [DataMember(Name = "starttime")]
-        [NullSetting(NullSetting = NullSettings.Null)]
-        public DateTime start { get; set; }
+        public DateTime Start { get; set; }
 
-        [Column("end")]
         [DataMember(Name = "endtime")]
-        [NullSetting(NullSetting = NullSettings.Null)]
-        public DateTime end { get; set; }
+        public DateTime End { get; set; }
 
-        [Column("organiser")]
-        [NullSetting(NullSetting = NullSettings.Null)]
         [DataMember(Name = "organiser_id")]
         public int Organiser { get; set; }
 
-        [Column("rangeStart")]
-        [NullSetting(NullSetting = NullSettings.Null)]
         [DataMember(Name = "range_start")]
         public int range_start { get; set; }
 
-        [Column("rangeEnd")]
-        [NullSetting(NullSetting = NullSettings.Null)]
         [DataMember(Name = "range_end")]
         public int range_end { get; set; }
 
-        [Ignore]
         [DataMember(Name = "days")]
-        public List<int> days { get; set; }
+        public List<int> Days { get; set; }
 
-        [Ignore]
         [DataMember(Name = "intervals")]
-        public List<int> intervals { get; set; }
+        public List<int> MonthlyIntervals { get; set; }
 
-        [Ignore]
         [DataMember(Name = "descriptions")]
-        public List<EventDescription> descriptions { get; set; }
+        public List<EventDescription> Descriptions { get; set; }
+
+        [DataMember(Name = "exceptions")]
+        public List<DateException> Exceptions { get; set; }
     }
 
     public class RecurringEventListModel

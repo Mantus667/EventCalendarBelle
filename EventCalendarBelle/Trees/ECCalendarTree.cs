@@ -168,18 +168,18 @@ namespace EventCalendarBelle.Trees
 
             if (id.Contains("c-"))
             {
-                List<Event> events = EventService.GetAllEvents().Where(x => x.calendarId.ToString() == id.Replace("c-", "")).ToList();//ctrl.GetAll().Where(x => x.calendarId.ToString() == id.Replace("c-","")).ToList();
+                List<Event> events = EventService.GetAllEvents().Where(x => x.calendarId.ToString() == id.Replace("c-", "")).ToList();
                 var tree = new TreeNodeCollection();
 
                 foreach(var e in events) {
-                    tree.Add(CreateTreeNode("e-" + e.Id.ToString(), id, queryStrings, e.title, "icon-music", false, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/editEvent/" + e.Id));
+                    tree.Add(CreateTreeNode("e-" + e.Id.ToString(), id, queryStrings, e.Title, "icon-music", false, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/editEvent/" + e.Id));
                 }
 
-                List<RecurringEvent> revents = RecurringEventService.GetAllEvents().Where(x => x.calendarId.ToString() == id.Replace("c-", "")).ToList();//ctrl2.GetAll().Where(x => x.calendarId.ToString() == id.Replace("c-", "")).ToList();
+                List<RecurringEvent> revents = RecurringEventService.GetAllEvents().Where(x => x.calendarId.ToString() == id.Replace("c-", "")).ToList();
 
                 foreach (var e in revents)
                 {
-                    tree.Add(CreateTreeNode("re-" + e.Id.ToString(), id, queryStrings, e.title, "icon-axis-rotation", false, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/editREvent/" + e.Id));
+                    tree.Add(CreateTreeNode("re-" + e.Id.ToString(), id, queryStrings, e.Title, "icon-axis-rotation", false, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/editREvent/" + e.Id));
                 }
 
                 return tree;

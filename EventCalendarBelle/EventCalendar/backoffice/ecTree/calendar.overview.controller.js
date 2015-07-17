@@ -24,7 +24,7 @@
                                     { "mData": "name", "sTitle": "1. Name" },
                                     { "mData": "gcal", "sTitle": "2. Uses Google calendar", "fnCreatedCell": gcal },
                                     { "mData": "color", "sTitle": "3. Color", "fnCreatedCell": color },
-                                    { "mData": "id", "fnCreatedCell": buttons}
+                                    { "mData": "id", "fnCreatedCell": buttonEditCalendar }
                                 ]
                             });
 
@@ -35,7 +35,7 @@
         });
     });
 
-function buttons(nTd, sData, oData, iRow, iCol) {
+function buttonEditCalendar(nTd, sData, oData, iRow, iCol) {
     $(nTd).html('<a class="btn btn-success" href="#/eventCalendar/ecTree/editCalendar/' + sData + '"><span class="icon icon-pencil"></span>Edit</a>');
 }
 
@@ -44,7 +44,7 @@ function color(nTd, sData, oData, iRow, iCol) {
 }
 
 function gcal(nTd, sData, oData, iRow, iCol) {
-    if (sData == "true") {
+    if (sData == true) {
         $(nTd).html('<span class="icon icon-check"></span>');
     } else {
         $(nTd).html('<span class="icon icon-delete"></span>');

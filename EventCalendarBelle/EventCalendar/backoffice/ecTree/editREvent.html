@@ -212,19 +212,21 @@
         </umb-tab>
         <umb-tab id="tabExceptions" rel="Exceptions">
             <div class="umb-pane">
-                <eventcalendar-localize key="event_exceptions_headline">EXceptions</eventcalendar-localize>
-                <div class="umb-property">
-                    <div class="control-group umb-control-group">
-                        <div class="umb-el-wrap">
-                            <label class="control-label" for="">
-                                <small><eventcalendar-localize key="event_location_description">Where does the event take place?</eventcalendar-localize></small>
-                            </label>
-                            <div class="controls controls-row">
-                            </div>
-                        </div>
+                <eventcalendar-localize key="event_exceptions_headline">Exceptions</eventcalendar-localize>
+                <hr />
+                <p ng-repeat="exception in event.exceptions">
+                    <span>{{exception.date | date: 'shortDate'}}</span> <a class="btn btn-danger" ng-click="deleteException($index)"><span class="icon icon-pencil"></span>Delete</a>
+                </p>
+                <hr />
+                <div>
+                    <div id="datetimepicker3" class="input-append">
+                        <input required name="exceptionDate" type="text" />
+                        <span class="add-on datepickerbutton">
+                            <i class="icon icon-calendar"></i>
+                        </span>
                     </div>
+                    <a class="btn btn-success" ng-click="addException()"><span class="icon icon-pencil"></span>Add</a>
                 </div>
-
             </div>
         </umb-tab>
         <umb-tab id="tab{{$index}}" rel="{{$index}}" ng-repeat="description in event.descriptions">

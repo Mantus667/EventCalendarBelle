@@ -7,6 +7,8 @@ using Umbraco.Core;
 using Umbraco.Core.Persistence;
 using EventCalendar.Core.Models;
 using EventCalendar.Core.EventArgs;
+using EventCalendar.Core.Dto;
+using AutoMapper;
 
 namespace EventCalendar.Core.Services
 {
@@ -23,46 +25,45 @@ namespace EventCalendar.Core.Services
             var db = ApplicationContext.Current.DatabaseContext.Database;
             var query = new Sql().Select("*").From("ec_recevents");
 
-            var events = db.Fetch<RecurringEvent>(query);
-            foreach(var e in events){
-                e.days = e.day.Split(new string[]{","}, StringSplitOptions.RemoveEmptyEntries).Select(x => int.Parse(x)).ToList();
-                e.intervals = e.monthly_interval.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(x => int.Parse(x)).ToList();
-            }
-            return events;
+            var events = db.Fetch<RecurringEventDto>(query);
+
+            return Mapper.Map<IEnumerable<RecurringEvent>>(events);
         }
 
         public static RecurringEvent GetRecurringEvent(int id)
         {
             var db = ApplicationContext.Current.DatabaseContext.Database;
-            var query = new Sql().Select("*").From("ec_recevents").Where<RecurringEvent>(x => x.Id == id);
+            var query = new Sql().Select("*").From("ec_recevents").Where<RecurringEventDto>(x => x.Id == id);
 
-            RecurringEvent current = db.Fetch<RecurringEvent>(query).FirstOrDefault();
+            var current = db.Fetch<RecurringEventDto>(query).FirstOrDefault();
 
             if (current != null)
             {
-                current.days = current.day.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(x => int.Parse(x)).ToList();
-                current.intervals = current.monthly_interval.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(x => int.Parse(x)).ToList();
-                current.descriptions = DescriptionService.GetDescriptionsForEvent(current.calendarId, current.Id, EventType.Recurring).ToList();
+                var result = Mapper.Map<RecurringEvent>(current);
+                result.Descriptions = DescriptionService.GetDescriptionsForEvent(current.calendarId, current.Id, EventType.Recurring).ToList();
 
                 var ls = ApplicationContext.Current.Services.LocalizationService;
                 foreach (var lang in ls.GetAllLanguages())
                 {
-                    if (current.descriptions.SingleOrDefault(x => x.CultureCode == lang.CultureInfo.ToString()) == null)
+                    if (result.Descriptions.SingleOrDefault(x => x.CultureCode == lang.CultureInfo.ToString()) == null)
                     {
-                        current.descriptions.Add(new EventDescription() { CalendarId = current.calendarId, EventId = current.Id, CultureCode = lang.CultureInfo.ToString(), Id = 0, Type = (int)EventType.Recurring });
+                        result.Descriptions.Add(new EventDescription() { CalendarId = current.calendarId, EventId = current.Id, CultureCode = lang.CultureInfo.ToString(), Id = 0, Type = (int)EventType.Recurring });
                     }
                 }
+                return result;
             }
 
-            return current;
+            return null;
         }
 
         public static RecurringEvent UpdateEvent(RecurringEvent revent)
         {
-            ApplicationContext.Current.DatabaseContext.Database.Update(revent);
+            var dto = Mapper.Map<RecurringEventDto>(revent);
+
+            ApplicationContext.Current.DatabaseContext.Database.Update(dto);
 
             //Save the event descriptions                
-            foreach (var desc in revent.descriptions)
+            foreach (var desc in revent.Descriptions)
             {
                 if (desc.Id > 0)
                 {
@@ -74,7 +75,20 @@ namespace EventCalendar.Core.Services
                 }
             }
 
-            return revent;
+            //Save the date exceptions
+            foreach (var de in revent.Exceptions)
+            {
+                if (de.Id > 0)
+                {
+                    DateExceptionService.UpdateDateException(de);
+                }
+                else
+                {
+                    DateExceptionService.CreateDateException(de);
+                }
+            }
+
+            return Mapper.Map<RecurringEvent>(dto);
         }
 
         public static RecurringEvent CreateEvent(RecurringEvent revent)
@@ -87,24 +101,32 @@ namespace EventCalendar.Core.Services
                 return revent;
             }
 
-            ApplicationContext.Current.DatabaseContext.Database.Save(revent);
+            var dto = Mapper.Map<RecurringEventDto>(revent);
+
+            ApplicationContext.Current.DatabaseContext.Database.Save(dto);
 
             //Create the new descriptions for the new event
-            revent.descriptions = DescriptionService.GetDescriptionsForEvent(revent.calendarId, revent.Id, EventType.Normal).ToList();
+            revent.Descriptions = DescriptionService.GetDescriptionsForEvent(revent.calendarId, revent.Id, EventType.Normal).ToList();
 
             var ls = ApplicationContext.Current.Services.LocalizationService;
             foreach (var lang in ls.GetAllLanguages())
             {
-                if (revent.descriptions.SingleOrDefault(x => x.CultureCode == lang.CultureInfo.ToString()) == null)
+                if (revent.Descriptions.SingleOrDefault(x => x.CultureCode == lang.CultureInfo.ToString()) == null)
                 {
-                    revent.descriptions.Add(new EventDescription() { CalendarId = revent.calendarId, EventId = revent.Id, CultureCode = lang.CultureInfo.ToString(), Id = 0, Type = (int)EventType.Recurring });
+                    revent.Descriptions.Add(new EventDescription() { CalendarId = revent.calendarId, EventId = revent.Id, CultureCode = lang.CultureInfo.ToString(), Id = 0, Type = (int)EventType.Recurring });
                 }
             }
 
             var args2 = new RecurringEventCreatedEventArgs { RecurringEvent = revent };
             OnCreated(args2);
 
-            return revent;
+            return Mapper.Map<RecurringEvent>(dto);
+        }
+
+        public static EventDetailsModel GetEventDetails(int id)
+        {
+            var e = RecurringEventService.GetRecurringEvent(id);
+            return Mapper.Map<EventDetailsModel>(e);
         }
 
         #region EventHandler Delegates

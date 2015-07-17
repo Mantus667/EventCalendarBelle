@@ -7,6 +7,8 @@ using EventCalendar.Core.Models;
 using Umbraco.Core;
 using Umbraco.Core.Persistence;
 using EventCalendar.Core.EventArgs;
+using AutoMapper;
+using EventCalendar.Core.Dto;
 
 namespace EventCalendar.Core.Services
 {
@@ -21,17 +23,18 @@ namespace EventCalendar.Core.Services
             {
                 return e;
             }
-            ApplicationContext.Current.DatabaseContext.Database.Save(e);
+            var dto = Mapper.Map<EventDto>(e);
+            ApplicationContext.Current.DatabaseContext.Database.Save(dto);
 
             //Create the new descriptions for the new event
-            e.descriptions = DescriptionService.GetDescriptionsForEvent(e.calendarId, e.Id, EventType.Normal).ToList();
+            e.Descriptions = DescriptionService.GetDescriptionsForEvent(e.calendarId, e.Id, EventType.Normal).ToList();
 
             var ls = ApplicationContext.Current.Services.LocalizationService;
             foreach (var lang in ls.GetAllLanguages())
             {
-                if (e.descriptions.SingleOrDefault(x => x.CultureCode == lang.CultureInfo.ToString()) == null)
+                if (e.Descriptions.SingleOrDefault(x => x.CultureCode == lang.CultureInfo.ToString()) == null)
                 {
-                    e.descriptions.Add(new EventDescription() { CalendarId = e.calendarId, EventId = e.Id, CultureCode = lang.CultureInfo.ToString(), Id = 0, Type = (int)EventType.Normal });
+                    e.Descriptions.Add(new EventDescription() { CalendarId = e.calendarId, EventId = e.Id, CultureCode = lang.CultureInfo.ToString(), Id = 0, Type = (int)EventType.Normal });
                 }
             }
 
@@ -43,10 +46,11 @@ namespace EventCalendar.Core.Services
 
         public static Event UpdateEvent(Event e)
         {
-            ApplicationContext.Current.DatabaseContext.Database.Update(e);
+            var dto = Mapper.Map<EventDto>(e);
+            ApplicationContext.Current.DatabaseContext.Database.Update(dto);
 
             //Save the event descriptions                
-            foreach (var desc in e.descriptions)
+            foreach (var desc in e.Descriptions)
             {
                 if (desc.Id > 0)
                 {
@@ -70,25 +74,35 @@ namespace EventCalendar.Core.Services
         public static Event GetEvent(int id)
         {
             var db = ApplicationContext.Current.DatabaseContext.Database;
-            var query = new Sql().Select("*").From("ec_events").Where<Event>(x => x.Id == id);
+            var query = new Sql().Select("*").From("ec_events").Where<EventDto>(x => x.Id == id);
 
-            Event current = db.Fetch<Event>(query).FirstOrDefault();
-
+            var current = db.Fetch<EventDto>(query).FirstOrDefault();
+            
             if (current != null)
             {
-                current.descriptions = DescriptionService.GetDescriptionsForEvent(current.calendarId, current.Id, EventType.Normal).ToList();
+                var e = Mapper.Map<Event>(current);
+                e.Descriptions = DescriptionService.GetDescriptionsForEvent(current.calendarId, current.Id, EventType.Normal).ToList();
 
                 var ls = ApplicationContext.Current.Services.LocalizationService;
                 foreach (var lang in ls.GetAllLanguages())
                 {
-                    if (current.descriptions.SingleOrDefault(x => x.CultureCode == lang.CultureInfo.ToString()) == null)
+                    if (e.Descriptions.SingleOrDefault(x => x.CultureCode == lang.CultureInfo.ToString()) == null)
                     {
-                        current.descriptions.Add(new EventDescription() { CalendarId = current.calendarId, EventId = current.Id, CultureCode = lang.CultureInfo.ToString(), Id = 0, Type = (int)EventType.Normal });
+                        e.Descriptions.Add(new EventDescription() { CalendarId = current.calendarId, EventId = current.Id, CultureCode = lang.CultureInfo.ToString(), Id = 0, Type = (int)EventType.Normal });
                     }
                 }
+                return e;
             }
 
-            return current;
+            return null;
+        }
+
+        public static EventDetailsModel GetEventDetails(int id)
+        {
+            //Fetch Event
+            var e = EventService.GetEvent(id);
+
+            return Mapper.Map<EventDetailsModel>(e);
         }
 
         public static IEnumerable<Event> GetAllEvents()
@@ -96,7 +110,8 @@ namespace EventCalendar.Core.Services
             var db = ApplicationContext.Current.DatabaseContext.Database;
             var query = new Sql().Select("*").From("ec_events");
 
-            return db.Fetch<Event>(query);
+            var events = db.Fetch<EventDto>(query);
+            return Mapper.Map<IEnumerable<Event>>(events);
         }
 
         #region EventHandler Delegates

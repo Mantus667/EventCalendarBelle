@@ -2,6 +2,7 @@
         function ($scope, $routeParams, reventResource, locationResource, notificationsService, navigationService, assetsService, userService, entityResource, dialogService) {
 
             $scope.event = { id: 0, calendarid: 0, allDay: false, organiser: {} };
+            var exceptionDate;
 
             var initAssets = function () {
                 assetsService.loadCss("/App_Plugins/EventCalendar/css/bootstrap-switch.min.css");
@@ -40,6 +41,11 @@
                                    });
                                    $('#datetimepicker2 input').val(moment.utc($scope.event.endtime).format('LT'));
 
+                                   $('#datetimepicker3').datetimepicker({
+                                       language: locale,
+                                       pickTime: false
+                                   });
+
                                    $('#datetimepicker1').on('dp.change', function (e) {
                                        var d = moment(e.date);
                                        $scope.event.starttime = d.format('HH:mm:ss');
@@ -47,6 +53,9 @@
                                    $('#datetimepicker2').on('dp.change', function (e) {
                                        var d = moment(e.date);
                                        $scope.event.endtime = d.format('HH:mm:ss');
+                                   });
+                                   $('#datetimepicker3').on('dp.change', function (e) {
+                                       exceptionDate = moment(e.date);
                                    });
                                });
                         });
@@ -146,7 +155,15 @@
 
             $scope.deleteOrganiser = function () {
                 $scope.event.organiser = {};
-            }
+            };
+
+            $scope.addException = function () {
+                $scope.event.exceptions.push({ id: 0, event: $scope.event.id, date: exceptionDate });
+            };
+
+            $scope.deleteException = function (index) {
+                $scope.event.exceptions.splice(index, 1);
+            };
 
             if ($routeParams.create == "true") {
                 $scope.event.calendarid = $routeParams.id.replace("c-", "");

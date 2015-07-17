@@ -84,65 +84,65 @@ namespace EventCalendarBelle.Controller
                     //check if it is an reccuring event
                     if (e.RecurrenceRules.Count > 0)
                     {
-                        var revent = new RecurringEvent(){ allDay = e.IsAllDay, title = e.Summary, start = e.Start.Date, end = e.Start.Date, calendarId = calendar_id, categories = String.Join(",", e.Categories), Id = 0};
-                        revent.monthly_interval = ((int)MonthlyIntervalEnum.First).ToString();
+                        var revent = new RecurringEvent(){ AllDay = e.IsAllDay, Title = e.Summary, Start = e.Start.Date, End = e.Start.Date, calendarId = calendar_id, Categories = String.Join(",", e.Categories), Id = 0};
+                        revent.MonthlyIntervals.Add(((int)MonthlyIntervalEnum.First));
                         RecurrencePattern rp = (RecurrencePattern)e.RecurrenceRules[0];
                         switch (rp.Frequency)
                         {
                             case FrequencyType.Daily:
                                 {
-                                    revent.frequency = (int)FrequencyTypeEnum.Daily;
+                                    revent.Frequency = (int)FrequencyTypeEnum.Daily;
                                     break;
                                 }
                             case FrequencyType.Monthly:
                                 {
-                                    revent.frequency = (int)FrequencyTypeEnum.Monthly;
+                                    revent.Frequency = (int)FrequencyTypeEnum.Monthly;
                                     break;
                                 }
                             case FrequencyType.Weekly:
                                 {
-                                    revent.frequency = (int)FrequencyTypeEnum.Weekly;
+                                    revent.Frequency = (int)FrequencyTypeEnum.Weekly;
                                     break;
                                 }
                             default:
                                 {
-                                    revent.frequency = (int)FrequencyTypeEnum.Monthly;
+                                    revent.Frequency = (int)FrequencyTypeEnum.Monthly;
                                     break;
                                 }
                         }
                         switch(e.Start.DayOfWeek) {
                             case DayOfWeek.Monday: {
-                                revent.days.Add((int)DayOfWeekEnum.Mon);
+                                revent.Days.Add((int)DayOfWeekEnum.Mon);
                                 break;
                             }
                             case DayOfWeek.Tuesday:
                                 {
-                                    revent.days.Add((int)DayOfWeekEnum.Tue);
+                                    revent.Days.Add((int)DayOfWeekEnum.Tue);
                                     break;
                                 }
                             case DayOfWeek.Wednesday:
                                 {
-                                    revent.days.Add((int)DayOfWeekEnum.Wed);
+                                    revent.Days.Add((int)DayOfWeekEnum.Wed);
                                     break;
                                 }
                             case DayOfWeek.Thursday:
                                 {
-                                    revent.days.Add((int)DayOfWeekEnum.Thu);
+                                    revent.Days.Add((int)DayOfWeekEnum.Thu);
                                     break;
                                 }
                             case DayOfWeek.Friday:
                                 {
-                                    revent.days.Add((int)DayOfWeekEnum.Fri);
+                                    revent.Days.Add((int)DayOfWeekEnum.Fri);
                                     break;
                                 }
                             case DayOfWeek.Saturday:
                                 {
-                                    revent.days.Add((int)DayOfWeekEnum.Sat);
+                                    revent.Days.Add((int)DayOfWeekEnum.Sat);
                                     break;
                                 }
                             case DayOfWeek.Sunday:
                                 {
-                                    revent.days.Add((int)DayOfWeekEnum.Sun);
+                                    revent.Days.Add((int)DayOfWeekEnum.Sun);
                                     break;
                                 }
                         }
@@ -150,7 +150,7 @@ namespace EventCalendarBelle.Controller
                     }
                     else
                     {
-                        ectrl.PostSave(new EventCalendar.Core.Models.Event() { allDay = e.IsAllDay, calendarId = calendar_id, title = e.Summary, start = e.Start.Date, end = e.End.Date, Id = 0, categories = String.Join(",", e.Categories) });
+                        ectrl.PostSave(new EventCalendar.Core.Models.Event() { AllDay = e.IsAllDay, calendarId = calendar_id, Title = e.Summary, Start = e.Start.Date, End = e.End.Date, Id = 0, Categories = String.Join(",", e.Categories) });
                     }
                 }
             }
@@ -179,39 +179,39 @@ namespace EventCalendarBelle.Controller
                     //check if it is an reccuring event
                     if (e.RecurrenceRules.Count > 0)
                     {
-                        var revent = new RecurringEvent() { allDay = e.IsAllDay, title = e.Summary, start = e.Start.Date, end = e.Start.Date, calendarId = calendar.Id, categories = String.Join(",", e.Categories), Id = 0 };
-                        revent.monthly_interval = ((int)MonthlyIntervalEnum.First).ToString();
+                        var revent = new RecurringEvent() { AllDay = e.IsAllDay, Title = e.Summary, Start = e.Start.Date, End = e.Start.Date, calendarId = calendar.Id, Categories = String.Join(",", e.Categories), Id = 0 };
+                        revent.MonthlyIntervals.Add(((int)MonthlyIntervalEnum.First));
                         RecurrencePattern rp = (RecurrencePattern)e.RecurrenceRules[0];
                         switch (rp.Frequency)
                         {
                             case FrequencyType.Daily:
                                 {
-                                    revent.frequency = (int)FrequencyTypeEnum.Daily;
+                                    revent.Frequency = (int)FrequencyTypeEnum.Daily;
                                     break;
                                 }
                             case FrequencyType.Monthly:
                                 {
-                                    revent.frequency = (int)FrequencyTypeEnum.Monthly;
+                                    revent.Frequency = (int)FrequencyTypeEnum.Monthly;
                                     break;
                                 }
                             case FrequencyType.Weekly:
                                 {
-                                    revent.frequency = (int)FrequencyTypeEnum.Weekly;
+                                    revent.Frequency = (int)FrequencyTypeEnum.Weekly;
                                     break;
                                 }
                             default:
                                 {
-                                    revent.frequency = (int)FrequencyTypeEnum.Monthly;
+                                    revent.Frequency = (int)FrequencyTypeEnum.Monthly;
                                     break;
                                 }
                         }
-                        revent.days.AddRange(rp.ByDay.Select(x => (int)x.DayOfWeek));
+                        revent.Days.AddRange(rp.ByDay.Select(x => (int)x.DayOfWeek));
                         
                         rectrl.PostSave(revent);
                     }
                     else
                     {
-                        ectrl.PostSave(new EventCalendar.Core.Models.Event() { allDay = e.IsAllDay, calendarId = calendar.Id, title = e.Summary, start = e.Start.Date, end = e.End.Date, Id = 0, categories = String.Join(",", e.Categories) });
+                        ectrl.PostSave(new EventCalendar.Core.Models.Event() { AllDay = e.IsAllDay, calendarId = calendar.Id, Title = e.Summary, Start = e.Start.Date, End = e.End.Date, Id = 0, Categories = String.Join(",", e.Categories) });
                     }
                 }
             }

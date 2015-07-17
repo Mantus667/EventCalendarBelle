@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
 using EventCalendar.Core.Models;
 using Umbraco.Core;
 using Umbraco.Core.Persistence;
 using EventCalendar.Core.EventArgs;
+using AutoMapper;
+using EventCalendar.Core.Dto;
 
 namespace EventCalendar.Core.Services
 {
@@ -21,8 +20,8 @@ namespace EventCalendar.Core.Services
         {
             var db = ApplicationContext.Current.DatabaseContext.Database;
             var query = new Sql().Select("*").From("ec_calendars");
-
-            return db.Fetch<ECalendar>(query);
+            var calendar = db.Fetch<CalendarDto>(query);
+            return Mapper.Map<IEnumerable<ECalendar>>(calendar);
         }
 
         /// <summary>
@@ -33,9 +32,9 @@ namespace EventCalendar.Core.Services
         public static ECalendar GetCalendarById(int id)
         {
             var db = ApplicationContext.Current.DatabaseContext.Database;
-            var query = new Sql().Select("*").From("ec_calendars").Where<ECalendar>(x => x.Id == id);
+            var query = new Sql().Select("*").From("ec_calendars").Where<CalendarDto>(x => x.Id == id);
 
-            return db.Fetch<ECalendar>(query).FirstOrDefault();
+            return Mapper.Map<ECalendar>(db.Fetch<CalendarDto>(query).FirstOrDefault());
         }
 
         /// <summary>
@@ -81,7 +80,7 @@ namespace EventCalendar.Core.Services
                 return calendar;
             }
 
-            db.Save(calendar);
+            db.Save(Mapper.Map<CalendarDto>(calendar));
 
             //Update usersettings and add the newly created calendar to the allowed calendar
             SecurityService.AddCalendarToUser(creatorId, calendar.Id);
@@ -100,7 +99,7 @@ namespace EventCalendar.Core.Services
         public static ECalendar UpdateCalendar(ECalendar calendar)
         {
             var db = ApplicationContext.Current.DatabaseContext.Database;
-            db.Update(calendar);
+            db.Update(Mapper.Map<CalendarDto>(calendar));
             return calendar;
         }
 
@@ -114,7 +113,7 @@ namespace EventCalendar.Core.Services
         {
             var db = ApplicationContext.Current.DatabaseContext.Database;
 
-            db.Update(calendar);
+            db.Update(Mapper.Map<CalendarDto>(calendar));
 
             //Update usersettings and add the newly created calendar to the allowed calendar
             SecurityService.AddCalendarToUser(creatorId, calendar.Id);

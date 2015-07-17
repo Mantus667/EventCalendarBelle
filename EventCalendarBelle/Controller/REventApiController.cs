@@ -21,9 +21,6 @@ namespace EventCalendarBelle.Controller
         {
             var ctrl = new DescriptionApiController();
 
-            nevent.day = string.Join(",", nevent.days.ToArray());
-            nevent.monthly_interval = string.Join(",", nevent.intervals.ToArray());
-
             if (nevent.Id > 0)
             {
                 return RecurringEventService.UpdateEvent(nevent);

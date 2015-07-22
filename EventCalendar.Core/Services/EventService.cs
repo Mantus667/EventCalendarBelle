@@ -68,7 +68,11 @@ namespace EventCalendar.Core.Services
         public static int DeleteEvent(int id)
         {
             var db = ApplicationContext.Current.DatabaseContext.Database;
-            return db.Delete<Event>(id);
+
+            var e = GetEvent(id);
+            DescriptionService.GetDescriptionsForEvent(e.calendarId, id, EventType.Normal).ForEach(x => DescriptionService.DeleteDescription(x.Id));
+
+            return db.Delete<EventDto>(id);
         }
 
         public static Event GetEvent(int id)
@@ -109,6 +113,15 @@ namespace EventCalendar.Core.Services
         {
             var db = ApplicationContext.Current.DatabaseContext.Database;
             var query = new Sql().Select("*").From("ec_events");
+
+            var events = db.Fetch<EventDto>(query);
+            return Mapper.Map<IEnumerable<Event>>(events);
+        }
+
+        public static IEnumerable<Event> GetEventsForCalendar(int id)
+        {
+            var db = ApplicationContext.Current.DatabaseContext.Database;
+            var query = new Sql().Select("*").From("ec_events").Where<EventDto>(x => x.calendarId == id);
 
             var events = db.Fetch<EventDto>(query);
             return Mapper.Map<IEnumerable<Event>>(events);

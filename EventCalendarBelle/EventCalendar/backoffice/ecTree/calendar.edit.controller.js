@@ -4,12 +4,12 @@
             //get a calendar id -> service
             calendarResource.getById($routeParams.id).then(function (response) {
                 $scope.calendar = response.data;
-                console.log($scope.calendar);
             }, function (response) {
                 notificationsService.error("Error", calendar.calendarname + " could not be loaded");
             });
 
             assetsService.loadCss("/App_Plugins/EventCalendar/css/colorpicker.css");
+            assetsService.loadCss("/App_Plugins/EventCalendar/css/bootstrap-switch.min.css");
             assetsService.loadCss("/App_Plugins/EventCalendar/css/EventCalendar.Custom.css");
 
             assetsService
@@ -49,6 +49,29 @@
                         }
                     });
                 });
+
+            assetsService
+                       .loadJs("/App_Plugins/EventCalendar/scripts/bootstrap-switch.min.js")
+                       .then(function () {
+                           $('#hide').bootstrapSwitch({
+                               onColor: "success",
+                               onText: "<i class='icon-check icon-white'></i>",
+                               offText: "<i class='icon-delete'></i>",
+                               onSwitchChange: function (event, state) {
+                                   $scope.calendar.displayOnSite = state;
+                               }
+                           });
+                           $('#hide').bootstrapSwitch('state', $scope.calendar.displayOnSite, false);
+                           $('#useGoogle').bootstrapSwitch({
+                               onColor: "success",
+                               onText: "<i class='icon-check icon-white'></i>",
+                               offText: "<i class='icon-delete'></i>",
+                               onSwitchChange: function (event, state) {
+                                   $scope.calendar.isGCal = state;
+                               }
+                           });
+                           $('#useGoogle').bootstrapSwitch('state', $scope.calendar.isGCal, false);
+                       });
 
             $scope.save = function (calendar) {
                 calendarResource.save(calendar).then(function (response) {

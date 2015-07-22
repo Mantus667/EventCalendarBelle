@@ -17,6 +17,10 @@ namespace EventCalendar.Core.Services
         public static int DeleteRecurringEvent(int id)
         {
             var db = ApplicationContext.Current.DatabaseContext.Database;
+
+            var re = GetRecurringEvent(id);
+            DescriptionService.GetDescriptionsForEvent(re.calendarId, id, EventType.Normal).ForEach(x => DescriptionService.DeleteDescription(x.Id));
+
             return db.Delete<RecurringEvent>(id);
         }
 
@@ -24,6 +28,16 @@ namespace EventCalendar.Core.Services
         {
             var db = ApplicationContext.Current.DatabaseContext.Database;
             var query = new Sql().Select("*").From("ec_recevents");
+
+            var events = db.Fetch<RecurringEventDto>(query);
+
+            return Mapper.Map<IEnumerable<RecurringEvent>>(events);
+        }
+
+        public static IEnumerable<RecurringEvent> GetEventsForCalendar(int id)
+        {
+            var db = ApplicationContext.Current.DatabaseContext.Database;
+            var query = new Sql().Select("*").From("ec_recevents").Where<RecurringEventDto>(x => x.calendarId == id);
 
             var events = db.Fetch<RecurringEventDto>(query);
 
@@ -75,7 +89,12 @@ namespace EventCalendar.Core.Services
                 }
             }
 
-            //Save the date exceptions
+            //Get all exceptions for this event
+            var exceptions = DateExceptionService.GetDateExceptionsForRecurringEvent(revent.Id);
+            //Get deleted exceptions from frontend and delete them from database
+            var deleted = exceptions.Where(x => !revent.Exceptions.Contains(x));
+            deleted.ForEach(x => DateExceptionService.DeleteDateException(x.Id));
+            //Save/Update the date exceptions
             foreach (var de in revent.Exceptions)
             {
                 if (de.Id > 0)

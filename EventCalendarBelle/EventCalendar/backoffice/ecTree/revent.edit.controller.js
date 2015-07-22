@@ -3,6 +3,8 @@
 
             $scope.event = { id: 0, calendarid: 0, allDay: false, organiser: {} };
             var exceptionDate;
+            var locale = 'en-US';
+            var dateformat = 'MM/DD/YYYY';
 
             var initAssets = function () {
                 assetsService.loadCss("/App_Plugins/EventCalendar/css/bootstrap-switch.min.css");
@@ -55,7 +57,8 @@
                                        $scope.event.endtime = d.format('HH:mm:ss');
                                    });
                                    $('#datetimepicker3').on('dp.change', function (e) {
-                                       exceptionDate = moment(e.date);
+                                       var d = moment(e.date);
+                                       exceptionDate = d.format(dateformat);
                                    });
                                });
                         });
@@ -159,6 +162,7 @@
 
             $scope.addException = function () {
                 $scope.event.exceptions.push({ id: 0, event: $scope.event.id, date: exceptionDate });
+                $('#datetimepicker3').val('')
             };
 
             $scope.deleteException = function (index) {

@@ -68,7 +68,7 @@ namespace EventCalendarBelle.Controller
                 var calendar = CalendarService.GetCalendarById(id);
                 if (calendar.IsGCal)
                 {
-                    sources.Add(calendar.GCalFeedUrl);
+                    sources.Add(new { googleCalendarApiKey = calendar.GoogleAPIKey, googleCalendarId = calendar.GCalFeedUrl });
                 }
                 else
                 {

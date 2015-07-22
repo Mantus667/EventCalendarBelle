@@ -54,7 +54,10 @@ namespace EventCalendar.Core.Services
             {
                 return id;
             }
-            var response = db.Delete<ECalendar>(id);
+
+            EventService.GetEventsForCalendar(id).ForEach(x => EventService.DeleteEvent(x.Id));
+            RecurringEventService.GetEventsForCalendar(id).ForEach(x => RecurringEventService.DeleteRecurringEvent(x.Id));
+            var response = db.Delete<CalendarDto>(id);
 
             var args2 = new CalendarDeletedEventArgs { Calendar = calendar };
             OnDeleted(args2);

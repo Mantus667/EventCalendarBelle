@@ -62,13 +62,11 @@
                                    $('#datetimepicker2 input').val(moment.utc($scope.event.endtime).format('l LT'));
 
                                    $('#datetimepicker1').on('dp.change', function (e) {
-                                       var d = moment(e.date); //.format('MM/DD/YYYY HH:mm:ss');
-                                       //$('#datetimepicker1 input').val(d.format('l LT'));
+                                       var d = moment(e.date);
                                        $scope.event.starttime = d.format('MM/DD/YYYY HH:mm:ss');
                                    });
                                    $('#datetimepicker2').on('dp.change', function (e) {
                                        var d = moment(e.date);
-                                       //$('#datetimepicker2 input').val(d.format('l LT'));
                                        $scope.event.endtime = d.format('MM/DD/YYYY HH:mm:ss');
                                    });
                                });
@@ -85,6 +83,7 @@
                                    $scope.event.allday = state;
                                }
                            });
+                           $('#allday').bootstrapSwitch('state', $scope.event.allday, false);
                        });
                 });
             };

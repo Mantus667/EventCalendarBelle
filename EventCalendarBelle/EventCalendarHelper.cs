@@ -3,24 +3,13 @@ using EventCalendarBelle.Controller;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Mvc;
-using Umbraco.Core.Configuration;
-using Umbraco.Core.IO;
-using Umbraco.Core.Manifest;
 using Umbraco.Core;
-using Umbraco.Web.Models.ContentEditing;
-using Umbraco.Web.Mvc;
-using Umbraco.Web.Trees;
 using Umbraco.Web.UI.JavaScript;
-using Umbraco.Web.PropertyEditors;
-using Umbraco.Web.Models;
-using Umbraco.Web.WebServices;
 using System.Web;
 using System.Web.Routing;
 using Umbraco.Web;
-using Umbraco.Core.Persistence;
+using EventCalendar.Core.Services;
 
 namespace EventCalendarBelle
 {
@@ -34,7 +23,7 @@ namespace EventCalendarBelle
             }
             else
             {
-                return ApplicationContext.Current.DatabaseContext.Database.SingleOrDefault<ECalendar>(id);
+                return CalendarService.GetCalendarById(id);
             }
         }
     }

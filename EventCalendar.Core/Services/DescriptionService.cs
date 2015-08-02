@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Umbraco.Core;
 using Umbraco.Core.Persistence;
+using Newtonsoft.Json;
 
 namespace EventCalendar.Core.Services
 {
@@ -49,6 +50,16 @@ namespace EventCalendar.Core.Services
         {
             var query2 = new Sql().Select("*").From("ec_eventdescriptions").Where<EventDescription>(x => x.CalendarId == calendar && x.EventId == @event && x.Type == (int)type);
             return ApplicationContext.Current.DatabaseContext.Database.Fetch<EventDescription>(query2);
+        }
+
+        public static object GetRTEConfiguration()
+        {
+            var query = new Sql().Select("value").From("cmsDataTypePreValues").Where("datatypeNodeId = -87");
+            var tmp = ApplicationContext.Current.DatabaseContext.Database.FirstOrDefault<string>(query);
+            if(!tmp.StartsWith("{")){
+                return tmp;
+            }
+            return JsonConvert.DeserializeObject(tmp);
         }
     }
 }

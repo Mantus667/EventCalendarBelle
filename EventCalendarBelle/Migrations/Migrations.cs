@@ -127,6 +127,7 @@ namespace EventCalendarBelle.Migrations
         }
     }
 
+    [Migration("2.2.0", 0, "UpdateEventCalendarTables")]
     public class RecurringEventEnhancements : MigrationBase
     {
         public override void Down()

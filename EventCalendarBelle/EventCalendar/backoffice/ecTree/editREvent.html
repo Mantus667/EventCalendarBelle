@@ -231,9 +231,11 @@
         </umb-tab>
         <umb-tab id="tab{{$index}}" rel="{{$index}}" ng-repeat="description in event.descriptions">
             <div class="umb-pane">
-                <umb-property property="description" >
-                    <umb-editor model="description"></umb-editor>
-                </umb-property>
+                <div ng-if="description.view == 'rte'">
+                    <umb-property property="description" >
+                        <umb-editor model="description"></umb-editor>
+                    </umb-property>
+                </div>
             </div>
         </umb-tab>
     </umb-tab-view>

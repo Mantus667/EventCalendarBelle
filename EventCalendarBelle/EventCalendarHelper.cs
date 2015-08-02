@@ -48,6 +48,7 @@ namespace EventCalendarBelle
             mainDictionary.Add("reventBaseUrl", urlHelper.GetUmbracoApiServiceBaseUrl<REventApiController>(controller => controller.PostSave(null)));
             mainDictionary.Add("userBaseUrl", urlHelper.GetUmbracoApiServiceBaseUrl<UserApiController>(controller => controller.PostSave(null)));
             mainDictionary.Add("importBaseUrl", urlHelper.GetUmbracoApiServiceBaseUrl<ImportApiController>(controller => controller.Import()));
+            mainDictionary.Add("descriptionBaseUrl", urlHelper.GetUmbracoApiServiceBaseUrl<DescriptionApiController>(controller => controller.PostSave(null)));
 
             if (!e.Keys.Contains("eventCalendar"))
             {

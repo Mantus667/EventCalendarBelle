@@ -15,6 +15,10 @@
 
                 deleteById: function (id) {
                     return $http.delete(Umbraco.Sys.ServerVariables.eventCalendar.eventBaseUrl + "DeleteById?id=" + id);
+                },
+
+                getRTEConfiguration: function () {
+                    return $http.get(Umbraco.Sys.ServerVariables.eventCalendar.descriptionBaseUrl + "GetRTEConfiguration");
                 }
             };
         });

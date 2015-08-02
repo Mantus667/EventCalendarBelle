@@ -1,17 +1,12 @@
 ﻿<umb-panel ng-controller="EventCalendar.CalendarCreateController">
     <umb-header>
         <div class="span4">
-                <input type="text"
-                    class="umb-headline" 
-                    localize="placeholder"
-                    select-on-focus 
-                    placeholder="@placeholders_entername" 
-                    ng-model="calendar.calendarname" />
+            <input type="text" class="umb-headline" ng-model="calendar.calendarname" />
         </div>
         <div class="span8">
-                <div class="btn-toolbar pull-right umb-btn-toolbar">
-                        <a href class="btn btn-primary" ng-click="save(calendar)" prevent-default><localize key="buttons_save">Save</localize></a>
-                </div>
+            <div class="btn-toolbar pull-right umb-btn-toolbar">
+                <a href class="btn btn-primary" ng-click="save(calendar)" prevent-default><localize key="buttons_save">Save</localize></a>
+            </div>
         </div>
     </umb-header>
 

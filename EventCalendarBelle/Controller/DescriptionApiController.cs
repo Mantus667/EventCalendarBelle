@@ -42,5 +42,10 @@ namespace EventCalendarBelle.Controller
         {
             return DescriptionService.GetAllDescriptions();
         }
+
+        public object GetRTEConfiguration()
+        {
+            return DescriptionService.GetRTEConfiguration();
+        }
     }
 }

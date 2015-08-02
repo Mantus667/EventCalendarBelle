@@ -5,6 +5,13 @@
             var exceptionDate;
             var locale = 'en-US';
             var dateformat = 'MM/DD/YYYY';
+            var rteDefaultConfiguration = {
+                editor: {
+                    toolbar: ["code", "undo", "redo", "cut", "styleselect", "bold", "italic", "alignleft", "aligncenter", "alignright", "bullist", "numlist", "link", "umbmediapicker", "umbmacro", "table", "umbembeddialog"],
+                    stylesheets: [],
+                    dimensions: { height: 400, width: '100%' }
+                }
+            };
 
             var initAssets = function () {
                 assetsService.loadCss("/App_Plugins/EventCalendar/css/bootstrap-switch.min.css");
@@ -99,25 +106,26 @@
             };
 
             var initRTE = function () {                
-                //Create the tabs for every language etc
-                $scope.tabs = [{ id: "Content", label: "Content" }, { id: "Exceptions", label: "Exceptions" }];
-                angular.forEach($scope.event.descriptions, function (value, key) {
-                    this.push({ id: key, label: value.culture });
-                }, $scope.tabs);
+                reventResource.getRTEConfiguration().then(function (response) {
+                    var tmp = response.data;
+                    if (typeof tmp !== null && typeof tmp === 'object') {
+                        rteDefaultConfiguration.editor.toolbar = tmp.toolbar;
+                    }
 
-                //Update descriptions with data for rte
-                angular.forEach($scope.event.descriptions, function (description) {
-                    description.label = '';
-                    description.description = '';
-                    description.view = 'rte';
-                    description.hideLabel = true;
-                    description.config = {
-                        editor: {
-                            toolbar: ["code", "undo", "redo", "cut", "styleselect", "bold", "italic", "alignleft", "aligncenter", "alignright", "bullist", "numlist", "link", "umbmediapicker", "umbmacro", "table", "umbembeddialog"],
-                            stylesheets: [],
-                            dimensions: { height: 400, width: '100%' }
-                        }
-                    };
+                    //Update descriptions with data for rte
+                    angular.forEach($scope.event.descriptions, function (description) {
+                        description.label = '';
+                        description.description = '';
+                        description.view = 'rte';
+                        description.hideLabel = true;
+                        description.config = rteDefaultConfiguration;
+                    });
+
+                    //Create the tabs for every language etc | length
+                    $scope.tabs = [{ id: "Content", label: "Content" }];
+                    angular.forEach($scope.event.descriptions, function (value, key) {
+                        this.push({ id: key, label: value.culture });
+                    }, $scope.tabs);
                 });
             };
 

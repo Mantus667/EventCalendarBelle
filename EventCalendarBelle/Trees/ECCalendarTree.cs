@@ -168,19 +168,33 @@ namespace EventCalendarBelle.Trees
 
             if (id.Contains("c-"))
             {
-                List<Event> events = EventService.GetAllEvents().Where(x => x.calendarId.ToString() == id.Replace("c-", "")).ToList();
                 var tree = new TreeNodeCollection();
 
-                foreach(var e in events) {
-                    tree.Add(CreateTreeNode("e-" + e.Id.ToString(), id, queryStrings, e.Title, "icon-music", false, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/editEvent/" + e.Id));
-                }
+                tree.Add(CreateTreeNode("normalEvents-" + id.Replace("c-", ""), id, queryStrings, "Normal Events", "icon-music", true));
+                tree.Add(CreateTreeNode("reccuringEvents-" + id.Replace("c-", ""), id, queryStrings, "Recurring Events", "icon-axis-rotation", true));
 
-                List<RecurringEvent> revents = RecurringEventService.GetAllEvents().Where(x => x.calendarId.ToString() == id.Replace("c-", "")).ToList();
+                return tree;
+            }
 
-                foreach (var e in revents)
-                {
-                    tree.Add(CreateTreeNode("re-" + e.Id.ToString(), id, queryStrings, e.Title, "icon-axis-rotation", false, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/editREvent/" + e.Id));
-                }
+            if (id.Contains("normalEvents"))
+            {
+                var tree = new TreeNodeCollection();
+
+                List<Event> events = EventService.GetEventsForCalendar(int.Parse(id.Replace("normalEvents-", ""))).ToList();
+
+                tree.AddRange(events
+                    .Select(e => CreateTreeNode("e-" + e.Id.ToString(), id, queryStrings, e.Title, "icon-music", false, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/editEvent/" + e.Id)));
+
+                return tree;
+            }
+
+            if (id.Contains("reccuringEvents"))
+            {
+                var tree = new TreeNodeCollection();
+
+                List<RecurringEvent> revents = RecurringEventService.GetEventsForCalendar(int.Parse(id.Replace("reccuringEvents-", ""))).ToList();
+
+                tree.AddRange(revents.Select(e => CreateTreeNode("re-" + e.Id.ToString(), id, queryStrings, e.Title, "icon-axis-rotation", false, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/editREvent/" + e.Id)));
 
                 return tree;
             }

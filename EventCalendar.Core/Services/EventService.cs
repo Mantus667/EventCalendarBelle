@@ -88,7 +88,18 @@ namespace EventCalendar.Core.Services
                 e.Descriptions = DescriptionService.GetDescriptionsForEvent(current.calendarId, current.Id, EventType.Normal).ToList();
 
                 var ls = ApplicationContext.Current.Services.LocalizationService;
-                foreach (var lang in ls.GetAllLanguages())
+                var langs = ls.GetAllLanguages();
+                //Check if a language was removed and remove the description
+                var descriptionsForDeletedLangs = e.Descriptions.Where(x => !langs.Any(y => y.CultureInfo.ToString() == x.CultureCode));
+                foreach (var desc in descriptionsForDeletedLangs)
+                {
+                    DescriptionService.DeleteDescription(desc.Id);
+                    e.Descriptions.Remove(desc);
+                }
+
+                //Foreach language if no description is present
+                //Create new description for new language
+                foreach (var lang in langs)
                 {
                     if (e.Descriptions.SingleOrDefault(x => x.CultureCode == lang.CultureInfo.ToString()) == null)
                     {

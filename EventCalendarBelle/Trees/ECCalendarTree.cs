@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Umbraco.Core;
 using Umbraco.Web.Models.Trees;
 using Umbraco.Web.Mvc;
 using Umbraco.Web.Trees;
-using EventCalendarBelle.Controller;
 using EventCalendar.Core.Models;
 using Umbraco.Web;
 using umbraco.BusinessLogic.Actions;
@@ -23,7 +20,6 @@ namespace EventCalendarBelle.Trees
         {
             var menu = new MenuItemCollection();
             var currentUser = Security.CurrentUser;
-            //var ctrl = new UserApiController();
 
             var settings = SecurityService.GetSecuritySettingsByUserId(currentUser.Id); //ctrl.GetById(currentUser.Id);
             
@@ -142,7 +138,7 @@ namespace EventCalendarBelle.Trees
                 }else {
                     locations = LocationService.GetLocationsForUser(Security.GetUserId()).ToList();
                 }
-                foreach (var loc in locations)
+                foreach (var loc in locations.OrderBy(x => x.LocationName))
                 {
                     tree.Add(CreateTreeNode("l-" + loc.Id.ToString(), id, queryStrings, loc.LocationName, "icon-map-loaction", false, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/editLocation/" + loc.Id.ToString()));
                 }

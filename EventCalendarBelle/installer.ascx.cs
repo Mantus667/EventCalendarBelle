@@ -61,13 +61,20 @@ namespace EventCalendarBelle
 
         private void RunMigrations()
         {
+            this.BulletedList1.Items.Add(new ListItem("Running Migrations."));
             try
             {
                 var runner = new MigrationRunner(this.oldVersion, this.newVersion, "UpdateEventCalendarTables");
                 var upgraded = runner.Execute(this._db, true);
+                this.BulletedList1.Items.Add(new ListItem("Done doing migration for version " + this.newVersion.ToString()));
                 LogHelper.Info<installer>("Done doing migration for version " + this.newVersion.ToString());
             }
-            catch (Exception ex) { LogHelper.Error<installer>("Failed to do the migration for a version", ex); }
+            catch (Exception ex) {
+                this.BulletedList1.Items.Add(new ListItem("Failed to do the migration for a version."));
+                LogHelper.Error<installer>("Failed to do the migration for a version", ex);
+            }
+
+            this.BulletedList1.Items.Add(new ListItem("Done running Migrations."));
         }
 
         private void CreateSection()

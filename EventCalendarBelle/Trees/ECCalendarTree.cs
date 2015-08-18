@@ -65,6 +65,23 @@ namespace EventCalendarBelle.Trees
                 }
                 menu.Items.Add<ActionRefresh>("Refresh");
             }
+            else if (id.Contains("normalEvents"))
+            {
+                if (settings.CanCreateEvents)
+                {
+                    menu.DefaultMenuAlias = "editEvent";
+                    //menu.Items.Add(new MenuItem("editEvent", "Create",) { Icon = "add" });
+                    menu.Items.Add(new MenuItem(ActionNew.Instance, "Create"));
+                }
+            }
+            else if (id.Contains("reccuringEvents"))
+            {
+                if (settings.CanCreateEvents)
+                {
+                    menu.DefaultMenuAlias = "editREvent";
+                    menu.Items.Add(new MenuItem("editREvent", "Create") { Icon = "add" });
+                }
+            }
             else if (id.Contains("l-"))
             {
                 if (settings.CanDeleteLocations)
@@ -166,8 +183,8 @@ namespace EventCalendarBelle.Trees
             {
                 var tree = new TreeNodeCollection();
 
-                tree.Add(CreateTreeNode("normalEvents-" + id.Replace("c-", ""), id, queryStrings, "Normal Events", "icon-music", true));
-                tree.Add(CreateTreeNode("reccuringEvents-" + id.Replace("c-", ""), id, queryStrings, "Recurring Events", "icon-axis-rotation", true));
+                tree.Add(CreateTreeNode("normalEvents-" + id.Replace("c-", ""), id, queryStrings, "Normal Events", "icon-music", true, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/overviewEvents/" + id.Replace("c-", "")));
+                tree.Add(CreateTreeNode("reccuringEvents-" + id.Replace("c-", ""), id, queryStrings, "Recurring Events", "icon-axis-rotation", true, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/overviewREvents/" + id.Replace("c-", "")));
 
                 return tree;
             }

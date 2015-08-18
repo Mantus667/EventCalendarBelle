@@ -136,7 +136,7 @@ namespace EventCalendar.Core.Services
             ApplicationContext.Current.DatabaseContext.Database.Save(dto);
 
             //Create the new descriptions for the new event
-            revent.Descriptions = DescriptionService.GetDescriptionsForEvent(revent.calendarId, revent.Id, EventType.Normal).ToList();
+            revent.Descriptions = DescriptionService.GetDescriptionsForEvent(revent.calendarId, revent.Id, EventType.Recurring).ToList();
 
             var ls = ApplicationContext.Current.Services.LocalizationService;
             foreach (var lang in ls.GetAllLanguages())

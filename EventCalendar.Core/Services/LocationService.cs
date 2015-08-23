@@ -18,7 +18,7 @@ namespace EventCalendar.Core.Services
             var args = new LocationDeletionEventArgs { Location = location };
             OnDeleting(args);
 
-            if (args.Cancel)
+            if (args.Cancel || CanLocationBeDeleted(id) == false)
             {
                 return id;
             }
@@ -82,6 +82,14 @@ namespace EventCalendar.Core.Services
             var locations = GetAllLocations();
             return locations.Where(x => settings.Locations.Contains(x.Id.ToString()));
         }
+
+        #region Private Stuff
+
+        private static bool CanLocationBeDeleted(int id){
+            return !EventService.GetEventsForLocation(id).Any() && !RecurringEventService.GetEventsForLocation(id).Any();
+        }
+
+        #endregion
 
         #region EventHandler Delegates
         public static void OnCreating(LocationCreatingEventArgs e)

@@ -14,9 +14,6 @@
             };
 
             var initAssets = function () {
-                assetsService.loadCss("/App_Plugins/EventCalendar/css/bootstrap-switch.min.css");
-                assetsService.loadCss("/App_Plugins/EventCalendar/css/eventcalendar.custom.css");
-                assetsService.loadCss("/App_Plugins/EventCalendar/css/bootstrap-tagsinput.css");
 
                 //Get the current user locale
                 userService.getCurrentUser().then(function (user) {

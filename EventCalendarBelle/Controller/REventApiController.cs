@@ -43,6 +43,11 @@ namespace EventCalendarBelle.Controller
             return RecurringEventService.GetAllEvents();
         }
 
+        public IEnumerable<RecurringEvent> GetForCalendar(int id)
+        {
+            return RecurringEventService.GetEventsForCalendar(id);
+        }
+
         [HttpGet]
         public IEnumerable<KeyValuePair<int,string>> GetDayOfWeekValues()
         {

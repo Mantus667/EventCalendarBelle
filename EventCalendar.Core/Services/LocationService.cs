@@ -10,7 +10,7 @@ namespace EventCalendar.Core.Services
 {
     public static class LocationService
     {
-        public static int DeleteLocation(int id)
+        public static bool DeleteLocation(int id)
         {
             var db = ApplicationContext.Current.DatabaseContext.Database;
             var location = GetLocation(id);
@@ -20,15 +20,15 @@ namespace EventCalendar.Core.Services
 
             if (args.Cancel || CanLocationBeDeleted(id) == false)
             {
-                return id;
+                return false;
             }
 
-            var response = db.Delete<EventLocation>(id);
+            var deletedID = db.Delete<EventLocation>(id);
 
             var args2 = new LocationDeletedEventArgs { Location = location };
             OnDeleted(args2);
 
-            return response;
+            return deletedID != 0;
         }
 
         public static EventLocation GetLocation(int id)

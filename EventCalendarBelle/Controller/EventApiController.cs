@@ -39,5 +39,10 @@ namespace EventCalendarBelle.Controller
         {
             return EventService.GetAllEvents();
         }
+
+        public IEnumerable<Event> GetForCalendar(int id)
+        {
+            return EventService.GetEventsForCalendar(id);
+        }
     }
 }

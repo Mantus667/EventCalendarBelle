@@ -1,5 +1,5 @@
 ﻿angular.module('umbraco')
-    .controller('EventCalendar.EventsOverviewController', function ($scope, assetsService, eventResource) {
+    .controller('EventCalendar.EventsOverviewController', function ($scope, assetsService, eventResource, $routeParams) {
 
         assetsService.loadCss("/App_Plugins/EventCalendar/css/DT_bootstrap.css");
 
@@ -13,7 +13,7 @@
 
                         var dataSource = [];
 
-                        eventResource.getall().then(function (response) {
+                        eventResource.getForCalendar($routeParams.id).then(function (response) {
                             angular.forEach(response.data, function (event) {
                                 dataSource.push({ id: event.id, name: event.title });
                             });

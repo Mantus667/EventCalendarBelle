@@ -13,10 +13,6 @@
             };
             
             var initAssets = function () {
-                assetsService.loadCss("/App_Plugins/EventCalendar/css/bootstrap-datetimepicker.min.css");
-                assetsService.loadCss("/App_Plugins/EventCalendar/css/bootstrap-switch.min.css");
-                assetsService.loadCss("/App_Plugins/EventCalendar/css/eventcalendar.custom.css");
-                assetsService.loadCss("/App_Plugins/EventCalendar/css/bootstrap-tagsinput.css");
 
                 //Get the current user locale
                 userService.getCurrentUser().then(function (user) {
@@ -100,7 +96,13 @@
                     var tmp = response.data;
                     if (typeof tmp !== null && typeof tmp === 'object') {                        
                         rteDefaultConfiguration.editor.toolbar = tmp.toolbar;
-                    }
+                    }                    
+
+                    //Create the tabs for every language etc | length
+                    $scope.tabs = [{ id: "Content", label: "Content" }];
+                    angular.forEach($scope.event.descriptions, function (value, key) {
+                        this.push({ id: key, label: value.culture });
+                    }, $scope.tabs);
 
                     //Update descriptions with data for rte
                     angular.forEach($scope.event.descriptions, function (description) {
@@ -110,12 +112,6 @@
                         description.hideLabel = true;
                         description.config = rteDefaultConfiguration;
                     });
-
-                    //Create the tabs for every language etc | length
-                    $scope.tabs = [{ id: "Content", label: "Content" }];
-                    angular.forEach($scope.event.descriptions, function (value, key) {
-                        this.push({ id: key, label: value.culture });
-                    }, $scope.tabs);                    
                 });                
             };
 

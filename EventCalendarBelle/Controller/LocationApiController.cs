@@ -28,7 +28,7 @@ namespace EventCalendarBelle.Controller
             }
         }
 
-        public int DeleteById(int id)
+        public bool DeleteById(int id)
         {
             return LocationService.DeleteLocation(id);
         }

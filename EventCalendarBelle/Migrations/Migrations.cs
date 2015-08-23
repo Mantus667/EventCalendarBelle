@@ -126,4 +126,24 @@ namespace EventCalendarBelle.Migrations
             Rename.Column("organisator").OnTable("ec_recevents").To("organiser");
         }
     }
+
+    [Migration("2.2.0", 0, "UpdateEventCalendarTables")]
+    public class RecurringEventEnhancements : MigrationBase
+    {
+        public override void Down()
+        {
+            Delete.Column("rangeStart").FromTable("ec_recevents");
+            Delete.Column("rangeEnd").FromTable("ec_recevents");
+            Alter.Table("ec_recevents").AlterColumn("day").AsInt32();
+            Alter.Table("ec_recevents").AlterColumn("monthly").AsInt32();
+        }
+
+        public override void Up()
+        {
+            Alter.Table("ec_recevents").AddColumn("rangeStart");
+            Alter.Table("ec_recevents").AddColumn("rangeEnd");
+            Alter.Table("ec_recevents").AlterColumn("day").AsFixedLengthString(255);
+            Alter.Table("ec_recevents").AlterColumn("monthly").AsFixedLengthString(255);
+        }
+    }
 }

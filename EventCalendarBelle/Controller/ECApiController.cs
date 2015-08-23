@@ -1,5 +1,6 @@
 ﻿using EventCalendar.Core.ActionFilter;
 using EventCalendar.Core.Models;
+using EventCalendar.Core.Services;
 using Newtonsoft.Json;
 using ScheduleWidget.Enums;
 using ScheduleWidget.ScheduledEvents;
@@ -64,11 +65,10 @@ namespace EventCalendarBelle.Controller
             //Check if we got an id, otherwise get all calendar
             if (id != 0)
             {
-                var query = new Sql().Select("*").From("ec_calendars").Where<ECalendar>(x => x.Id == id);
-                var calendar = db.Fetch<ECalendar>(query).FirstOrDefault();
+                var calendar = CalendarService.GetCalendarById(id);
                 if (calendar.IsGCal)
                 {
-                    sources.Add(calendar.GCalFeedUrl);
+                    sources.Add(new { googleCalendarApiKey = calendar.GoogleAPIKey, googleCalendarId = calendar.GCalFeedUrl });
                 }
                 else
                 {
@@ -82,8 +82,7 @@ namespace EventCalendarBelle.Controller
             else
             {
                 //Get all calendar
-                var query = new Sql().Select("*").From("ec_calendars");
-                var calendar = db.Fetch<ECalendar>(query);
+                var calendar = CalendarService.GetAllCalendar();
 
                 foreach (var cal in calendar)
                 {
@@ -114,9 +113,9 @@ namespace EventCalendarBelle.Controller
 
             //Handle normal events
             List<EventsOverviewModel> events = new List<EventsOverviewModel>();
-            var calendar = db.SingleOrDefault<ECalendar>(id);
-            var normal_events = db.Fetch<EventCalendar.Core.Models.Event>("SELECT * FROM ec_events WHERE ec_events.calendarId = @0", id).ToList();
-            foreach (var ne in normal_events.Where(x => x.start <= endDate && x.end >= startDate))
+            var calendar = CalendarService.GetCalendarById(id);
+            var normal_events = EventService.GetAllEvents();
+            foreach (var ne in normal_events.Where(x => x.Start <= endDate && x.End >= startDate))
             {
                 List<EventDescription> descriptions = db.Query<EventDescription>("SELECT * FROM ec_eventdescriptions WHERE eventid = @0 AND calendarid = @1 AND type = @2", ne.Id, ne.calendarId, (int)EventType.Normal).ToList();
                 EventDescription currentDescription = descriptions.SingleOrDefault(x => x.CultureCode.ToLower() == culture);                
@@ -131,15 +130,15 @@ namespace EventCalendarBelle.Controller
                     new EventsOverviewModel()
                     {
                         type = EventType.Normal,
-                        title = ne.title,
-                        allDay = ne.allDay,
+                        title = ne.Title,
+                        allDay = ne.AllDay,
                         description = description,
-                        end = ne.end,
-                        start = ne.start,
+                        end = ne.End,
+                        start = ne.Start,
                         id = ne.Id,
                         color = !String.IsNullOrEmpty(calendar.Color) ? calendar.Color : "",
                         textColor = !String.IsNullOrEmpty(calendar.TextColor) ? calendar.TextColor : "",
-                        categories = ne.categories,
+                        categories = ne.Categories,
                         calendar = ne.calendarId
                     });
             }
@@ -160,19 +159,42 @@ namespace EventCalendarBelle.Controller
             range.StartDateTime = startDate;
             range.EndDateTime = endDate;
 
-            var calendar = db.SingleOrDefault<ECalendar>(id);
-            var recurring_events = db.Query<RecurringEvent>("SELECT * FROM ec_recevents WHERE calendarId = @0 ORDER BY id DESC", id).ToList();
+            var calendar = CalendarService.GetCalendarById(id);
+            var recurring_events = RecurringEventService.GetAllEvents().Where(x => x.calendarId == id);
+            
             foreach (var e in recurring_events)
             {
-                var schedule = new Schedule(
-                    new ScheduleWidget.ScheduledEvents.Event()
-                    {
-                        Title = e.title,
-                        ID = e.Id,
-                        DaysOfWeekOptions = (DayOfWeekEnum)e.day,
-                        FrequencyTypeOptions = (FrequencyTypeEnum)e.frequency,
-                        MonthlyIntervalOptions = (MonthlyIntervalEnum)e.monthly_interval
-                    });
+                RangeInYear rangeInYear = null;
+
+                if(e.range_start != 0 && e.range_end != 0){
+                    rangeInYear = new RangeInYear(){
+                        StartMonth = e.range_start,
+                        EndMonth = e.range_end
+                    };
+                }
+
+                var tmp_event = new ScheduleWidget.ScheduledEvents.Event() {
+                    Title = e.Title,
+                    ID = e.Id,
+                    FrequencyTypeOptions = (FrequencyTypeEnum)e.Frequency,
+                };
+
+                if (rangeInYear != null)
+                {
+                    tmp_event.RangeInYear = rangeInYear;
+                }
+
+                foreach (var day in e.Days)
+                {
+                    tmp_event.DaysOfWeekOptions = tmp_event.DaysOfWeekOptions | (DayOfWeekEnum)day;
+                }
+                foreach (var i in e.MonthlyIntervals)
+                {
+                    tmp_event.MonthlyIntervalOptions = tmp_event.MonthlyIntervalOptions | (MonthlyIntervalEnum)i;
+                }
+
+                var schedule = new Schedule(tmp_event, e.Exceptions.Select(x => x.Date.Value).ToList());
+
                 foreach (var tmp in schedule.Occurrences(range))
                 {
                     List<EventDescription> descriptions = db.Query<EventDescription>("SELECT * FROM ec_eventdescriptions WHERE eventid = @0 AND calendarid = @1 AND type = @2", e.Id, e.calendarId, (int)EventType.Recurring).ToList();
@@ -188,16 +210,16 @@ namespace EventCalendarBelle.Controller
 
                     events.Add(new EventsOverviewModel()
                     {
-                        title = e.title,
+                        title = e.Title,
                         id = e.Id,
-                        allDay = e.allDay,
+                        allDay = e.AllDay,
                         description = description,
-                        start = new DateTime(tmp.Year,tmp.Month,tmp.Day,e.start.Hour,e.start.Minute,0),
-                        end = new DateTime(tmp.Year, tmp.Month, tmp.Day, e.end.Hour, e.end.Minute, 0),
+                        start = new DateTime(tmp.Year,tmp.Month,tmp.Day,e.Start.Hour,e.Start.Minute,0),
+                        end = new DateTime(tmp.Year, tmp.Month, tmp.Day, e.End.Hour, e.End.Minute, 0),
                         type = EventType.Recurring,
                         color = !String.IsNullOrEmpty(calendar.Color) ? calendar.Color : "",
                         textColor = !String.IsNullOrEmpty(calendar.TextColor) ? calendar.TextColor : "",
-                        categories = e.categories,
+                        categories = e.Categories,
                         calendar = e.calendarId
                     });
                 }

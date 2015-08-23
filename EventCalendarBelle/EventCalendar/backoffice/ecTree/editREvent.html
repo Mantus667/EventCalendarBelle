@@ -51,7 +51,8 @@
                                 <small><eventcalendar-localize key="event_weekday_description">On which day does the event take place?</eventcalendar-localize></small>
                             </label>
                             <div class="controls controls-row">            
-                                <select ng-model="event.day" name="daySelect" ng-options="d.Key as d.Value for d in DayOfWeekList" required ng-selected="event.day == d.Key"></select>
+                                <select ng-model="event.days" name="daySelect" multiple ng-options="d.Key as d.Value for d in DayOfWeekList" required>
+                                </select>
                                 <span ng-show="form.daySelect.$dirty && form.daySelect.$error.required">Day is required</span>
                             </div>
                         </div>
@@ -66,7 +67,7 @@
                                 <small><eventcalendar-localize key="event_frequency_description">Frequency of your event?</eventcalendar-localize></small>
                             </label>
                             <div class="controls controls-row">            
-                                <select ng-model="event.frequency" name="freqSelect" ng-options="f.Key as f.Value for f in FrequencyTypes" required ng-selected="event.frequency == fKey"></select>
+                                <select ng-model="event.frequency" name="freqSelect" ng-options="f.Key as f.Value for f in FrequencyTypes" required ng-selected="event.frequency == m.Key"></select>
                                 <span ng-show="form.freqSelect.$dirty && form.freqSelect.$error.required">Frequency is required</span>
                             </div>
                         </div>
@@ -81,8 +82,32 @@
                                 <small><eventcalendar-localize key="event_monthly_description">Monthly interval of your event?</eventcalendar-localize></small>
                             </label>
                             <div class="controls controls-row">            
-                                <select ng-model="event.monthly" name="monSelect" ng-options="m.Key as m.Value for m in MonthlyIntervals" required ng-selected="event.monthly == m.Key"></select>
+                                <select ng-model="event.intervals" name="monSelect" multiple ng-options="m.Key as m.Value for m in MonthlyIntervals" required >
+                                </select>
                                 <span ng-show="form.monSelect.$dirty && form.monSelect.$error.required">Monthly is required</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="umb-property">
+                    <div class="control-group umb-control-group">
+                        <div class="umb-el-wrap">
+                            <label class="control-label" for="">
+                                <eventcalendar-localize key="event_month_range_label">Range</eventcalendar-localize>
+                                <small><eventcalendar-localize key="event_month_range_description">A month range when your event occurs</eventcalendar-localize></small>
+                            </label>
+                            <div class="controls controls-row">
+                                <p>
+                                    <select ng-model="event.range_start" name="monRangeStartSelect" ng-options="mr.Key as mr.Value for mr in MonthRange" ng-selected="event.range_start == m.Key">
+                                        <option value="">---Select month---</option>
+                                    </select>
+                                </p>
+                                <p>
+                                    <select ng-model="event.range_end" name="monRangeEndSelect" ng-options="mr.Key as mr.Value for mr in MonthRange" ng-selected="event.range_start == m.Key">
+                                        <option value="">---Select month---</option>
+                                    </select>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -185,11 +210,32 @@
                     
              </div>
         </umb-tab>
+        <umb-tab id="tabExceptions" rel="Exceptions">
+            <div class="umb-pane">
+                <eventcalendar-localize key="event_exceptions_headline">Exceptions</eventcalendar-localize>
+                <hr />
+                <p ng-repeat="exception in event.exceptions">
+                    <span>{{exception.date | date: 'shortDate'}}</span> <a class="btn btn-danger" ng-click="deleteException($index)"><span class="icon icon-pencil"></span>Delete</a>
+                </p>
+                <hr />
+                <div>
+                    <div id="datetimepicker3" class="input-append">
+                        <input required name="exceptionDate" type="text" />
+                        <span class="add-on datepickerbutton">
+                            <i class="icon icon-calendar"></i>
+                        </span>
+                    </div>
+                    <a class="btn btn-success" ng-click="addException()"><span class="icon icon-pencil"></span>Add</a>
+                </div>
+            </div>
+        </umb-tab>
         <umb-tab id="tab{{$index}}" rel="{{$index}}" ng-repeat="description in event.descriptions">
             <div class="umb-pane">
-                <umb-property property="description" >
-                    <umb-editor model="description"></umb-editor>
-                </umb-property>
+                <div ng-if="description.view == 'rte'">
+                    <umb-property property="description" >
+                        <umb-editor model="description"></umb-editor>
+                    </umb-property>
+                </div>
             </div>
         </umb-tab>
     </umb-tab-view>

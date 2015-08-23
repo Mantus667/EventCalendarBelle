@@ -27,6 +27,14 @@
 
                 getMonthlyIntervalValues: function () {
                     return $http.get(Umbraco.Sys.ServerVariables.eventCalendar.reventBaseUrl + "GetMonthlyIntervalValues");
+                },
+
+                getMonths: function () {
+                    return $http.get(Umbraco.Sys.ServerVariables.eventCalendar.reventBaseUrl + "GetMonths");
+                },
+
+                getRTEConfiguration: function () {
+                    return $http.get(Umbraco.Sys.ServerVariables.eventCalendar.descriptionBaseUrl + "GetRTEConfiguration");
                 }
             };
         });

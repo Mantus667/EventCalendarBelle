@@ -33,10 +33,12 @@
 			'~/App_Plugins/EventCalendar/backoffice/ectree/event.edit.controller.js',
 			'~/App_Plugins/EventCalendar/backoffice/ectree/event.create.controller.js',
 			'~/App_Plugins/EventCalendar/backoffice/ectree/event.delete.controller.js',
+			'~/App_Plugins/EventCalendar/backoffice/ectree/events.overview.controller.js',
 
 			'~/App_Plugins/EventCalendar/backoffice/ectree/revent.edit.controller.js',
 			'~/App_Plugins/EventCalendar/backoffice/ectree/revent.create.controller.js',
 			'~/App_Plugins/EventCalendar/backoffice/ectree/revent.delete.controller.js',
+			'~/App_Plugins/EventCalendar/backoffice/ectree/revents.overview.controller.js',
 
 			'~/App_Plugins/EventCalendar/backoffice/ectree/user.edit.controller.js',
 			'~/App_Plugins/EventCalendar/backoffice/ectree/security.overview.controller.js',

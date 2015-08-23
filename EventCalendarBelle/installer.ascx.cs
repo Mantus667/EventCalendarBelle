@@ -14,13 +14,14 @@ using Umbraco.Core.Logging;
 using System.Configuration;
 using System.IO;
 using umbraco.BusinessLogic;
+using EventCalendar.Core.Dto;
 
 namespace EventCalendarBelle
 {
     public partial class installer : Umbraco.Web.UmbracoUserControl
     {
         private UmbracoDatabase _db = null;
-        protected Version newVersion = new Version("2.1.4");
+        protected Version newVersion = new Version("2.2.0");
         private Version oldVersion = new Version("2.0.0");
 
         protected void Page_Load(object sender, EventArgs e)
@@ -60,13 +61,20 @@ namespace EventCalendarBelle
 
         private void RunMigrations()
         {
+            this.BulletedList1.Items.Add(new ListItem("Running Migrations."));
             try
             {
                 var runner = new MigrationRunner(this.oldVersion, this.newVersion, "UpdateEventCalendarTables");
                 var upgraded = runner.Execute(this._db, true);
+                this.BulletedList1.Items.Add(new ListItem("Done doing migration for version " + this.newVersion.ToString()));
                 LogHelper.Info<installer>("Done doing migration for version " + this.newVersion.ToString());
             }
-            catch (Exception ex) { LogHelper.Error<installer>("Failed to do the migration for a version", ex); }
+            catch (Exception ex) {
+                this.BulletedList1.Items.Add(new ListItem("Failed to do the migration for a version."));
+                LogHelper.Error<installer>("Failed to do the migration for a version", ex);
+            }
+
+            this.BulletedList1.Items.Add(new ListItem("Done running Migrations."));
         }
 
         private void CreateSection()
@@ -191,7 +199,7 @@ namespace EventCalendarBelle
                     this.BulletedList1.Items.Add(new ListItem("Creating calendar tables."));
                     if (!this._db.TableExist("ec_calendars"))
                     {
-                        this._db.CreateTable<EventCalendar.Core.Models.ECalendar>(false);
+                        this._db.CreateTable<CalendarDto>(false);
                         this.BulletedList1.Items.Add(new ListItem("Successfully created tables."));
                     }
                 }
@@ -206,7 +214,7 @@ namespace EventCalendarBelle
                     this.BulletedList1.Items.Add(new ListItem("Creating events table."));
                     if (!this._db.TableExist("ec_events"))
                     {
-                        this._db.CreateTable<Event>(false);
+                        this._db.CreateTable<EventDto>(false);
                         this.BulletedList1.Items.Add(new ListItem("Successfully created table."));
                     }
                 }
@@ -221,7 +229,7 @@ namespace EventCalendarBelle
                     this.BulletedList1.Items.Add(new ListItem("Creating recurring events table."));
                     if (!this._db.TableExist("ec_recevents"))
                     {
-                        this._db.CreateTable<RecurringEvent>(false);
+                        this._db.CreateTable<RecurringEventDto>(false);
                         this.BulletedList1.Items.Add(new ListItem("Successfully created table."));
                     }
                 }
@@ -263,6 +271,18 @@ namespace EventCalendarBelle
                         this._db.CreateTable<UserSettings>(false);
                         //Auto install the settings for superadmin
                         this._db.Save(new UserSettings() { UserId = 0, CanCreateCalendar = true, CanCreateEvents = true, CanCreateLocations = true, CanDeleteCalendar = true, CanDeleteEvents = true, CanDeleteLocations = true });
+                        this.BulletedList1.Items.Add(new ListItem("Successfully created table."));
+                    }
+                }
+                catch (Exception ex) { this.BulletedList1.Items.Add(new ListItem(ex.Message)); }
+
+                //Creating date exceptions table
+                try
+                {
+                    this.BulletedList1.Items.Add(new ListItem("Creating date exceptions table."));
+                    if (!this._db.TableExist("ec_dateexceptions"))
+                    {
+                        this._db.CreateTable<DateExceptionDto>(false);
                         this.BulletedList1.Items.Add(new ListItem("Successfully created table."));
                     }
                 }

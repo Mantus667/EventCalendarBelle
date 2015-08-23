@@ -2,6 +2,16 @@
         function ($scope, $routeParams, reventResource, locationResource, notificationsService, navigationService, assetsService, userService, entityResource, dialogService) {
 
             $scope.event = { id: 0, calendarid: 0, allDay: false, organiser: {} };
+            var exceptionDate;
+            var locale = 'en-US';
+            var dateformat = 'MM/DD/YYYY';
+            var rteDefaultConfiguration = {
+                editor: {
+                    toolbar: ["code", "undo", "redo", "cut", "styleselect", "bold", "italic", "alignleft", "aligncenter", "alignright", "bullist", "numlist", "link", "umbmediapicker", "umbmacro", "table", "umbembeddialog"],
+                    stylesheets: [],
+                    dimensions: { height: 400, width: '100%' }
+                }
+            };
 
             var initAssets = function () {
                 assetsService.loadCss("/App_Plugins/EventCalendar/css/bootstrap-switch.min.css");
@@ -40,17 +50,22 @@
                                    });
                                    $('#datetimepicker2 input').val(moment.utc($scope.event.endtime).format('LT'));
 
+                                   $('#datetimepicker3').datetimepicker({
+                                       language: locale,
+                                       pickTime: false
+                                   });
+
                                    $('#datetimepicker1').on('dp.change', function (e) {
-                                       var d = moment(e.date); //.format('MM/DD/YYYY HH:mm:ss');
-                                       console.log(d);
-                                       //$('#datetimepicker1 input').val(d.format('l LT'));
+                                       var d = moment(e.date);
                                        $scope.event.starttime = d.format('HH:mm:ss');
                                    });
                                    $('#datetimepicker2').on('dp.change', function (e) {
                                        var d = moment(e.date);
-                                       console.log(d);
-                                       //$('#datetimepicker2 input').val(d.format('l LT'));
                                        $scope.event.endtime = d.format('HH:mm:ss');
+                                   });
+                                   $('#datetimepicker3').on('dp.change', function (e) {
+                                       var d = moment(e.date);
+                                       exceptionDate = d.format(dateformat);
                                    });
                                });
                         });
@@ -91,25 +106,26 @@
             };
 
             var initRTE = function () {                
-                //Create the tabs for every language etc
-                $scope.tabs = [{ id: "Content", label: "Content" }];
-                angular.forEach($scope.event.descriptions, function (value, key) {
-                    this.push({ id: key, label: value.culture });
-                }, $scope.tabs);
+                reventResource.getRTEConfiguration().then(function (response) {
+                    var tmp = response.data;
+                    if (typeof tmp !== null && typeof tmp === 'object') {
+                        rteDefaultConfiguration.editor.toolbar = tmp.toolbar;
+                    }
 
-                //Update descriptions with data for rte
-                angular.forEach($scope.event.descriptions, function (description) {
-                    description.label = '';
-                    description.description = '';
-                    description.view = 'rte';
-                    description.hideLabel = true;
-                    description.config = {
-                        editor: {
-                            toolbar: ["code", "undo", "redo", "cut", "styleselect", "bold", "italic", "alignleft", "aligncenter", "alignright", "bullist", "numlist", "link", "umbmediapicker", "umbmacro", "table", "umbembeddialog"],
-                            stylesheets: [],
-                            dimensions: { height: 400, width: '100%' }
-                        }
-                    };
+                    //Update descriptions with data for rte
+                    angular.forEach($scope.event.descriptions, function (description) {
+                        description.label = '';
+                        description.description = '';
+                        description.view = 'rte';
+                        description.hideLabel = true;
+                        description.config = rteDefaultConfiguration;
+                    });
+
+                    //Create the tabs for every language etc | length
+                    $scope.tabs = [{ id: "Content", label: "Content" }];
+                    angular.forEach($scope.event.descriptions, function (value, key) {
+                        this.push({ id: key, label: value.culture });
+                    }, $scope.tabs);
                 });
             };
 
@@ -132,6 +148,10 @@
                 $scope.MonthlyIntervals = response.data;
             });
 
+            reventResource.getMonths().then(function (response) {
+                $scope.MonthRange = response.data;
+            });
+
             $scope.populate = function (data) {
                 $scope.event.organiser_id = data.id;
                 $scope.event.organiser = { name: data.name, id: data.id, icon: data.icon };
@@ -146,7 +166,16 @@
 
             $scope.deleteOrganiser = function () {
                 $scope.event.organiser = {};
-            }
+            };
+
+            $scope.addException = function () {
+                $scope.event.exceptions.push({ id: 0, event: $scope.event.id, date: exceptionDate });
+                $('#datetimepicker3').val('')
+            };
+
+            $scope.deleteException = function (index) {
+                $scope.event.exceptions.splice(index, 1);
+            };
 
             if ($routeParams.create == "true") {
                 $scope.event.calendarid = $routeParams.id.replace("c-", "");

@@ -1,17 +1,12 @@
 ﻿<umb-panel ng-controller="EventCalendar.CalendarEditController">
     <umb-header>
         <div class="span4">
-                <input type="text"
-                    class="umb-headline" 
-                    localize="placeholder"
-                    select-on-focus 
-                    placeholder="@placeholders_entername" 
-                    ng-model="calendar.calendarname" />
+            <input type="text" class="umb-headline" ng-model="calendar.calendarname" />
         </div>
         <div class="span8">
-                <div class="btn-toolbar pull-right umb-btn-toolbar">
-                        <a href class="btn btn-primary" ng-click="save(calendar)" prevent-default><localize key="buttons_save">Save</localize></a>
-                </div>
+            <div class="btn-toolbar pull-right umb-btn-toolbar">
+                <a href="#" class="btn btn-primary" ng-click="save(calendar)" prevent-default><localize key="buttons_save">Save</localize></a>
+            </div>
         </div>
     </umb-header>
 
@@ -26,7 +21,7 @@
                             <small><eventcalendar-localize key="calendar_hide_description">Should the Calendar be hidden on front end?</eventcalendar-localize></small>
                         </label>
                         <div class="controls controls-row">            
-                            <input type="checkbox" class="umb-editor umb-textstring" ng-model="calendar.displayOnSite" />
+                            <input type="checkbox" id="hide" />
                         </div>
                     </div>
                 </div>
@@ -40,7 +35,7 @@
                             <small><eventcalendar-localize key="calendar_gcal_description">Do you want to use a Gcal Feed?</eventcalendar-localize></small>
                         </label>
                         <div class="controls controls-row">            
-                            <input type="checkbox" class="umb-editor umb-textstring" ng-model="calendar.isGCal" />
+                            <input type="checkbox" id="useGoogle" />
                         </div>
                     </div>
                 </div>
@@ -83,7 +78,7 @@
                         </label>
                         <div class="controls controls-row">            
                             <input type="hidden" id="Hidden2" class="umb-editor umb-textstring" ng-model="calendar.color" />
-                            <div id="colorSelector"><div style="background-color: {{calendar.color}}"></div></div>
+                            <div id="colorSelector"><div ng-style="{'background-color': calendar.color}"></div></div>
                         </div>
                     </div>
                 </div>
@@ -98,7 +93,7 @@
                         </label>
                         <div class="controls controls-row">            
                             <input type="hidden" id="Hidden1" class="umb-editor umb-textstring" ng-model="calendar.textColor" />
-                            <div id="colorSelector2"><div style="background-color: {{calendar.textColor}}"></div></div>
+                            <div id="colorSelector2"><div ng-style="{'background-color': calendar.textColor}"></div></div>
                         </div>
                     </div>
                 </div>

@@ -32,11 +32,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AutoMapper">
+    <Reference Include="AutoMapper, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.3.0.0\lib\net40\AutoMapper.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="AutoMapper.Net4">
+    <Reference Include="AutoMapper.Net4, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.3.0.0\lib\net40\AutoMapper.Net4.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="businesslogic">
       <HintPath>..\packages\UmbracoCms.Core.7.2.4\lib\businesslogic.dll</HintPath>
@@ -195,10 +197,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionFilter\ValidateHttpAntiForgeryToken.cs" />
+    <Compile Include="AutoMapperEvent.cs" />
+    <Compile Include="AutoMapperProfiles\CalendarProfile.cs" />
+    <Compile Include="AutoMapperProfiles\DateExceptionProfile.cs" />
+    <Compile Include="AutoMapperProfiles\EventProfile.cs" />
+    <Compile Include="AutoMapperProfiles\RecurringEventProfile.cs" />
+    <Compile Include="Dto\CalendarDto.cs" />
+    <Compile Include="Dto\DateExceptionsDto.cs" />
+    <Compile Include="Dto\EventDto.cs" />
+    <Compile Include="Dto\RecurringEventDto.cs" />
     <Compile Include="EventArgs\CalendarEventArgs.cs" />
     <Compile Include="EventArgs\EventEventArgs.cs" />
     <Compile Include="EventArgs\LocationEventArgs.cs" />
     <Compile Include="EventArgs\RecurringEventEventArgs.cs" />
+    <Compile Include="Models\DateException.cs" />
     <Compile Include="Models\ECalendar.cs" />
     <Compile Include="Models\Event.cs" />
     <Compile Include="Models\EventDescription.cs" />
@@ -211,6 +223,7 @@
     <Compile Include="Models\UserSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\CalendarService.cs" />
+    <Compile Include="Services\DateExceptionService.cs" />
     <Compile Include="Services\DescriptionService.cs" />
     <Compile Include="Services\EventService.cs" />
     <Compile Include="Services\LocationService.cs" />

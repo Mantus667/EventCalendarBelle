@@ -8,55 +8,37 @@ using System.Runtime.Serialization;
 
 namespace EventCalendar.Core.Models
 {
-    [TableName("ec_events")]
-    [PrimaryKey("id", autoIncrement = true)]
-    [ExplicitColumns]
     [DataContract(Name="event", Namespace= "")]
     public class Event
     {
-        [Column("id")]
-        [PrimaryKeyColumn(AutoIncrement = true)]
         [DataMember(Name="id")]
         public int Id { get; set; }
 
-        [Column("calendarid")]
         [DataMember(Name = "calendarid")]
         public int calendarId { get; set; }
 
-        [Column("locationId")]
         [DataMember(Name = "locationId")]
         public int locationId { get; set; }
 
-        [Column("title")]
         [DataMember(Name = "title")]
-        public string title { get; set; }
+        public string Title { get; set; }
 
-        [Column("starttime")]
-        [NullSetting(NullSetting = NullSettings.Null)]
         [DataMember(Name = "starttime")]
-        public DateTime? start { get; set; }
+        public DateTime? Start { get; set; }
 
-        [Column("endtime")]
-        [NullSetting(NullSetting = NullSettings.Null)]
         [DataMember(Name = "endtime")]
-        public DateTime? end { get; set; }
+        public DateTime? End { get; set; }
 
-        [Column("allday")]
         [DataMember(Name = "allday")]
-        public bool allDay { get; set; }
+        public bool AllDay { get; set; }
 
-        [Column("categories")]
-        [NullSetting(NullSetting = NullSettings.Null)]
         [DataMember(Name = "categories")]
-        public string categories { get; set; }
+        public string Categories { get; set; }
 
-        [Column("organiser")]
-        [NullSetting(NullSetting = NullSettings.Null)]
         [DataMember(Name = "organiser_id")]
         public int Organiser { get; set; }
 
-        [Ignore]
         [DataMember(Name = "descriptions")]
-        public List<EventDescription> descriptions { get; set; }
+        public List<EventDescription> Descriptions { get; set; }
     }
 }

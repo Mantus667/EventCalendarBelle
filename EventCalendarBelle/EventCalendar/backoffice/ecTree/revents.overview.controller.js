@@ -1,5 +1,5 @@
 ﻿angular.module('umbraco')
-    .controller('EventCalendar.SecurityOverviewController', function ($scope, assetsService, userResource) {
+    .controller('EventCalendar.REventsOverviewController', function ($scope, assetsService, reventResource) {
 
         assetsService.loadCss("/App_Plugins/EventCalendar/css/DT_bootstrap.css");
 
@@ -13,17 +13,16 @@
 
                         var dataSource = [];
 
-                        userResource.getAllUser().then(function (response) {
-                            console.log(response.data);
-                            angular.forEach(response.data, function (user) {
-                                dataSource.push({ id: user.Id, name: user.Name });
+                        reventResource.getall().then(function (response) {
+                            angular.forEach(response.data, function (revent) {
+                                dataSource.push({ id: revent.id, name: revent.title });
                             });
 
-                            $('#securityOverview').dataTable({
+                            $('#reventsOverview').dataTable({
                                 "aaData": dataSource,
                                 "aoColumns": [
                                     { "mData": "name", "sTitle": "1. Name" },
-                                    { "mData": "id", "fnCreatedCell": buttonEditUser }
+                                    { "mData": "id", "fnCreatedCell": buttonEditEvent }
                                 ]
                             });
 
@@ -34,6 +33,6 @@
             });
     });
 
-function buttonEditUser(nTd, sData, oData, iRow, iCol) {
-    $(nTd).html('<a class="btn btn-success" href="#/eventCalendar/ecTree/editUser/' + sData + '"><span class="icon icon-pencil"></span>Edit</a>');
+function buttonEditEvent(nTd, sData, oData, iRow, iCol) {
+    $(nTd).html('<a class="btn btn-success" href="#/eventCalendar/ecTree/editREvent/' + sData + '"><span class="icon icon-pencil"></span>Edit</a>');
 }

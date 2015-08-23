@@ -2,11 +2,9 @@
 using EventCalendar.Core.Services;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Http;
-using Umbraco.Core.Persistence;
 using Umbraco.Web.Editors;
 using Umbraco.Web.Mvc;
 
@@ -70,6 +68,12 @@ namespace EventCalendarBelle.Controller
                 .Cast<ScheduleWidget.Enums.MonthlyIntervalEnum>()
                 .Select(t => new KeyValuePair<int, string>((int)t, t.ToString()));
             return pairs;
+        }
+
+        [HttpGet]
+        public IEnumerable<KeyValuePair<int, string>> GetMonths()
+        {
+            return Enumerable.Range(1, 12).Select(i => new KeyValuePair<int,string>(i, DateTimeFormatInfo.CurrentInfo.GetMonthName(i)));
         }
     }
 }

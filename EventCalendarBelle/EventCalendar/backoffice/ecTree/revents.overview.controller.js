@@ -1,7 +1,5 @@
 ﻿angular.module('umbraco')
-    .controller('EventCalendar.REventsOverviewController', function ($scope, assetsService, reventResource) {
-
-        assetsService.loadCss("/App_Plugins/EventCalendar/css/DT_bootstrap.css");
+    .controller('EventCalendar.REventsOverviewController', function ($scope, assetsService, reventResource, $routeParams) {
 
         assetsService
             .loadJs("/App_Plugins/EventCalendar/scripts/jquery.dataTables.js")
@@ -13,7 +11,7 @@
 
                         var dataSource = [];
 
-                        reventResource.getall().then(function (response) {
+                        reventResource.getForCalendar($routeParams.id).then(function (response) {
                             angular.forEach(response.data, function (revent) {
                                 dataSource.push({ id: revent.id, name: revent.title });
                             });

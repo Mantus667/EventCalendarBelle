@@ -9,6 +9,10 @@
                     return $http.get(Umbraco.Sys.ServerVariables.eventCalendar.reventBaseUrl + "GetAll");
                 },
 
+                getForCalendar: function (id) {
+                    return $http.get(Umbraco.Sys.ServerVariables.eventCalendar.reventBaseUrl + "GetForCalendar?id=" + id);
+                },
+
                 save: function (event) {
                     return $http.post(Umbraco.Sys.ServerVariables.eventCalendar.reventBaseUrl + "PostSave", angular.toJson(event));
                 },

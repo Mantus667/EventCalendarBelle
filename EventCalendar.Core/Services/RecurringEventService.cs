@@ -159,6 +159,16 @@ namespace EventCalendar.Core.Services
             return Mapper.Map<EventDetailsModel>(e);
         }
 
+        public static IEnumerable<RecurringEvent> GetEventsForLocation(int id)
+        {
+            var db = ApplicationContext.Current.DatabaseContext.Database;
+            var query = new Sql().Select("*").From("ec_recevents").Where<RecurringEventDto>(x => x.locationId == id);
+
+            var events = db.Fetch<RecurringEventDto>(query);
+
+            return Mapper.Map<IEnumerable<RecurringEvent>>(events);
+        }
+
         #region EventHandler Delegates
         public static void OnCreating(RecurringEventCreatingEventArgs e)
         {

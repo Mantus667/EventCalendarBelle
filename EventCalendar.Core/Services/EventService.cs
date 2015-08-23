@@ -138,6 +138,15 @@ namespace EventCalendar.Core.Services
             return Mapper.Map<IEnumerable<Event>>(events);
         }
 
+        public static IEnumerable<Event> GetEventsForLocation(int id)
+        {
+            var db = ApplicationContext.Current.DatabaseContext.Database;
+            var query = new Sql().Select("*").From("ec_events").Where<EventDto>(x => x.locationId == id);
+
+            var events = db.Fetch<EventDto>(query);
+            return Mapper.Map<IEnumerable<Event>>(events);
+        }
+
         #region EventHandler Delegates
         public static void OnCreating(EventCreatingEventArgs e)
         {

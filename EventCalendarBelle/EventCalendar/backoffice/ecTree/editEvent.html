@@ -1,153 +1,155 @@
-﻿<form novalidate 
-    name="form" 
-    id="editEventForm" 
-    class="form-horizontal"
-    ng-controller="EventCalendar.EventEditController"
-    ng-submit="save(event)">
-<umb-panel>
-    <umb-header tabs="tabs">
-        <div class="span4">
+﻿<form novalidate
+      name="form"
+      id="editEventForm"
+      class="form-horizontal"
+      ng-controller="EventCalendar.EventEditController"
+      ng-submit="save(event)">
+    <umb-panel>
+        <umb-header tabs="tabs">
+            <div class="span4">
                 <input type="text"
-                    class="umb-headline" 
-                    localize="placeholder"
-                    select-on-focus
-                    required
-                    placeholder="@placeholders_entername" 
-                    ng-model="event.title" />
-        </div>
-        <div class="span8">
+                       class="umb-headline"
+                       localize="placeholder"
+                       select-on-focus
+                       required
+                       placeholder="@placeholders_entername"
+                       ng-model="event.title" />
+            </div>
+            <div class="span8">
                 <div class="btn-toolbar pull-right umb-btn-toolbar">
                     <button type="submit" data-hotkey="ctrl+s" class="btn btn-success">
                         <localize key="buttons_save">Save</localize>
                     </button>
                 </div>
-        </div>
-    </umb-header>
-
-    <umb-tab-view>
-        <umb-tab id="tabContent" rel="Content" class="active">
-            <div class="umb-pane">
-
-                <div class="umb-property">
-                    <div class="control-group umb-control-group">
-                        <div class="umb-el-wrap">
-                            <label class="control-label" for="">
-                                <eventcalendar-localize key="event_start_label">Start date/time</eventcalendar-localize>
-                                <small><eventcalendar-localize key="event_start_description">The starting date/time of your event.</eventcalendar-localize></small>
-                            </label>
-                            <div class="controls controls-row">            
-                                <div id="datetimepicker1" class="input-append">
-                                    <input required name="start" type="text" />                                    
-                                    <span class="add-on datepickerbutton">
-                                        <i class="icon icon-calendar"></i>
-                                    </span>
-                                </div>
-                                <span ng-show="form.start.$dirty && frmRegister.start.$error.required">Start is required</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="umb-property">
-                    <div class="control-group umb-control-group">
-                        <div class="umb-el-wrap">
-                            <label class="control-label" for="">
-                                <eventcalendar-localize key="event_end_label">End date/time</eventcalendar-localize>
-                                <small><eventcalendar-localize key="event_end_description">The ending date/time of your event.</eventcalendar-localize></small>
-                            </label>
-                            <div class="controls controls-row">            
-                                <div id="datetimepicker2" class="input-append">
-                                    <input required name="end" type="text" />
-                                    <span class="add-on">
-                                        <i class="icon icon-calendar"></i>
-                                    </span>
-                                </div>
-                                <span ng-show="form.end.$dirty && frmRegister.end.$error.required">End is required</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="umb-property">
-                    <div class="control-group umb-control-group">
-                        <div class="umb-el-wrap">
-                            <label class="control-label" for="">
-                                <eventcalendar-localize key="event_allday_label">All day</eventcalendar-localize>
-                                <small><eventcalendar-localize key="event_allday_description">Is this an all day long event?</eventcalendar-localize></small>
-                            </label>
-                            <div class="controls controls-row">            
-                                <input type="checkbox" id="allday">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="umb-property">
-                    <div class="control-group umb-control-group">
-                        <div class="umb-el-wrap">
-                            <label class="control-label" for="">
-                                <eventcalendar-localize key="event_location_label">Location</eventcalendar-localize>
-                                <small><eventcalendar-localize key="event_location_description">Where does the event take place?</eventcalendar-localize></small>
-                            </label>
-                            <div class="controls controls-row">            
-                                <select ng-model="event.locationId" name="locSelect" ng-options="l.id as l.name for l in locations" required ng-selected="event.locationId == l.id"></select>
-                                <span ng-show="form.locSelect.$dirty && frmRegister.locSelect.$error.required">Location is required</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="umb-property">
-                    <div class="control-group umb-control-group">
-                        <div class="umb-el-wrap">
-                            <label class="control-label" for="">
-                                <eventcalendar-localize key="event_categories_label">Categories</eventcalendar-localize>
-                                <small><eventcalendar-localize key="event_categories_description">Specify categories which the event is related to.</eventcalendar-localize></small>
-                            </label>
-                            <div class="controls controls-row">            
-                                <input type="text" id="tags" ng-model="event.categories" data-role="tagsinput" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="umb-property">
-                    <div class="control-group umb-control-group">
-                        <div class="umb-el-wrap">
-                            <label class="control-label" for="">
-                                <eventcalendar-localize key="event_organiser_label">Organiser</eventcalendar-localize>
-                                <small><eventcalendar-localize key="event_organiser_description">Who is the organiser of this event?</eventcalendar-localize></small>
-                            </label>
-                            <div class="controls controls-row">
-                                <ul class="unstyled list-icons" ng-if="event.organiser.name">
-                                    <li>
-                                        <i class="icon icon-delete red hover-show pull-right" ng-click="deleteOrganiser()"></i>
-                                        <i class="icon icon-user hover-hide"></i>
-                                        <span>{{event.organiser.name}}</span>
-                                    </li>
-                                </ul>
-                                <ul class="unstyled list-icons">
-                                    <li>
-                                        <i class="icon icon-add blue"></i>                                 
-                                        <a href="#" ng-click="openMemberPicker()" prevent-default>Select</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                    
             </div>
-        </umb-tab>
-        <umb-tab id="tab{{$index}}" rel="{{$index}}" ng-repeat="description in event.descriptions">
-            <div class="umb-pane">
-                <div ng-if="description.view == 'rte'">
-                    <umb-property property="description" >
-                        <umb-editor model="description"></umb-editor>
-                    </umb-property>
+        </umb-header>
+
+        <umb-tab-view>
+            <umb-tab id="tabContent" rel="Content" class="active">
+                <div class="umb-pane">
+
+                    <div class="umb-property">
+                        <div class="control-group umb-control-group">
+                            <div class="umb-el-wrap">
+                                <label class="control-label" for="">
+                                    <eventcalendar-localize key="event_start_label">Start date/time</eventcalendar-localize>
+                                    <small><eventcalendar-localize key="event_start_description">The starting date/time of your event.</eventcalendar-localize></small>
+                                </label>
+                                <div class="controls controls-row">
+                                    <div id="datetimepicker1" class="input-append">
+                                        <input required name="start" type="text" />
+                                        <span class="add-on datepickerbutton">
+                                            <i class="icon icon-calendar"></i>
+                                        </span>
+                                    </div>
+                                    <span ng-show="form.start.$dirty && frmRegister.start.$error.required">Start is required</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="umb-property">
+                        <div class="control-group umb-control-group">
+                            <div class="umb-el-wrap">
+                                <label class="control-label" for="">
+                                    <eventcalendar-localize key="event_end_label">End date/time</eventcalendar-localize>
+                                    <small><eventcalendar-localize key="event_end_description">The ending date/time of your event.</eventcalendar-localize></small>
+                                </label>
+                                <div class="controls controls-row">
+                                    <div id="datetimepicker2" class="input-append">
+                                        <input required name="end" type="text" />
+                                        <span class="add-on">
+                                            <i class="icon icon-calendar"></i>
+                                        </span>
+                                    </div>
+                                    <span ng-show="form.end.$dirty && frmRegister.end.$error.required">End is required</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="umb-property">
+                        <div class="control-group umb-control-group">
+                            <div class="umb-el-wrap">
+                                <label class="control-label" for="">
+                                    <eventcalendar-localize key="event_allday_label">All day</eventcalendar-localize>
+                                    <small><eventcalendar-localize key="event_allday_description">Is this an all day long event?</eventcalendar-localize></small>
+                                </label>
+                                <div class="controls controls-row">
+                                    <input type="checkbox" id="allday">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="umb-property">
+                        <div class="control-group umb-control-group">
+                            <div class="umb-el-wrap">
+                                <label class="control-label" for="">
+                                    <eventcalendar-localize key="event_location_label">Location</eventcalendar-localize>
+                                    <small><eventcalendar-localize key="event_location_description">Where does the event take place?</eventcalendar-localize></small>
+                                </label>
+                                <div class="controls controls-row">
+                                    <select ng-model="event.locationId" name="locSelect" ng-options="l.id as l.name for l in locations" required ng-selected="event.locationId == l.id"></select>
+                                    <button class="btn btn-success" type="button" ng-click="openCreateLocationDialog()"><i class="icon icon-add"></i></button>
+                                    <br />
+                                    <span ng-show="form.locSelect.$dirty && frmRegister.locSelect.$error.required">Location is required</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="umb-property">
+                        <div class="control-group umb-control-group">
+                            <div class="umb-el-wrap">
+                                <label class="control-label" for="">
+                                    <eventcalendar-localize key="event_categories_label">Categories</eventcalendar-localize>
+                                    <small><eventcalendar-localize key="event_categories_description">Specify categories which the event is related to.</eventcalendar-localize></small>
+                                </label>
+                                <div class="controls controls-row">
+                                    <input type="text" id="tags" ng-model="event.categories" data-role="tagsinput" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="umb-property">
+                        <div class="control-group umb-control-group">
+                            <div class="umb-el-wrap">
+                                <label class="control-label" for="">
+                                    <eventcalendar-localize key="event_organiser_label">Organiser</eventcalendar-localize>
+                                    <small><eventcalendar-localize key="event_organiser_description">Who is the organiser of this event?</eventcalendar-localize></small>
+                                </label>
+                                <div class="controls controls-row">
+                                    <ul class="unstyled list-icons" ng-if="event.organiser.name">
+                                        <li>
+                                            <i class="icon icon-delete red hover-show pull-right" ng-click="deleteOrganiser()"></i>
+                                            <i class="icon icon-user hover-hide"></i>
+                                            <span>{{event.organiser.name}}</span>
+                                        </li>
+                                    </ul>
+                                    <ul class="unstyled list-icons">
+                                        <li>
+                                            <i class="icon icon-add blue"></i>
+                                            <a href="#" ng-click="openMemberPicker()" prevent-default>Select</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
-            </div>
-        </umb-tab>
-    </umb-tab-view>
-</umb-panel>
+            </umb-tab>
+            <umb-tab id="tab{{$index}}" rel="{{$index}}" ng-repeat="description in event.descriptions">
+                <div class="umb-pane">
+                    <div ng-if="description.view == 'rte'">
+                        <umb-property property="description">
+                            <umb-editor model="description"></umb-editor>
+                        </umb-property>
+                    </div>
+                </div>
+            </umb-tab>
+        </umb-tab-view>
+    </umb-panel>
 </form>

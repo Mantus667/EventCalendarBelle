@@ -1,5 +1,5 @@
 ﻿angular.module('umbraco')
-    .controller('EventCalendar.REventsOverviewController', function ($scope, assetsService, reventResource, $routeParams) {
+    .controller('EventCalendar.REventsOverviewController', function ($scope, assetsService, reventResource, $routeParams, notificationsService) {
 
         assetsService
             .loadJs("/App_Plugins/EventCalendar/scripts/jquery.dataTables.js")

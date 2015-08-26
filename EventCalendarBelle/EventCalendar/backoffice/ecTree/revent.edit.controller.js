@@ -174,6 +174,20 @@
                 $scope.event.exceptions.splice(index, 1);
             };
 
+            $scope.openCreateLocationDialog = function () {
+                dialogService.open({
+                    template: '/App_Plugins/EventCalendar/backoffice/ecTree/createLocation.html',
+                    dialogData: {
+                        isDialog: true
+                    },
+                    show: true,
+                    callback: function (data) {
+                        $scope.locations.push(data.location);
+                        $scope.event.locationid = data.location.id;
+                    }
+                });
+            };
+
             if ($routeParams.create == "true") {
                 $scope.event.calendarid = $routeParams.id.replace("c-", "");
                 initAssets();

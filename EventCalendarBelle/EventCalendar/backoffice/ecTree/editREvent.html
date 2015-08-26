@@ -162,6 +162,8 @@
                             </label>
                             <div class="controls controls-row">            
                                 <select ng-model="event.locationid" name="locSelect" ng-options="l.id as l.name for l in locations" required ng-selected="event.locationid == l.id"></select>
+                                <button class="btn btn-success" type="button" ng-click="openCreateLocationDialog()"><i class="icon icon-add"></i></button>
+                                <br />
                                 <span ng-show="(form.locSelect.$dirty || form.locSelect.$invalid) && form.locSelect.$error.required">Location is required</span>
                             </div>
                         </div>

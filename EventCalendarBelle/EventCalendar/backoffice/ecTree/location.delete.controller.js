@@ -5,7 +5,7 @@
 
                 locationResource.deleteById($scope.currentNode.id.replace("l-","")).then(function (response) {
                     $scope.currentNode.loading = false;
-                    if (response.data === true) {
+                    if (response.data == 'true') {
                         //mark it for deletion (used in the UI)
                         $scope.currentNode.loading = true;
 

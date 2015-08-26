@@ -119,7 +119,7 @@
                     });
 
                     //Create the tabs for every language etc | length
-                    $scope.tabs = [{ id: "Content", label: "Content" }];
+                    $scope.tabs = [{ id: "Content", label: "Content" }, { id: "Exceptions", label: "DateExceptions" }];
                     angular.forEach($scope.event.descriptions, function (value, key) {
                         this.push({ id: key, label: value.culture });
                     }, $scope.tabs);
@@ -172,6 +172,20 @@
 
             $scope.deleteException = function (index) {
                 $scope.event.exceptions.splice(index, 1);
+            };
+
+            $scope.openCreateLocationDialog = function () {
+                dialogService.open({
+                    template: '/App_Plugins/EventCalendar/backoffice/ecTree/createLocation.html',
+                    dialogData: {
+                        isDialog: true
+                    },
+                    show: true,
+                    callback: function (data) {
+                        $scope.locations.push(data.location);
+                        $scope.event.locationid = data.location.id;
+                    }
+                });
             };
 
             if ($routeParams.create == "true") {

@@ -119,7 +119,7 @@
                     });
 
                     //Create the tabs for every language etc | length
-                    $scope.tabs = [{ id: "Content", label: "Content" }];
+                    $scope.tabs = [{ id: "Content", label: "Content" }, { id: "Exceptions", label: "DateExceptions" }];
                     angular.forEach($scope.event.descriptions, function (value, key) {
                         this.push({ id: key, label: value.culture });
                     }, $scope.tabs);

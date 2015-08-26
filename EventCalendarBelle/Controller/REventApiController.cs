@@ -16,8 +16,6 @@ namespace EventCalendarBelle.Controller
         [HttpPost]
         public RecurringEvent PostSave(RecurringEvent nevent)
         {
-            var ctrl = new DescriptionApiController();
-
             if (nevent.Id > 0)
             {
                 return RecurringEventService.UpdateEvent(nevent);

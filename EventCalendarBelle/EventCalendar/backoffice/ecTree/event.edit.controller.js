@@ -11,14 +11,25 @@
                     dimensions: { height: 400, width: '100%' }
                 }
             };
+
+            var initSwitch = function () {
+                assetsService
+                   .loadJs("/App_Plugins/EventCalendar/scripts/bootstrap-switch.min.js")
+                   .then(function () {
+                       $('#allday').bootstrapSwitch({
+                           onColor: "success",
+                           onText: "<i class='icon-check icon-white'></i>",
+                           offText: "<i class='icon-delete'></i>",
+                           onSwitchChange: function (event, state) {
+                               $scope.event.allday = state;
+                           }
+                       });
+                       $('#allday').bootstrapSwitch('state', $scope.event.allday, false);
+                   });
+            };
             
-            var initAssets = function () {
-
-                //Get the current user locale
-                userService.getCurrentUser().then(function (user) {
-                    locale = user.locale;
-
-                    assetsService
+            var initTagsInput = function () {
+                assetsService
                     .loadJs("/App_Plugins/EventCalendar/scripts/bootstrap-tagsinput.min.js")
                     .then(function () {
                         $('input#tags').tagsinput();
@@ -37,6 +48,12 @@
                             $scope.event.categories = $("input#tags").val();
                         });
                     });
+            };
+
+            var initDatePicker = function () {
+                //Get the current user locale
+                userService.getCurrentUser().then(function (user) {
+                    locale = user.locale;
 
                     //Load js library add set the date values for starttime/endtime
                     assetsService
@@ -74,21 +91,13 @@
                                    });
                                });
                         });
-
-                    assetsService
-                       .loadJs("/App_Plugins/EventCalendar/scripts/bootstrap-switch.min.js")
-                       .then(function () {
-                           $('#allday').bootstrapSwitch({
-                               onColor: "success",
-                               onText: "<i class='icon-check icon-white'></i>",
-                               offText: "<i class='icon-delete'></i>",
-                               onSwitchChange: function (event, state) {
-                                   $scope.event.allday = state;
-                               }
-                           });
-                           $('#allday').bootstrapSwitch('state', $scope.event.allday, false);
-                       });
                 });
+            };
+            
+            var initAssets = function () {
+                initSwitch();
+                initTagsInput();
+                initDatePicker();
             };
 
             var initRTE = function () {

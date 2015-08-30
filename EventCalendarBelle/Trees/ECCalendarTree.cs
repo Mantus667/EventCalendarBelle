@@ -67,20 +67,11 @@ namespace EventCalendarBelle.Trees
             }
             else if (id.Contains("normalEvents"))
             {
-                if (settings.CanCreateEvents)
-                {
-                    menu.DefaultMenuAlias = "editEvent";
-                    //menu.Items.Add(new MenuItem("editEvent", "Create",) { Icon = "add" });
-                    menu.Items.Add(new MenuItem(ActionNew.Instance, "Create"));
-                }
+                menu.Items.Add<ActionRefresh>("Refresh");
             }
             else if (id.Contains("reccuringEvents"))
             {
-                if (settings.CanCreateEvents)
-                {
-                    menu.DefaultMenuAlias = "editREvent";
-                    menu.Items.Add(new MenuItem("editREvent", "Create") { Icon = "add" });
-                }
+                menu.Items.Add<ActionRefresh>("Refresh");
             }
             else if (id.Contains("l-"))
             {

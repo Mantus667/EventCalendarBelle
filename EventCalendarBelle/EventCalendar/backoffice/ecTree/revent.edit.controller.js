@@ -13,8 +13,45 @@
                 }
             };
 
-            var initAssets = function () {
+            var initSwitch = function () {
+                assetsService
+                    .loadJs("/App_Plugins/EventCalendar/scripts/bootstrap-switch.min.js")
+                    .then(function () {
+                        $('#allday').bootstrapSwitch({
+                            onColor: "success",
+                            onText: "<i class='icon-check icon-white'></i>",
+                            offText: "<i class='icon-delete'></i>",
+                            onSwitchChange: function (event, state) {
+                                $scope.event.allday = !$scope.event.allday;
+                            }
+                        });
+                        $('#allday').bootstrapSwitch('state', $scope.event.allday, false);
+                    });
+            };
 
+            var initTagsInput = function () {
+                assetsService
+                    .loadJs("/App_Plugins/EventCalendar/scripts/bootstrap-tagsinput.min.js")
+                    .then(function () {
+                        $('input#tags').tagsinput();
+                        if ($scope.event.categories != "" && $scope.event.categories != null && $scope.event.categories !== undefined) {
+                            var tags = $scope.event.categories.split(",");
+                            angular.forEach(tags, function (value) {
+                                $('input#tags').tagsinput('add', value);
+                            });
+                        }
+                        $('input#tags').on('itemAdded', function (event) {
+                            // event.item: contains the item
+                            $scope.event.categories = $("input#tags").val();
+                        });
+                        $('input#tags').on('itemRemoved', function (event) {
+                            // event.item: contains the item
+                            $scope.event.categories = $("input#tags").val();
+                        });
+                    });
+            };
+
+            var initDatePicker = function () {
                 //Get the current user locale
                 userService.getCurrentUser().then(function (user) {
                     locale = user.locale;
@@ -66,40 +103,13 @@
                                    });
                                });
                         });
+                });
+            };
 
-                    assetsService
-                    .loadJs("/App_Plugins/EventCalendar/scripts/bootstrap-tagsinput.min.js")
-                    .then(function () {                        
-                        $('input#tags').tagsinput();
-                        if ($scope.event.categories != "" && $scope.event.categories != null && $scope.event.categories !== undefined) {
-                            var tags = $scope.event.categories.split(",");
-                            angular.forEach(tags, function (value) {
-                                $('input#tags').tagsinput('add', value);
-                            });
-                        }
-                        $('input#tags').on('itemAdded', function (event) {
-                            // event.item: contains the item
-                            $scope.event.categories = $("input#tags").val();
-                        });
-                        $('input#tags').on('itemRemoved', function (event) {
-                            // event.item: contains the item
-                            $scope.event.categories = $("input#tags").val();
-                        });
-                    });
-
-                    assetsService
-                        .loadJs("/App_Plugins/EventCalendar/scripts/bootstrap-switch.min.js")
-                        .then(function () {
-                            $('#allday').bootstrapSwitch({
-                                onColor: "success",
-                                onText: "<i class='icon-check icon-white'></i>",
-                                offText: "<i class='icon-delete'></i>",
-                                onSwitchChange: function (event, state) {
-                                    $scope.event.allday = state;
-                                }
-                            });
-                        });
-                });                
+            var initAssets = function () {
+                initSwitch();
+                initTagsInput();
+                initDatePicker();
             };
 
             var initRTE = function () {                

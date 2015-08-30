@@ -49,7 +49,11 @@
 			'~/App_Plugins/EventCalendar/location.resource.js',
 			'~/App_Plugins/EventCalendar/event.resource.js',
 			'~/App_Plugins/EventCalendar/revent.resource.js',
-			'~/App_Plugins/EventCalendar/user.resource.js'
+			'~/App_Plugins/EventCalendar/user.resource.js',
+
+			'~/App_Plugins/EventCalendar/scripts/moment-with-locales.js',
+			'~/App_Plugins/EventCalendar/scripts/bootstrap-datetimepicker.js',
+			'~/App_Plugins/EventCalendar/scripts/bootstrap-switch.min.js'
         ],
 		css: [
 			'/App_Plugins/EventCalendar/css/bootstrap-datetimepicker.min.css',

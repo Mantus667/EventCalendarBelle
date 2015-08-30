@@ -114,7 +114,7 @@ namespace EventCalendarBelle.Controller
             //Handle normal events
             List<EventsOverviewModel> events = new List<EventsOverviewModel>();
             var calendar = CalendarService.GetCalendarById(id);
-            var normal_events = EventService.GetAllEvents();
+            var normal_events = EventService.GetEventsForCalendar(id);
             foreach (var ne in normal_events.Where(x => x.Start <= endDate && x.End >= startDate))
             {
                 List<EventDescription> descriptions = db.Query<EventDescription>("SELECT * FROM ec_eventdescriptions WHERE eventid = @0 AND calendarid = @1 AND type = @2", ne.Id, ne.calendarId, (int)EventType.Normal).ToList();

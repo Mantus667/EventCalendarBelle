@@ -21,7 +21,7 @@ namespace EventCalendar.Core.Services
             var re = GetRecurringEvent(id);
             DescriptionService.GetDescriptionsForEvent(re.calendarId, id, EventType.Normal).ForEach(x => DescriptionService.DeleteDescription(x.Id));
 
-            return db.Delete<RecurringEvent>(id);
+            return db.Delete<RecurringEventDto>(id);
         }
 
         public static IEnumerable<RecurringEvent> GetAllEvents()

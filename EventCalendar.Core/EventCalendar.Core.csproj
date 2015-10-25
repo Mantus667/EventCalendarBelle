@@ -219,6 +219,7 @@
     <Compile Include="Models\EventRange.cs" />
     <Compile Include="Models\EventSource.cs" />
     <Compile Include="Models\EventsOverviewModel.cs" />
+    <Compile Include="Models\GridListModel.cs" />
     <Compile Include="Models\RecurringEvent.cs" />
     <Compile Include="Models\UserSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

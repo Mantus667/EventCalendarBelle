@@ -1,0 +1,30 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<EventCalendarBelle.Models.GridEditorListValueModel>
+
+<div class="EventCalendar-EventList">
+    @if(!String.IsNullOrEmpty(Model.Title)){
+        <h1>@Model.Title</h1>
+    }
+    @if(Model.Events.Count() == 0){
+        <p>@Umbraco.GetDictionaryValue("EventCalendar.EmptyEventList")</p>
+    } else {
+        <ul>
+            @foreach(var e in Model.Events){
+                <li>
+                    <b>@e.title</b><br />
+                    <small>
+                        @if(e.start.HasValue){
+                            @e.start
+                        }
+                        @if(e.end.HasValue){
+                            @Html.Raw(" - " + e.end.ToString())
+                        }
+                    </small>
+                    @if(Model.Teaser){
+                        <br />
+                        @e.description.Substring(0, (e.description.Length > 50) ? 50 :  e.description.Length)
+                    }
+                </li>
+            }
+        </ul>
+    }
+</div>

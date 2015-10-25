@@ -16,6 +16,14 @@
 
                 deleteById: function (id) {
                     return $http.delete(Umbraco.Sys.ServerVariables.eventCalendar.calendarBaseUrl + "DeleteById?id=" + id);
+                },
+
+                getEvents: function (id, quantity, forward) {
+                    return $http.get(Umbraco.Sys.ServerVariables.eventCalendar.calendarBaseUrl + "GetEvents?id=" + id + "&quantity=" + quantity + "&forward=" + forward);
+                },
+
+                getEventSources: function (id) {
+                    return $http.get(Umbraco.Sys.ServerVariables.eventCalendar.calendarBaseUrl + "GetCalendarSources?id=" + id);
                 }
             };
         });

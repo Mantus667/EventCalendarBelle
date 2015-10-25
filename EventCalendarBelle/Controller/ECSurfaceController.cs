@@ -362,15 +362,6 @@ namespace EventCalendarBelle.Controller
             return File(bytes, contentType, cal.Calendarname + ".ics");
         }
 
-        [ChildActionOnly]
-        public ActionResult RenderGridEditorList(GridEditorListValueModel data)
-        {
-            var ctrl = new CalendarApiController();
-            data.Events = ctrl.GetEvents(data.CalendarId, data.Forward, data.Quantity);
-
-            return PartialView(data);
-        }
-
         private string GetDescription(EventCalendar.Core.Models.Event e, string culture)
         {
             if (e.Descriptions != null && e.Descriptions.Any(x => x.CultureCode == culture))

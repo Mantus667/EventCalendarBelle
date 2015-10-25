@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
 // die mit einer Assembly verknüpft sind.
 [assembly: AssemblyTitle("EventCalendar for Umbraco")]
-[assembly: AssemblyDescription("A simple calendar package for Umbraco 7.1.4")]
+[assembly: AssemblyDescription("A simple calendar package for Umbraco")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("David Brendel")]
 [assembly: AssemblyProduct("EventCalendar")]

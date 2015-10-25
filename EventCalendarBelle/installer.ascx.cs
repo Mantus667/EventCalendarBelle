@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.UI;
 using System.Web.UI.WebControls;
 using Umbraco.Core.Persistence;
 using EventCalendar.Core.Models;
@@ -14,10 +15,6 @@ using System.Configuration;
 using System.IO;
 using umbraco.BusinessLogic;
 using EventCalendar.Core.Dto;
-using Newtonsoft.Json;
-using System.Text;
-using Newtonsoft.Json.Linq;
-using Formatting = Newtonsoft.Json.Formatting;
 
 namespace EventCalendarBelle
 {
@@ -53,17 +50,13 @@ namespace EventCalendarBelle
 
             //Create section and language code
             this.CreateSection();
-            this.AddLanguageKey();
+            this.addLanguagekey();
             this.AddSectionDashboard();
 
             //Create database tables
             this.CreateTable();
 
-            //Run database migrations
             this.RunMigrations();
-
-            //Add grid editors
-            this.AddGridEditors();
         }
 
         private void RunMigrations()
@@ -111,7 +104,7 @@ namespace EventCalendarBelle
             }            
         }
 
-        private void AddLanguageKey()
+        private void addLanguagekey()
         {
             this.BulletedList1.Items.Add(new ListItem("Adding language keys."));
 
@@ -303,6 +296,9 @@ namespace EventCalendarBelle
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void AddSectionDashboard()
         {
             bool saveFile = false;
@@ -396,48 +392,6 @@ namespace EventCalendarBelle
             {
                 //Save the XML file
                 dashboardXml.Save(dashboardFilePath);
-            }
-        }
-
-        public void AddGridEditors()
-        {
-            try
-            {
-                var src = HttpContext.Current.Server.MapPath("~/App_Plugins/EventCalendar/GridEditors/Editors.json");
-                var trg = HttpContext.Current.Server.MapPath("~/config/grid.editors.config.json");
-
-                if (!File.Exists(src) || !File.Exists(trg))
-                    return;
-
-                var srcJson = File.ReadAllText(src);
-                var trgJson = File.ReadAllText(trg);
-
-                if (string.IsNullOrWhiteSpace(srcJson))
-                    return;
-
-                var srcObj = JsonConvert.DeserializeObject<IEnumerable<JObject>>(srcJson);
-                var trgArr = JsonConvert.DeserializeObject(trgJson) as JArray ?? new JArray();
-
-                if (srcObj == null)
-                    return;
-
-                foreach (var obj in srcObj)
-                {
-                    if (trgArr.Any(x => x["alias"] != obj["alias"]))
-                    {
-                        trgArr.Add(obj);
-                    }
-                }
-
-                File.WriteAllText(trg, JsonConvert.SerializeObject(trgArr, Formatting.Indented), Encoding.UTF8);
-                LogHelper.Info<installer>("[EventCalendar] Done editing grid editors.");
-                return;
-            }
-            catch (Exception ex)
-            {
-                LogHelper.Error<installer>("[EventCalendar] Error merging grid editor config.", ex);
-
-                return;
             }
         }
     }

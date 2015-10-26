@@ -58,5 +58,9 @@ namespace EventCalendar.Core.Dto
         [Column("rangeEnd")]
         [NullSetting(NullSetting = NullSettings.Null)]
         public int range_end { get; set; }
+
+        [Column("media")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public string media { get; set; }
     }
 }

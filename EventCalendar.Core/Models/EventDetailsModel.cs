@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Umbraco.Core.Models;
 
 namespace EventCalendar.Core.Models
 {
@@ -16,6 +17,7 @@ namespace EventCalendar.Core.Models
         public int LocationId { get; set; }
         public Organiser Organiser { get; set; }
         public EventLocation Location { get; set; }
+        public List<IPublishedContent> MediaItems { get; set; }
         public List<EventDescription> Descriptions { get; set; }
 
         public string GetDescription(string culture)

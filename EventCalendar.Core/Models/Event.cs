@@ -38,6 +38,9 @@ namespace EventCalendar.Core.Models
         [DataMember(Name = "organiser_id")]
         public int Organiser { get; set; }
 
+        [DataMember(Name = "mediaItems")]
+        public List<int> MediaItems { get; set; }
+
         [DataMember(Name = "descriptions")]
         public List<EventDescription> Descriptions { get; set; }
     }

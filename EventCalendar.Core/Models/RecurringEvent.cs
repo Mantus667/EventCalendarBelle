@@ -55,6 +55,9 @@ namespace EventCalendar.Core.Models
         [DataMember(Name = "intervals")]
         public List<int> MonthlyIntervals { get; set; }
 
+        [DataMember(Name = "mediaItems")]
+        public List<int> MediaItems { get; set; }
+
         [DataMember(Name = "descriptions")]
         public List<EventDescription> Descriptions { get; set; }
 

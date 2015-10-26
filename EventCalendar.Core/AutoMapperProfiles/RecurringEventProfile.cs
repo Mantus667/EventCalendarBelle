@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Umbraco.Core;
+using Umbraco.Web;
 
 namespace EventCalendar.Core.AutoMapperProfiles
 {
@@ -45,6 +46,11 @@ namespace EventCalendar.Core.AutoMapperProfiles
                     Exceptions = DateExceptionService.GetDateExceptionsForRecurringEvent(source.Id).ToList()
                 };
 
+                if (!String.IsNullOrEmpty(source.media))
+                {
+                    result.MediaItems = source.media.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(x => int.Parse(x)).ToList();
+                }
+
                 return result;
             }
         }
@@ -61,15 +67,16 @@ namespace EventCalendar.Core.AutoMapperProfiles
                     allDay = source.AllDay,
                     calendarId = source.calendarId,
                     categories = source.Categories,
-                    day = string.Join(",", source.Days.ToArray()),
+                    day = String.Join(",", source.Days.ToArray()),
                     end = source.End,
                     frequency = source.Frequency,
-                    monthly_interval = string.Join(",", source.MonthlyIntervals.ToArray()),
+                    monthly_interval = String.Join(",", source.MonthlyIntervals.ToArray()),
                     Organiser = source.Organiser,
                     range_end = source.range_end,
                     range_start = source.range_start,
                     start = source.Start,
                     title = source.Title,
+                    media = String.Join(",", source.MediaItems.ToArray())
                 };
                 return result;
             }
@@ -121,10 +128,16 @@ namespace EventCalendar.Core.AutoMapperProfiles
                     var end = ((DateTime)schedule.NextOccurrence(DateTime.Now));
                     result.EndDate = new DateTime(end.Year, end.Month, end.Day, source.End.Hour, source.End.Minute, 0).ToString("F", CultureInfo.CurrentCulture);
                 }
-                if (source.Organiser != null && source.Organiser != 0)
+                if (source.Organiser != 0)
                 {
                     var member = ms.GetById(source.Organiser);
                     result.Organiser = new Organiser() { Name = member.Name, Email = member.Email };
+                }
+
+                if (source.MediaItems.Any())
+                {
+                    var helper = new UmbracoHelper(UmbracoContext.Current);
+                    result.MediaItems = helper.TypedMedia(source.MediaItems).ToList();
                 }
 
                 return result;

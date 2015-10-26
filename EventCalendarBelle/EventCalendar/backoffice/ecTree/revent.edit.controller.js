@@ -1,5 +1,7 @@
 ﻿angular.module("umbraco").controller("EventCalendar.REventEditController",
-        function ($scope, $routeParams, reventResource, locationResource, notificationsService, navigationService, assetsService, userService, entityResource, dialogService) {
+        function ($scope, $routeParams, reventResource, locationResource,
+            notificationsService, navigationService, assetsService,
+            userService, entityResource, dialogService) {
 
             $scope.event = { id: 0, calendarid: 0, allDay: false, organiser: {} };
             var exceptionDate;
@@ -12,6 +14,7 @@
                     dimensions: { height: 400, width: '100%' }
                 }
             };
+            $scope.images = [];
 
             var initSwitch = function () {
                 assetsService
@@ -171,6 +174,27 @@
                 });
             };
 
+            $scope.openMediaPicker = function () {
+                dialogService.mediaPicker({ onlyImages: true, callback: populateFile });
+            };
+
+            function populateFile(item) {
+                if ($scope.event.mediaItems !== null) {
+                    $scope.event.mediaItems.push(item.id);
+                } else {
+                    $scope.event.mediaItems = [];
+                    $scope.event.mediaItems.push(item.id);
+                }
+                $scope.images.push({ name: item.name, path: item.image });
+            };
+
+            $scope.isPicture = function (path) {
+                if (/\.(jpg|png|gif|jpeg)$/.test(path)) {
+                    return true;
+                }
+                return false;
+            };
+
             $scope.deleteOrganiser = function () {
                 $scope.event.organiser = {};
             };
@@ -215,6 +239,15 @@
                         entityResource.getById($scope.event.organiser_id, "Member")
                            .then(function (data) {
                                $scope.event.organiser = { name: data.name, id: data.id, icon: data.icon };
+                           });
+                    }
+
+                    if ($scope.event.mediaItems != null) {
+                        entityResource.getByIds($scope.event.mediaItems, "Media")
+                           .then(function (mediaArray) {
+                               _.forEach(mediaArray, function (item) {
+                                   $scope.images.push({ name: item.name, path: item.metaData.umbracoFile.Value });
+                               });
                            });
                     }
 

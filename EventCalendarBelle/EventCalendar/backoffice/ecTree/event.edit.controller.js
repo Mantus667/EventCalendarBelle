@@ -1,6 +1,8 @@
 ﻿angular.module("umbraco").controller("EventCalendar.EventEditController",
-        function ($scope, $routeParams, eventResource, locationResource, notificationsService, assetsService, tinyMceService, $timeout, dialogService, navigationService, userService, eventCalendarLocalizationService, entityResource, angularHelper) {           
-            //name : null, id : null, icon: "icon-user"
+        function ($scope, $routeParams, eventResource, locationResource, notificationsService, assetsService,
+            tinyMceService, $timeout, dialogService, navigationService, userService,
+            eventCalendarLocalizationService, entityResource, angularHelper) {
+
             $scope.event = { id: 0, calendarid: 0, allday: false, descriptions: {}, organiser: {} };
             var locale = 'en-US';
             var dateformat = 'MM/DD/YYYY HH:mm:ss';
@@ -11,6 +13,7 @@
                     dimensions: { height: 400, width: '100%' }
                 }
             };
+            $scope.images = [];
 
             var initSwitch = function () {
                 assetsService
@@ -170,6 +173,15 @@
                        });
                     }
 
+                    if ($scope.event.mediaItems != null) {
+                        entityResource.getByIds($scope.event.mediaItems, "Media")
+                           .then(function (mediaArray) {
+                               _.forEach(mediaArray, function (item) {
+                                   $scope.images.push({ name: item.name, path: item.metaData.umbracoFile.Value });
+                               });
+                           });
+                    }
+
                 }, function (response) {
                     notificationsService.error("Error", $scope.currentNode.name + " could not be loaded");
                 });
@@ -184,7 +196,28 @@
 
             $scope.deleteOrganiser = function () {
                 $scope.event.organiser = {};
-            }
+            };
+
+            $scope.openMediaPicker = function () {
+                dialogService.mediaPicker({ onlyImages: true, callback: populateFile });
+            };
+
+            function populateFile(item) {
+                if ($scope.event.mediaItems !== null) {
+                    $scope.event.mediaItems.push(item.id);
+                } else {
+                    $scope.event.mediaItems = [];
+                    $scope.event.mediaItems.push(item.id);
+                }
+                $scope.images.push({ name: item.name, path: item.image });
+            };
+
+            $scope.isPicture = function (path) {
+                if (/\.(jpg|png|gif|jpeg)$/.test(path)) {
+                    return true;
+                }
+                return false;
+            };
 
             $scope.save = function (event) {
                 eventResource.save(event).then(function (response) {

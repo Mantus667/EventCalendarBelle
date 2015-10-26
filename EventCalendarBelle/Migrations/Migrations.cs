@@ -146,4 +146,24 @@ namespace EventCalendarBelle.Migrations
             Alter.Table("ec_recevents").AlterColumn("monthly").AsFixedLengthString(255);
         }
     }
+
+    [Migration("2.3.0", 0, "EventEnhancements")]
+    public class EventEnhancements : MigrationBase
+    {
+        public override void Down()
+        {
+            Delete.Column("media").FromTable("ec_recevents");
+            Delete.Column("icon").FromTable("ec_recevents");
+            Delete.Column("media").FromTable("ec_events");
+            Delete.Column("icon").FromTable("ec_events");
+        }
+
+        public override void Up()
+        {
+            Alter.Table("ec_recevents").AddColumn("media").AsString();
+            Alter.Table("ec_recevents").AddColumn("icon").AsString();
+            Alter.Table("ec_events").AddColumn("media").AsString();
+            Alter.Table("ec_events").AddColumn("icon").AsString();
+        }
+    }
 }

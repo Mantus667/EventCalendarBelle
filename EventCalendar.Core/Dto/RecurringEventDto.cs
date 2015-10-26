@@ -62,5 +62,9 @@ namespace EventCalendar.Core.Dto
         [Column("media")]
         [NullSetting(NullSetting = NullSettings.Null)]
         public string media { get; set; }
+
+        [Column("icon")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public string icon { get; set; }
     }
 }

@@ -31,6 +31,23 @@
                         <div class="control-group umb-control-group">
                             <div class="umb-el-wrap">
                                 <label class="control-label" for="">
+                                    <eventcalendar-localize key="event_icon_label">Icon</eventcalendar-localize>
+                                    <small><eventcalendar-localize key="event_icon_description">Use a custom icon?</eventcalendar-localize></small>
+                                </label>
+                                <div class="controls controls-row">
+                                    <a href="#" ng-click="openIconPicker()" prevent-default class="btn btn-link picker-icons">
+                                        <i ng-class="event.icon"></i> Choose...
+                                    </a>
+                                    <i class="icon icon-delete red hover-show" ng-if="event.icon" ng-click="deleteIcon()"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="umb-property">
+                        <div class="control-group umb-control-group">
+                            <div class="umb-el-wrap">
+                                <label class="control-label" for="">
                                     <eventcalendar-localize key="event_allday_label">All day</eventcalendar-localize>
                                     <small><eventcalendar-localize key="event_allday_description">Is this an all day long event?</eventcalendar-localize></small>
                                 </label>
@@ -210,13 +227,14 @@
                         <div class="control-group umb-control-group">
                             <div class="umb-el-wrap">
                                 <label class="control-label" for="">
-                                    <eventcalendar-localize key="event_organiser_label">Media</eventcalendar-localize>
-                                    <small><eventcalendar-localize key="event_organiser_description">Media files for this event</eventcalendar-localize></small>
+                                    <eventcalendar-localize key="event_media_label">Media</eventcalendar-localize>
+                                    <small><eventcalendar-localize key="event_media_description">Media files for this event</eventcalendar-localize></small>
                                 </label>
                                 <div class="controls controls-row">
                                     <ul class="unstyled list-icons clearfix">
                                         <li ng-repeat="media in images" class="pull-left">
                                             <div ng-show="isPicture(media.path)">
+                                                <i class="icon icon-delete red hover-show pull-right" ng-click="deleteMediaItem(media)"></i>
                                                 <img ng-src="{{media.path}}?width=200" />
                                             </div>
                                         </li>
@@ -224,7 +242,7 @@
                                     <ul class="unstyled list-icons">
                                         <li>
                                             <i class="icon icon-add blue"></i>
-                                            <a href="#" ng-click="openMediaPicker()" prevent-default>Select</a>
+                                            <a href="#" ng-click="openMediaPicker()" prevent-default>Add</a>
                                         </li>
                                     </ul>
                                 </div>

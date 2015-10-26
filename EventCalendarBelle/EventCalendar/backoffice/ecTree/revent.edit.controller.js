@@ -174,6 +174,18 @@
                 });
             };
 
+            $scope.openIconPicker = function () {
+                dialogService.iconPicker({ callback: populateIcon });
+            };
+
+            function populateIcon(item) {
+                $scope.event.icon = item;
+            };
+
+            $scope.deleteIcon = function () {
+                $scope.event.icon = "";
+            };
+
             $scope.openMediaPicker = function () {
                 dialogService.mediaPicker({ onlyImages: true, callback: populateFile });
             };
@@ -185,7 +197,12 @@
                     $scope.event.mediaItems = [];
                     $scope.event.mediaItems.push(item.id);
                 }
-                $scope.images.push({ name: item.name, path: item.image });
+                $scope.images.push({ id: item.id, name: item.name, path: item.image });
+            };
+
+            $scope.deleteMediaItem = function (media) {
+                $scope.event.mediaItems = _.without($scope.event.mediaItems, media.id);
+                $scope.images = _.without($scope.images, media);
             };
 
             $scope.isPicture = function (path) {
@@ -246,7 +263,7 @@
                         entityResource.getByIds($scope.event.mediaItems, "Media")
                            .then(function (mediaArray) {
                                _.forEach(mediaArray, function (item) {
-                                   $scope.images.push({ name: item.name, path: item.metaData.umbracoFile.Value });
+                                   $scope.images.push({ id: item.id, name: item.name, path: item.metaData.umbracoFile.Value });
                                });
                            });
                     }

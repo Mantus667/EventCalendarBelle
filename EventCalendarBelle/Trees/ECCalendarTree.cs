@@ -187,7 +187,7 @@ namespace EventCalendarBelle.Trees
                 List<Event> events = EventService.GetEventsForCalendar(int.Parse(id.Replace("normalEvents-", ""))).ToList();
 
                 tree.AddRange(events
-                    .Select(e => CreateTreeNode("e-" + e.Id.ToString(), id, queryStrings, e.Title, "icon-music", false, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/editEvent/" + e.Id)));
+                    .Select(e => CreateTreeNode("e-" + e.Id.ToString(), id, queryStrings, e.Title, String.IsNullOrEmpty(e.Icon) ? "icon-music" : e.Icon, false, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/editEvent/" + e.Id)));
 
                 return tree;
             }
@@ -198,7 +198,7 @@ namespace EventCalendarBelle.Trees
 
                 List<RecurringEvent> revents = RecurringEventService.GetEventsForCalendar(int.Parse(id.Replace("reccuringEvents-", ""))).ToList();
 
-                tree.AddRange(revents.Select(e => CreateTreeNode("re-" + e.Id.ToString(), id, queryStrings, e.Title, "icon-axis-rotation", false, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/editREvent/" + e.Id)));
+                tree.AddRange(revents.Select(e => CreateTreeNode("re-" + e.Id.ToString(), id, queryStrings, e.Title, String.IsNullOrEmpty(e.Icon) ? "icon-axis-rotation" : e.Icon, false, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/editREvent/" + e.Id)));
 
                 return tree;
             }

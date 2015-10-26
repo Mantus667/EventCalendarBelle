@@ -49,6 +49,9 @@ namespace EventCalendar.Core.Models
         [DataMember(Name = "range_end")]
         public int range_end { get; set; }
 
+        [DataMember(Name = "icon")]
+        public string Icon { get; set; }
+
         [DataMember(Name = "days")]
         public List<int> Days { get; set; }
 

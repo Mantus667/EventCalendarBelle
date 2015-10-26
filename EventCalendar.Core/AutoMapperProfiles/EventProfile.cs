@@ -35,6 +35,7 @@ namespace EventCalendar.Core.AutoMapperProfiles
                     Organiser = source.Organiser,
                     start = source.Start,
                     title = source.Title,
+                    icon = source.Icon,
                     media = String.Join(",", source.MediaItems.ToArray())
                 };
                 return result;
@@ -55,7 +56,8 @@ namespace EventCalendar.Core.AutoMapperProfiles
                     locationId = source.locationId,
                     Organiser = source.Organiser,
                     Start = source.start,
-                    Title = source.title
+                    Title = source.title,
+                    Icon = String.IsNullOrEmpty(source.icon) ? String.Empty : source.icon
                 };
 
                 if (!String.IsNullOrEmpty(source.media))

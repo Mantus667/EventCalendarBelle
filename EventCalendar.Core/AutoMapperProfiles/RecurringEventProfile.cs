@@ -43,6 +43,7 @@ namespace EventCalendar.Core.AutoMapperProfiles
                     range_start = source.range_start,
                     Start = source.start,
                     Title = source.title,
+                    Icon = String.IsNullOrEmpty(source.icon) ? String.Empty : source.icon,
                     Exceptions = DateExceptionService.GetDateExceptionsForRecurringEvent(source.Id).ToList()
                 };
 
@@ -76,6 +77,7 @@ namespace EventCalendar.Core.AutoMapperProfiles
                     range_start = source.range_start,
                     start = source.Start,
                     title = source.Title,
+                    icon = source.Icon,
                     media = String.Join(",", source.MediaItems.ToArray())
                 };
                 return result;

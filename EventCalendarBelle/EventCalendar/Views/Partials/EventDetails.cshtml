@@ -35,6 +35,9 @@
                 {
                     <p>End: @Model.EndDate</p>
                 }
+                @if (Model.isOver) { 
+                    <p>This event is over</p>
+                }
             </div>
         </div>
         @if (Model.Organiser != null)

@@ -15,6 +15,7 @@ namespace EventCalendar.Core.Models
         public string EndDate { get; set; }
         public string Description { get; set; }
         public int LocationId { get; set; }
+        public bool isOver { get; set; }
         public Organiser Organiser { get; set; }
         public EventLocation Location { get; set; }
         public List<IPublishedContent> MediaItems { get; set; }
@@ -30,6 +31,11 @@ namespace EventCalendar.Core.Models
             {
                 return "";
             }
+        }
+
+        public EventDetailsModel()
+        {
+            isOver = false;
         }
     }
 

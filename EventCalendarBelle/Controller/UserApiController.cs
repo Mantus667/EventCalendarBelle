@@ -9,6 +9,7 @@ using Umbraco.Core.Persistence;
 using Umbraco.Web.Editors;
 using Umbraco.Web.Mvc;
 using Umbraco.Core.Models.Membership;
+using EventCalendar.Core.Services;
 
 namespace EventCalendarBelle.Controller
 {
@@ -59,6 +60,12 @@ namespace EventCalendarBelle.Controller
             var total = 0;
             var users = us.GetAll(0, 1000, out total);
             return users;
+        }
+
+        public PagedUserResult GetPaged(int itemsPerPage, int pageNumber, string sortColumn,
+            string sortOrder, string searchTerm)
+        {
+            return SecurityService.GetPagedUser(itemsPerPage, pageNumber, sortColumn, sortOrder, searchTerm);
         }
     }
 }

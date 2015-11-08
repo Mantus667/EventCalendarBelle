@@ -47,6 +47,13 @@ namespace EventCalendar.Core.AutoMapperProfiles
                     Exceptions = DateExceptionService.GetDateExceptionsForRecurringEvent(source.Id).ToList()
                 };
 
+                result.Calendar = CalendarService.GetCalendarById(result.calendarId);
+
+                if (result.locationId != 0)
+                {
+                    result.Location = LocationService.GetLocation(result.locationId);
+                }
+
                 if (!String.IsNullOrEmpty(source.media))
                 {
                     result.MediaItems = source.media.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(x => int.Parse(x)).ToList();

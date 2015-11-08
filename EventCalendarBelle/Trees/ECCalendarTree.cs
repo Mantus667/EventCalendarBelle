@@ -174,8 +174,8 @@ namespace EventCalendarBelle.Trees
             {
                 var tree = new TreeNodeCollection();
 
-                tree.Add(CreateTreeNode("normalEvents-" + id.Replace("c-", ""), id, queryStrings, "Normal Events", "icon-music", true, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/overviewEvents/" + id.Replace("c-", "")));
-                tree.Add(CreateTreeNode("reccuringEvents-" + id.Replace("c-", ""), id, queryStrings, "Recurring Events", "icon-axis-rotation", true, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/overviewREvents/" + id.Replace("c-", "")));
+                tree.Add(CreateTreeNode("normalEvents-" + id.Replace("c-", ""), id, queryStrings, "Normal Events", "icon-music", false, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/overviewEvents/" + id.Replace("c-", "")));
+                tree.Add(CreateTreeNode("reccuringEvents-" + id.Replace("c-", ""), id, queryStrings, "Recurring Events", "icon-axis-rotation", false, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/overviewREvents/" + id.Replace("c-", "")));
 
                 return tree;
             }

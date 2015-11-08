@@ -5,14 +5,91 @@
 
     <div class="umb-panel-body">
         <div class="umb-pane">
-            <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="securityOverview" width="100%">
-                <thead>
-                    <tr>
-                        <th width="30%">Name</th>
-                        <th width="18%">&nbsp</th>
-                    </tr>
-                </thead>                
-            </table>            
+            <div class="umb-sub-header">
+
+                <div class="btn-group" ng-show="isAnythingSelected()">
+                    <a class="btn btn-danger" ng-disabled="actionInProgress" ng-click="delete()" prevent-default="">
+                        <localize key="actions_delete">Delete</localize>
+                    </a>
+                </div>
+
+                <form class="form-search pull-right ng-pristine ng-valid" novalidate="">
+                    <div class="inner-addon left-addon">
+                        <i class="icon icon-search"></i>
+                        <input type="text" class="form-control ng-pristine ng-valid" localize="placeholder" placeholder="Type to search..." ng-model="searchFilter" prevent-enter-submit="" no-dirty-check="" ng-change="search(searchFilter)">
+                    </div>
+                </form>
+
+            </div>
+
+            <div class="umb-listview">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <td style="width:35px"></td>
+                            <td>Name</td>
+                            <td>
+                                <a href="#" prevent-default class="sortable" ng-click="order('createcalendar')">Can create calendar?</a>
+                                <i class="icon" ng-class="{'icon-navigation-up': reverse, 'icon-navigation-down': !reverse}" ng-show="predicate == 'canCreateCalendar'"></i>
+                            </td>
+                            <td>
+                                <a href="#" prevent-default class="sortable" ng-click="order('deletecalendar')">Can delete calendar?</a>
+                                <i class="icon" ng-class="{'icon-navigation-up': reverse, 'icon-navigation-down': !reverse}" ng-show="predicate == 'canDeleteCalendar'"></i>
+                            </td>
+                            <td>
+                                <a href="#" prevent-default class="sortable" ng-click="order('createlocations')">Can create locations?</a>
+                                <i class="icon" ng-class="{'icon-navigation-up': reverse, 'icon-navigation-down': !reverse}" ng-show="predicate == 'canCreateLocations'"></i>
+                            </td>
+                            <td>
+                                <a href="#" prevent-default class="sortable" ng-click="order('deletelocations')">Can delete locations?</a>
+                                <i class="icon" ng-class="{'icon-navigation-up': reverse, 'icon-navigation-down': !reverse}" ng-show="predicate == 'canDeleteLocations'"></i>
+                            </td>
+                            <td>
+                                <a href="#" prevent-default class="sortable" ng-click="order('createevents')">Can create events?</a>
+                                <i class="icon" ng-class="{'icon-navigation-up': reverse, 'icon-navigation-down': !reverse}" ng-show="predicate == 'canCreateEvents'"></i>
+                            </td>
+                            <td>
+                                <a href="#" prevent-default class="sortable" ng-click="order('deleteevents')">Can delete events?</a>
+                                <i class="icon" ng-class="{'icon-navigation-up': reverse, 'icon-navigation-down': !reverse}" ng-show="predicate == 'canDeleteEvents'"></i>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="user in users" ng-class="{selected: isRowSelected(user.id)}">
+                            <td style="width: 35px">
+                                <i class="icon icon-edit"></i>
+                                <input type="checkbox" name="selectedItems[]" value="{{user.id}}" ng-checked="isRowSelected(user.id)" ng-click="toggleSelection(user.id)" />
+                            </td>
+                            <td>
+                                <a href="#/eventCalendar/ecTree/editUser/{{user.user_id}}">{{user.userName}}</a>
+                            </td>
+                            <td><span class="icon icon-check" ng-show="user.canCreateCalendar"></span><span class="icon icon-delete" ng-show="!user.canCreateCalendar"></span></td>
+                            <td><span class="icon icon-check" ng-show="user.canDeleteCalendar"></span><span class="icon icon-delete" ng-show="!user.canDeleteCalendar"></span></td>
+                            <td><span class="icon icon-check" ng-show="user.canCreateLocations"></span><span class="icon icon-delete" ng-show="!user.canCreateLocations"></span></td>
+                            <td><span class="icon icon-check" ng-show="user.canDeleteLocations"></span><span class="icon icon-delete" ng-show="!user.canDeleteLocations"></span></td>
+                            <td><span class="icon icon-check" ng-show="user.canCreateEvents"></span><span class="icon icon-delete" ng-show="!user.canCreateEvents"></span></td>
+                            <td><span class="icon icon-check" ng-show="user.canDeleteEvents"></span><span class="icon icon-delete" ng-show="!user.canDeleteEvents"></span></td>
+                        </tr>
+                    </tbody>
+                    <tfoot ng-show="totalPages > 1">
+                        <tr>
+                            <th colspan="8">
+                                <div class="pagination pagination-right">
+                                    <ul>
+                                        <li ng-class="{disabled: currentPage == 1}">
+                                            <a href ng-click="prevPage()">Prev</a>
+                                        </li>
+                                        <li ng-repeat="i in getNumber(totalPages) track by $index" ng-click="setPage($index+1)"><span>{{$index+1}}</span></li>
+                                        <li ng-class="{disabled: currentPage == totalPages}">
+                                            <a href ng-click="nextPage()">Next</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>        
         </div>
     </div>
 </umb-panel>

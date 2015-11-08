@@ -57,5 +57,66 @@ namespace EventCalendar.Core.Services
             var db = ApplicationContext.Current.DatabaseContext.Database;
             db.Update(settings);
         }
+
+        public static PagedUserResult GetPagedUser(int itemsPerPage, int pageNumber, string sortColumn,
+            string sortOrder, string searchTerm)
+        {
+            var db = ApplicationContext.Current.DatabaseContext.Database;
+
+            var currentType = typeof(UserSettings);
+
+            var query = new Sql().Select("*").From("ec_usettings");
+
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                int c = 0;
+                foreach (var property in currentType.GetProperties())
+                {
+                    string before = "WHERE";
+                    if (c > 0)
+                    {
+                        before = "OR";
+                    }
+
+                    var columnAttri =
+                           property.GetCustomAttributes(typeof(ColumnAttribute), false);
+
+                    var columnName = property.Name;
+                    if (columnAttri.Any())
+                    {
+                        columnName = ((ColumnAttribute)columnAttri.FirstOrDefault()).Name;
+                    }
+
+                    query.Append(before + " [" + columnName + "] like @0", "%" + searchTerm + "%");
+                    c++;
+                }
+            }
+            if (!string.IsNullOrEmpty(sortColumn) && !string.IsNullOrEmpty(sortOrder))
+                query.OrderBy(sortColumn + " " + sortOrder);
+            else
+            {
+                query.OrderBy("id asc");
+            }
+
+            var p = db.Page<UserSettings>(pageNumber, itemsPerPage, query);
+
+            foreach (var us in p.Items)
+            {
+                var user = ApplicationContext.Current.Services.UserService.GetByProviderKey(us.UserId);
+                if (user != null)
+                {
+                    us.UserName = user.Username;
+                }
+            }
+            var result = new PagedUserResult
+            {
+                TotalPages = p.TotalPages,
+                TotalItems = p.TotalItems,
+                ItemsPerPage = p.ItemsPerPage,
+                CurrentPage = p.CurrentPage,
+                User = p.Items
+            };
+            return result;
+        }
     }
 }

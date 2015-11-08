@@ -1,38 +1,76 @@
 ﻿angular.module('umbraco')
     .controller('EventCalendar.CalendarOverviewController', function ($scope, assetsService, calendarResource) {
 
-        assetsService.loadCss("/App_Plugins/EventCalendar/css/DT_bootstrap.css");
+        $scope.selectedIds = [];
 
-        assetsService
-            .loadJs("/App_Plugins/EventCalendar/scripts/jquery.dataTables.js")
-            .then(function () {
+        $scope.currentPage = 1;
+        $scope.itemsPerPage = 10;
+        $scope.totalPages = 1;
 
-                assetsService
-                    .loadJs("/App_Plugins/EventCalendar/scripts/DT_bootstrap.js")
-                    .then(function () {
+        $scope.reverse = false;
 
-                        var dataSource = [];
+        $scope.searchTerm = "";
+        $scope.predicate = 'id';
 
-                        calendarResource.getall().then(function (response) {
-                            angular.forEach(response.data, function (calendar) {
-                                dataSource.push({ id: calendar.id, name: calendar.calendarname, gcal: calendar.isGCal, color: calendar.color });
-                            });
+        function fetchData() {
+            calendarResource.getPaged($scope.itemsPerPage, $scope.currentPage, $scope.predicate, $scope.reverse ? "desc" : "asc", $scope.searchTerm).then(function (response) {
+                $scope.calendar = response.data.calendar;
+                $scope.totalPages = response.data.totalPages;
+            }, function (response) {
+                notificationsService.error("Error", "Could not load calendar");
+            });
+        };
 
-                            $('#calendarOverview').dataTable({
-                                "aaData": dataSource,
-                                "aoColumns": [
-                                    { "mData": "name", "sTitle": "1. Name" },
-                                    { "mData": "gcal", "sTitle": "2. Uses Google calendar", "fnCreatedCell": gcal },
-                                    { "mData": "color", "sTitle": "3. Color", "fnCreatedCell": color },
-                                    { "mData": "id", "fnCreatedCell": buttonEditCalendar }
-                                ]
-                            });
+        $scope.order = function (predicate) {
+            $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
+            $scope.predicate = predicate;
+            $scope.currentPage = 1;
+            fetchData();
+        };
 
-                        }, function (response) {
-                            notificationsService.error("Error", "Could not load calendars");
-                        });                      
-                    });
-        });
+        $scope.toggleSelection = function (val) {
+            var idx = $scope.selectedIds.indexOf(val);
+            if (idx > -1) {
+                $scope.selectedIds.splice(idx, 1);
+            } else {
+                $scope.selectedIds.push(val);
+            }
+        };
+
+        $scope.isRowSelected = function (id) {
+            return $scope.selectedIds.indexOf(id) > -1;
+        };
+
+        $scope.isAnythingSelected = function () {
+            return $scope.selectedIds.length > 0;
+        };
+
+        $scope.prevPage = function () {
+            if ($scope.currentPage > 1) {
+                $scope.currentPage--;
+                fetchData();
+            }
+        };
+
+        $scope.nextPage = function () {
+            if ($scope.currentPage < $scope.totalPages) {
+                $scope.currentPage++;
+                fetchData();
+            }
+        };
+
+        $scope.setPage = function (pageNumber) {
+            $scope.currentPage = pageNumber;
+            fetchData();
+        };
+
+        $scope.search = function (searchFilter) {
+            $scope.searchTerm = searchFilter;
+            $scope.currentPage = 1;
+            fetchData();
+        };
+
+        fetchData();
     });
 
 function buttonEditCalendar(nTd, sData, oData, iRow, iCol) {

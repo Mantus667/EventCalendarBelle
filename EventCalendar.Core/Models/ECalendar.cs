@@ -53,4 +53,23 @@ namespace EventCalendar.Core.Models
         [DataMember(Name="viewMode")]
         public string ViewMode { get; set; }
     }
+
+    [DataContract(Name = "pagedCalendar", Namespace = "")]
+    public class PagedCalendarResult
+    {
+        [DataMember(Name = "calendar")]
+        public List<ECalendar> Calendar { get; set; }
+
+        [DataMember(Name = "currentPage")]
+        public long CurrentPage { get; set; }
+
+        [DataMember(Name = "itemsPerPage")]
+        public long ItemsPerPage { get; set; }
+
+        [DataMember(Name = "totalPages")]
+        public long TotalPages { get; set; }
+
+        [DataMember(Name = "totalItems")]
+        public long TotalItems { get; set; }
+    }
 }

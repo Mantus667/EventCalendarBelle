@@ -16,6 +16,14 @@
 
                 deleteById: function (id) {
                     return $http.delete(Umbraco.Sys.ServerVariables.eventCalendar.calendarBaseUrl + "DeleteById?id=" + id);
+                },
+
+                getPaged: function (itemsPerPage, pageNumber, sortColumn, sortOrder, searchTerm) {
+                    if (sortColumn == undefined)
+                        sortColumn = "";
+                    if (sortOrder == undefined)
+                        sortOrder = "";
+                    return $http.get(Umbraco.Sys.ServerVariables.eventCalendar.calendarBaseUrl + "GetPaged?itemsPerPage=" + itemsPerPage + "&pageNumber=" + pageNumber + "&sortColumn=" + sortColumn + "&sortOrder=" + sortOrder + "&searchTerm=" + searchTerm);
                 }
             };
         });

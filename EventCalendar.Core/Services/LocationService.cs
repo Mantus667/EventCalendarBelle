@@ -76,11 +76,78 @@ namespace EventCalendar.Core.Services
             return location;
         }
 
+        /// <summary>
+        /// Get locations for a specific user
+        /// </summary>
+        /// <param name="user">The id of the user</param>
+        /// <returns>List of locations for specified user</returns>
         public static IEnumerable<EventLocation> GetLocationsForUser(int user)
         {
             var settings = SecurityService.GetSecuritySettingsByUserId(user);
             var locations = GetAllLocations();
             return locations.Where(x => settings.Locations.Contains(x.Id.ToString()));
+        }
+
+        /// <summary>
+        /// Get paged locations
+        /// </summary>
+        /// <param name="itemsPerPage">Locations per page</param>
+        /// <param name="pageNumber">Current page</param>
+        /// <param name="sortColumn">Sort column</param>
+        /// <param name="sortOrder">Sort order</param>
+        /// <param name="searchTerm">Search term</param>
+        /// <returns>Paged locations</returns>
+        public static PagedLocationsResult GetPagedLocations(int itemsPerPage, int pageNumber, string sortColumn,
+            string sortOrder, string searchTerm)
+        {
+            var items = new List<EventLocation>();
+            var db = ApplicationContext.Current.DatabaseContext.Database;
+
+            var currentType = typeof(EventLocation);
+
+            var query = new Sql().Select("*").From("ec_locations");
+
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                int c = 0;
+                foreach (var property in currentType.GetProperties())
+                {
+                    string before = "WHERE";
+                    if (c > 0)
+                    {
+                        before = "OR";
+                    }
+
+                    var columnAttri =
+                           property.GetCustomAttributes(typeof(ColumnAttribute), false);
+
+                    var columnName = property.Name;
+                    if (columnAttri.Any())
+                    {
+                        columnName = ((ColumnAttribute)columnAttri.FirstOrDefault()).Name;
+                    }
+
+                    query.Append(before + " [" + columnName + "] like @0", "%" + searchTerm + "%");
+                    c++;
+                }
+            }
+            if (!string.IsNullOrEmpty(sortColumn) && !string.IsNullOrEmpty(sortOrder))
+                query.OrderBy(sortColumn + " " + sortOrder);
+            else
+            {
+                query.OrderBy("id asc");
+            }
+
+            var p = db.Page<EventLocation>(pageNumber, itemsPerPage, query);
+            var result = new PagedLocationsResult
+            {
+                TotalPages = p.TotalPages,
+                TotalItems = p.TotalItems,
+                ItemsPerPage = p.ItemsPerPage,
+                CurrentPage = p.CurrentPage,
+                Locations = p.Items
+            };
+            return result;
         }
 
         #region Private Stuff

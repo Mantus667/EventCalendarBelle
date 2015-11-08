@@ -18,7 +18,7 @@
                     return $http.delete(Umbraco.Sys.ServerVariables.eventCalendar.locationBaseUrl + "DeleteById?id=" + id);
                 },
 
-                getPaged: function (type, itemsPerPage, pageNumber, sortColumn, sortOrder, searchTerm) {
+                getPaged: function (itemsPerPage, pageNumber, sortColumn, sortOrder, searchTerm) {
                     if (sortColumn == undefined)
                         sortColumn = "";
                     if (sortOrder == undefined)

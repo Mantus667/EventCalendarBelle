@@ -136,6 +136,68 @@ namespace EventCalendar.Core.Services
             return calendar.Where(x => settings.AllowedCalendar.Contains(x.Id.ToString()));
         }
 
+        /// <summary>
+        /// Get paged calendar
+        /// </summary>
+        /// <param name="itemsPerPage">Items per page</param>
+        /// <param name="pageNumber">Current page</param>
+        /// <param name="sortColumn">Sort column</param>
+        /// <param name="sortOrder">Sort order</param>
+        /// <param name="searchTerm">Search term</param>
+        /// <returns>Paged calendar result </returns>
+        public static PagedCalendarResult GetPagedCalendar(int itemsPerPage, int pageNumber, string sortColumn,
+            string sortOrder, string searchTerm)
+        {
+            var items = new List<ECalendar>();
+            var db = ApplicationContext.Current.DatabaseContext.Database;
+
+            var currentType = typeof(CalendarDto);
+
+            var query = new Sql().Select("*").From("ec_calendars");
+
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                int c = 0;
+                foreach (var property in currentType.GetProperties())
+                {
+                    string before = "WHERE";
+                    if (c > 0)
+                    {
+                        before = "OR";
+                    }
+
+                    var columnAttri =
+                           property.GetCustomAttributes(typeof(ColumnAttribute), false);
+
+                    var columnName = property.Name;
+                    if (columnAttri.Any())
+                    {
+                        columnName = ((ColumnAttribute)columnAttri.FirstOrDefault()).Name;
+                    }
+
+                    query.Append(before + " [" + columnName + "] like @0", "%" + searchTerm + "%");
+                    c++;
+                }
+            }
+            if (!string.IsNullOrEmpty(sortColumn) && !string.IsNullOrEmpty(sortOrder))
+                query.OrderBy(sortColumn + " " + sortOrder);
+            else
+            {
+                query.OrderBy("id asc");
+            }
+
+            var p = db.Page<CalendarDto>(pageNumber, itemsPerPage, query);
+            var result = new PagedCalendarResult
+            {
+                TotalPages = p.TotalPages,
+                TotalItems = p.TotalItems,
+                ItemsPerPage = p.ItemsPerPage,
+                CurrentPage = p.CurrentPage,
+                Calendar = Mapper.Map<IEnumerable<ECalendar>>(p.Items).ToList()
+            };
+            return result;
+        }
+
         #region EventHandler Delegates
         public static void OnCreating(CalendarCreationEventArgs e)
         {

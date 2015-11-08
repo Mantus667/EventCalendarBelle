@@ -13,7 +13,7 @@
         $scope.predicate = 'id';
 
         function fetchData() {
-            locationResource.getPaged($scope.typeName, $scope.itemsPerPage, $scope.currentPage, $scope.predicate, $scope.reverse ? "desc" : "asc", $scope.searchTerm).then(function (response) {
+            locationResource.getPaged($scope.itemsPerPage, $scope.currentPage, $scope.predicate, $scope.reverse ? "desc" : "asc", $scope.searchTerm).then(function (response) {
                 $scope.locations = response.data.locations;
                 $scope.totalPages = response.data.totalPages;
             }, function (response) {

@@ -44,5 +44,11 @@ namespace EventCalendarBelle.Controller
         {
             return CalendarService.GetAllCalendar();
         }
+
+        public PagedCalendarResult GetPaged(int itemsPerPage, int pageNumber, string sortColumn,
+            string sortOrder, string searchTerm)
+        {
+            return CalendarService.GetPagedCalendar(itemsPerPage, pageNumber, sortColumn, sortOrder, searchTerm);
+        }
     }
 }

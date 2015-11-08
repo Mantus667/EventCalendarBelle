@@ -76,6 +76,11 @@ namespace EventCalendar.Core.Services
             return location;
         }
 
+        /// <summary>
+        /// Get locations for a specific user
+        /// </summary>
+        /// <param name="user">The id of the user</param>
+        /// <returns>List of locations for specified user</returns>
         public static IEnumerable<EventLocation> GetLocationsForUser(int user)
         {
             var settings = SecurityService.GetSecuritySettingsByUserId(user);
@@ -83,6 +88,15 @@ namespace EventCalendar.Core.Services
             return locations.Where(x => settings.Locations.Contains(x.Id.ToString()));
         }
 
+        /// <summary>
+        /// Get paged locations
+        /// </summary>
+        /// <param name="itemsPerPage">Locations per page</param>
+        /// <param name="pageNumber">Current page</param>
+        /// <param name="sortColumn">Sort column</param>
+        /// <param name="sortOrder">Sort order</param>
+        /// <param name="searchTerm">Search term</param>
+        /// <returns>Paged locations</returns>
         public static PagedLocationsResult GetPagedLocations(int itemsPerPage, int pageNumber, string sortColumn,
             string sortOrder, string searchTerm)
         {

@@ -1,6 +1,6 @@
 ﻿angular.module('umbraco')
-    .controller('EventCalendar.EventsOverviewController', function ($scope, assetsService, eventResource, $routeParams) {
-
+    .controller('EventCalendar.EventsOverviewController', function ($scope, assetsService, eventResource, $routeParams, notificationsService) {
+        
         $scope.selectedIds = [];
 
         $scope.currentPage = 1;
@@ -13,11 +13,11 @@
         $scope.predicate = 'id';
 
         function fetchData() {
-            eventResource.getPaged($scope.typeName, $scope.itemsPerPage, $scope.currentPage, $scope.predicate, $scope.reverse ? "desc" : "asc", $scope.searchTerm).then(function (response) {
+            eventResource.getPaged($routeParams.id, $scope.itemsPerPage, $scope.currentPage, $scope.predicate, $scope.reverse ? "desc" : "asc", $scope.searchTerm).then(function (response) {
                 $scope.events = response.data.events;
                 $scope.totalPages = response.data.totalPages;
             }, function (response) {
-                notificationsService.error("Error", "Could not load locations");
+                notificationsService.error("Error", "Could not load events");
             });
         };
 

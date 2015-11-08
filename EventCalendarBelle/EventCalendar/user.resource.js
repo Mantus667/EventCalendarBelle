@@ -19,6 +19,14 @@
 
                 getAllUser: function () {
                     return $http.get(Umbraco.Sys.ServerVariables.eventCalendar.userBaseUrl + "GetAllUser");
+                },
+
+                getPaged: function (itemsPerPage, pageNumber, sortColumn, sortOrder, searchTerm) {
+                    if (sortColumn == undefined)
+                        sortColumn = "";
+                    if (sortOrder == undefined)
+                        sortOrder = "";
+                    return $http.get(Umbraco.Sys.ServerVariables.eventCalendar.userBaseUrl + "GetPaged?itemsPerPage=" + itemsPerPage + "&pageNumber=" + pageNumber + "&sortColumn=" + sortColumn + "&sortOrder=" + sortOrder + "&searchTerm=" + searchTerm);
                 }
             };
         });

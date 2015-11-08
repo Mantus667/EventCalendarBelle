@@ -147,14 +147,14 @@ namespace EventCalendar.Core.Services
             return Mapper.Map<IEnumerable<Event>>(events);
         }
 
-        public static PagedEventsResult GetPagedEvents(int itemsPerPage, int pageNumber, string sortColumn,
+        public static PagedEventsResult GetPagedEvents(int calendar, int itemsPerPage, int pageNumber, string sortColumn,
             string sortOrder, string searchTerm)
         {
             var db = ApplicationContext.Current.DatabaseContext.Database;
 
             var currentType = typeof(EventDto);
 
-            var query = new Sql().Select("*").From("ec_events");
+            var query = new Sql().Select("*").From("ec_events").Where<EventDto>(x => x.calendarId == calendar);
 
             if (!string.IsNullOrEmpty(searchTerm))
             {

@@ -25,12 +25,12 @@
                     return $http.get(Umbraco.Sys.ServerVariables.eventCalendar.descriptionBaseUrl + "GetRTEConfiguration");
                 },
 
-                getPaged: function (type, itemsPerPage, pageNumber, sortColumn, sortOrder, searchTerm) {
+                getPaged: function (calendar, itemsPerPage, pageNumber, sortColumn, sortOrder, searchTerm) {
                     if (sortColumn == undefined)
                         sortColumn = "";
                     if (sortOrder == undefined)
                         sortOrder = "";
-                    return $http.get(Umbraco.Sys.ServerVariables.eventCalendar.eventBaseUrl + "GetPaged?itemsPerPage=" + itemsPerPage + "&pageNumber=" + pageNumber + "&sortColumn=" + sortColumn + "&sortOrder=" + sortOrder + "&searchTerm=" + searchTerm);
+                    return $http.get(Umbraco.Sys.ServerVariables.eventCalendar.eventBaseUrl + "GetPaged?calendar=" + calendar + "&itemsPerPage=" + itemsPerPage + "&pageNumber=" + pageNumber + "&sortColumn=" + sortColumn + "&sortOrder=" + sortOrder + "&searchTerm=" + searchTerm);
                 }
             };
         });

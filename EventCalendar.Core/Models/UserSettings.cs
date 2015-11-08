@@ -89,5 +89,28 @@ namespace EventCalendar.Core.Models
                 }
             }
         }
+
+        [Ignore]
+        [DataMember(Name = "userName")]
+        public string UserName { get; set; }
+    }
+
+    [DataContract(Name = "pagedUsers", Namespace = "")]
+    public class PagedUserResult
+    {
+        [DataMember(Name = "user")]
+        public List<UserSettings> User { get; set; }
+
+        [DataMember(Name = "currentPage")]
+        public long CurrentPage { get; set; }
+
+        [DataMember(Name = "itemsPerPage")]
+        public long ItemsPerPage { get; set; }
+
+        [DataMember(Name = "totalPages")]
+        public long TotalPages { get; set; }
+
+        [DataMember(Name = "totalItems")]
+        public long TotalItems { get; set; }
     }
 }

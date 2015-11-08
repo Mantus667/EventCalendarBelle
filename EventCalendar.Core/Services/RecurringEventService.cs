@@ -169,14 +169,14 @@ namespace EventCalendar.Core.Services
             return Mapper.Map<IEnumerable<RecurringEvent>>(events);
         }
 
-        public static PagedREventsResult GetPagedEvents(int itemsPerPage, int pageNumber, string sortColumn,
+        public static PagedREventsResult GetPagedEvents(int calendar, int itemsPerPage, int pageNumber, string sortColumn,
             string sortOrder, string searchTerm)
         {
             var db = ApplicationContext.Current.DatabaseContext.Database;
 
             var currentType = typeof(RecurringEventDto);
 
-            var query = new Sql().Select("*").From("ec_recevents");
+            var query = new Sql().Select("*").From("ec_recevents").Where<RecurringEventDto>(x => x.calendarId == calendar);
 
             if (!string.IsNullOrEmpty(searchTerm))
             {

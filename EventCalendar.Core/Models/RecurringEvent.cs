@@ -66,6 +66,12 @@ namespace EventCalendar.Core.Models
 
         [DataMember(Name = "exceptions")]
         public List<DateException> Exceptions { get; set; }
+
+        [DataMember(Name = "calendar")]
+        public ECalendar Calendar { get; set; }
+
+        [DataMember(Name = "location")]
+        public EventLocation Location { get; set; }
     }
 
     public class RecurringEventListModel

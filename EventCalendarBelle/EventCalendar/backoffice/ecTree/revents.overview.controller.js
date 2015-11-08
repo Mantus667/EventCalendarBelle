@@ -1,36 +1,74 @@
 ﻿angular.module('umbraco')
     .controller('EventCalendar.REventsOverviewController', function ($scope, assetsService, reventResource, $routeParams, notificationsService) {
 
-        assetsService
-            .loadJs("/App_Plugins/EventCalendar/scripts/jquery.dataTables.js")
-            .then(function () {
+        $scope.selectedIds = [];
 
-                assetsService
-                    .loadJs("/App_Plugins/EventCalendar/scripts/DT_bootstrap.js")
-                    .then(function () {
+        $scope.currentPage = 1;
+        $scope.itemsPerPage = 10;
+        $scope.totalPages = 1;
 
-                        var dataSource = [];
+        $scope.reverse = false;
 
-                        reventResource.getForCalendar($routeParams.id).then(function (response) {
-                            angular.forEach(response.data, function (revent) {
-                                dataSource.push({ id: revent.id, name: revent.title });
-                            });
+        $scope.searchTerm = "";
+        $scope.predicate = 'id';
 
-                            $('#reventsOverview').dataTable({
-                                "aaData": dataSource,
-                                "aoColumns": [
-                                    { "mData": "name", "sTitle": "1. Name" },
-                                    { "mData": "id", "fnCreatedCell": buttonEditREvent }
-                                ]
-                            });
-
-                        }, function (response) {
-                            notificationsService.error("Error", "Could not load calendars");
-                        });
-                    });
+        function fetchData() {
+            reventResource.getPaged($routeParams.id, $scope.itemsPerPage, $scope.currentPage, $scope.predicate, $scope.reverse ? "desc" : "asc", $scope.searchTerm).then(function (response) {
+                $scope.events = response.data.events;
+                $scope.totalPages = response.data.totalPages;
+            }, function (response) {
+                notificationsService.error("Error", "Could not load events");
             });
-    });
+        };
 
-function buttonEditREvent(nTd, sData, oData, iRow, iCol) {
-    $(nTd).html('<a class="btn btn-success" href="#/eventCalendar/ecTree/editREvent/' + sData + '"><span class="icon icon-pencil"></span>Edit</a>');
-}
+        $scope.order = function (predicate) {
+            $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
+            $scope.predicate = predicate;
+            $scope.currentPage = 1;
+            fetchData();
+        };
+
+        $scope.toggleSelection = function (val) {
+            var idx = $scope.selectedIds.indexOf(val);
+            if (idx > -1) {
+                $scope.selectedIds.splice(idx, 1);
+            } else {
+                $scope.selectedIds.push(val);
+            }
+        };
+
+        $scope.isRowSelected = function (id) {
+            return $scope.selectedIds.indexOf(id) > -1;
+        };
+
+        $scope.isAnythingSelected = function () {
+            return $scope.selectedIds.length > 0;
+        };
+
+        $scope.prevPage = function () {
+            if ($scope.currentPage > 1) {
+                $scope.currentPage--;
+                fetchData();
+            }
+        };
+
+        $scope.nextPage = function () {
+            if ($scope.currentPage < $scope.totalPages) {
+                $scope.currentPage++;
+                fetchData();
+            }
+        };
+
+        $scope.setPage = function (pageNumber) {
+            $scope.currentPage = pageNumber;
+            fetchData();
+        };
+
+        $scope.search = function (searchFilter) {
+            $scope.searchTerm = searchFilter;
+            $scope.currentPage = 1;
+            fetchData();
+        };
+
+        fetchData();
+    });

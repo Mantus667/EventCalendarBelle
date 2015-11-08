@@ -65,6 +65,12 @@ namespace EventCalendar.Core.AutoMapperProfiles
                     Icon = String.IsNullOrEmpty(source.icon) ? String.Empty : source.icon
                 };
 
+                if (result.locationId != 0)
+                {
+                    result.Location = LocationService.GetLocation(result.locationId);
+                }
+                result.Calendar = CalendarService.GetCalendarById(result.calendarId);
+
                 if (!String.IsNullOrEmpty(source.media))
                 {
                     result.MediaItems = source.media.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(x => int.Parse(x)).ToList();

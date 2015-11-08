@@ -46,6 +46,12 @@ namespace EventCalendar.Core.Models
 
         [DataMember(Name = "descriptions")]
         public List<EventDescription> Descriptions { get; set; }
+
+        [DataMember(Name = "location")]
+        public EventLocation Location { get; set; }
+
+        [DataMember(Name = "calendar")]
+        public ECalendar Calendar { get; set; }
     }
 
     [DataContract(Name = "pagedEvents", Namespace = "")]

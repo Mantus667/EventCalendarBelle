@@ -130,7 +130,7 @@ namespace EventCalendarBelle.Trees
                 }
                 foreach (var cal in calendar)
                 {
-                    tree.Add(CreateTreeNode("c-" + cal.Id.ToString(), id, queryStrings, cal.Calendarname, "icon-calendar", false, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/editCalendar/" + cal.Id));
+                    tree.Add(CreateTreeNode("c-" + cal.Id.ToString(), id, queryStrings, cal.Calendarname, "icon-calendar", true, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/editCalendar/" + cal.Id));
                 }
                 return tree;
             }
@@ -174,8 +174,8 @@ namespace EventCalendarBelle.Trees
             {
                 var tree = new TreeNodeCollection();
 
-                tree.Add(CreateTreeNode("normalEvents-" + id.Replace("c-", ""), id, queryStrings, "Normal Events", "icon-music", true, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/overviewEvents/" + id.Replace("c-", "")));
-                tree.Add(CreateTreeNode("reccuringEvents-" + id.Replace("c-", ""), id, queryStrings, "Recurring Events", "icon-axis-rotation", true, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/overviewREvents/" + id.Replace("c-", "")));
+                tree.Add(CreateTreeNode("normalEvents-" + id.Replace("c-", ""), id, queryStrings, "Normal Events", "icon-music", false, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/overviewEvents/" + id.Replace("c-", "")));
+                tree.Add(CreateTreeNode("reccuringEvents-" + id.Replace("c-", ""), id, queryStrings, "Recurring Events", "icon-axis-rotation", false, FormDataCollectionExtensions.GetValue<string>(queryStrings, "application") + StringExtensions.EnsureStartsWith(this.TreeAlias, '/') + "/overviewREvents/" + id.Replace("c-", "")));
 
                 return tree;
             }

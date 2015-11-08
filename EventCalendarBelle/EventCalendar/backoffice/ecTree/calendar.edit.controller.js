@@ -72,6 +72,7 @@
 
             //get a calendar id -> service
             calendarResource.getById($routeParams.id).then(function (response) {
+                $scope.calendar = response.data;
                 initAssets();
             }, function (response) {
                 notificationsService.error("Error", calendar.calendarname + " could not be loaded");

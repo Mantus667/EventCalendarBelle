@@ -380,7 +380,6 @@ namespace EventCalendar.Core.Services
             list.AddRange(events.Select(x => new EventListModel { Id = x.Id, Title = x.Title, Start = x.Start.Value, CalendarId = x.calendarId, Type = (int)EventType.Normal }));
 
             return list.OrderByDescending(x => x.Start).Take(take);
->>>>>>> refs/remotes/origin/development
         }
 
         #region EventHandler Delegates

@@ -78,8 +78,12 @@ namespace EventCalendar.Core.AutoMapperProfiles
                     start = source.Start,
                     title = source.Title,
                     icon = source.Icon,
-                    media = String.Join(",", source.MediaItems.ToArray())
                 };
+
+                if (source.MediaItems != null)
+                {
+                    result.media = String.Join(",", source.MediaItems.ToArray());
+                }
                 return result;
             }
         }

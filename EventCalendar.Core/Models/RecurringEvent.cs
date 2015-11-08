@@ -77,35 +77,22 @@ namespace EventCalendar.Core.Models
         public FrequencyTypeEnum frequency { get; set; }
     }
 
-    public class EditRecurringEventModel
+    [DataContract(Name = "pagedREvents", Namespace = "")]
+    public class PagedREventsResult
     {
-        [HiddenInput]
-        public int id { get; set; }
+        [DataMember(Name = "events")]
+        public List<RecurringEvent> Events { get; set; }
 
-        [Display(Name = "Title")]
-        public string title { get; set; }
+        [DataMember(Name = "currentPage")]
+        public long CurrentPage { get; set; }
 
-        [Display(Name = "Is all day?")]
-        public bool allDay { get; set; }
+        [DataMember(Name = "itemsPerPage")]
+        public long ItemsPerPage { get; set; }
 
-        [Display(Name = "Day of the event")]
-        public DayOfWeekEnum day { get; set; }
+        [DataMember(Name = "totalPages")]
+        public long TotalPages { get; set; }
 
-        [Display(Name = "Time period")]
-        public FrequencyTypeEnum frequency { get; set; }
-
-        [Display(Name = "Monthly period")]
-        public MonthlyIntervalEnum monthly { get; set; }
-
-        [HiddenInput]
-        public int selectedLocation { get; set; }
-
-        [Display(Name = "Location")]
-        public SelectList locations { get; set; }
-
-        [HiddenInput]
-        public int calendar { get; set; }
-
-        public Dictionary<string, EventDescription> Descriptions { get; set; }
+        [DataMember(Name = "totalItems")]
+        public long TotalItems { get; set; }
     }
 }

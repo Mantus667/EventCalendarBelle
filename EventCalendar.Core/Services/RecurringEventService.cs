@@ -169,6 +169,58 @@ namespace EventCalendar.Core.Services
             return Mapper.Map<IEnumerable<RecurringEvent>>(events);
         }
 
+        public static PagedREventsResult GetPagedEvents(int itemsPerPage, int pageNumber, string sortColumn,
+            string sortOrder, string searchTerm)
+        {
+            var db = ApplicationContext.Current.DatabaseContext.Database;
+
+            var currentType = typeof(RecurringEventDto);
+
+            var query = new Sql().Select("*").From("ec_recevents");
+
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                int c = 0;
+                foreach (var property in currentType.GetProperties())
+                {
+                    string before = "WHERE";
+                    if (c > 0)
+                    {
+                        before = "OR";
+                    }
+
+                    var columnAttri =
+                           property.GetCustomAttributes(typeof(ColumnAttribute), false);
+
+                    var columnName = property.Name;
+                    if (columnAttri.Any())
+                    {
+                        columnName = ((ColumnAttribute)columnAttri.FirstOrDefault()).Name;
+                    }
+
+                    query.Append(before + " [" + columnName + "] like @0", "%" + searchTerm + "%");
+                    c++;
+                }
+            }
+            if (!string.IsNullOrEmpty(sortColumn) && !string.IsNullOrEmpty(sortOrder))
+                query.OrderBy(sortColumn + " " + sortOrder);
+            else
+            {
+                query.OrderBy("id asc");
+            }
+
+            var p = db.Page<RecurringEventDto>(pageNumber, itemsPerPage, query);
+            var result = new PagedREventsResult
+            {
+                TotalPages = p.TotalPages,
+                TotalItems = p.TotalItems,
+                ItemsPerPage = p.ItemsPerPage,
+                CurrentPage = p.CurrentPage,
+                Events = Mapper.Map<IEnumerable<RecurringEvent>>(p.Items).ToList()
+            };
+            return result;
+        }
+
         #region EventHandler Delegates
         public static void OnCreating(RecurringEventCreatingEventArgs e)
         {

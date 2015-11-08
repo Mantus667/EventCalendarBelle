@@ -78,8 +78,12 @@ namespace EventCalendar.Core.AutoMapperProfiles
                     start = source.Start,
                     title = source.Title,
                     icon = source.Icon,
-                    media = String.Join(",", source.MediaItems.ToArray())
                 };
+
+                if (source.MediaItems != null)
+                {
+                    result.media = String.Join(",", source.MediaItems.ToArray());
+                }
                 return result;
             }
         }
@@ -117,18 +121,44 @@ namespace EventCalendar.Core.AutoMapperProfiles
                     tmp_event.MonthlyIntervalOptions = tmp_event.MonthlyIntervalOptions | (MonthlyIntervalEnum)i;
                 }
 
-                Schedule schedule = new Schedule(tmp_event);
+                RangeInYear rangeInYear = null;
 
-                if (null != source.Start)
+                if (source.range_start != 0 && source.range_end != 0)
                 {
-                    var start = ((DateTime)schedule.NextOccurrence(DateTime.Now));
-                    result.StartDate = new DateTime(start.Year, start.Month, start.Day, source.Start.Hour, source.Start.Minute, 0).ToString("F", CultureInfo.CurrentCulture);
+                    rangeInYear = new RangeInYear()
+                    {
+                        StartMonth = source.range_start,
+                        EndMonth = source.range_end
+                    };
 
+                    tmp_event.RangeInYear = rangeInYear;
                 }
-                if (null != source.End)
+
+                Schedule schedule = new Schedule(tmp_event,source.Exceptions.Select(x => (DateTime)x.Date));
+                var today = DateTime.Now;
+
+                if (schedule.IsOccurring(today))
                 {
-                    var end = ((DateTime)schedule.NextOccurrence(DateTime.Now));
-                    result.EndDate = new DateTime(end.Year, end.Month, end.Day, source.End.Hour, source.End.Minute, 0).ToString("F", CultureInfo.CurrentCulture);
+                    result.StartDate = new DateTime(today.Year, today.Month, today.Day, source.Start.Hour, source.Start.Minute, 0).ToString("F", CultureInfo.CurrentCulture);
+                    result.EndDate = new DateTime(today.Year, today.Month, today.Day, source.End.Hour, source.End.Minute, 0).ToString("F", CultureInfo.CurrentCulture);
+                    if (today.Hour > source.End.Hour && today.Minute > source.End.Minute)
+                    {
+                        result.isOver = true;
+                    }
+                }
+                else
+                {
+                    if (null != source.Start)
+                    {
+                        var start = ((DateTime)schedule.NextOccurrence(today));
+                        result.StartDate = new DateTime(start.Year, start.Month, start.Day, source.Start.Hour, source.Start.Minute, 0).ToString("F", CultureInfo.CurrentCulture);
+
+                    }
+                    if (null != source.End)
+                    {
+                        var end = ((DateTime)schedule.NextOccurrence(today));
+                        result.EndDate = new DateTime(end.Year, end.Month, end.Day, source.End.Hour, source.End.Minute, 0).ToString("F", CultureInfo.CurrentCulture);
+                    }
                 }
                 if (source.Organiser != 0)
                 {

@@ -127,6 +127,21 @@
                 });                
             };
 
+            var updateView = function () {
+                //Update descriptions with data for rte
+                angular.forEach($scope.event.descriptions, function (description) {
+                    description.label = '';
+                    description.description = '';
+                    description.view = 'rte';
+                    description.hideLabel = true;
+                    description.config = rteDefaultConfiguration;
+                });
+
+                $('ul.nav-tabs li').removeClass('active');
+                $('ul.nav-tabs li:first').addClass('active');
+                $('#tabContent').addClass('active');
+            };
+
             $scope.populate = function (data) {
                 $scope.event.organiser_id = data.id;
                 $scope.event.organiser = { name: data.name, id: data.id, icon: data.icon };
@@ -243,6 +258,8 @@
                     }
                     navigationService.syncTree({ tree: 'ecTree', path: ["-1", "calendarTree", "c-" + $scope.event.calendarid], forceReload: true });
                     notificationsService.success("Success", event.title + " has been saved");
+                    $scope.event = response.data;
+                    updateView();
                 }, function (response) {
                     notificationsService.error("Error", event.title + " could not be saved");
                 });

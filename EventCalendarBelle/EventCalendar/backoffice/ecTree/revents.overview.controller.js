@@ -20,7 +20,7 @@
                                 "aaData": dataSource,
                                 "aoColumns": [
                                     { "mData": "name", "sTitle": "1. Name" },
-                                    { "mData": "id", "fnCreatedCell": buttonEditEvent }
+                                    { "mData": "id", "fnCreatedCell": buttonEditREvent }
                                 ]
                             });
 
@@ -31,6 +31,6 @@
             });
     });
 
-function buttonEditEvent(nTd, sData, oData, iRow, iCol) {
+function buttonEditREvent(nTd, sData, oData, iRow, iCol) {
     $(nTd).html('<a class="btn btn-success" href="#/eventCalendar/ecTree/editREvent/' + sData + '"><span class="icon icon-pencil"></span>Edit</a>');
 }

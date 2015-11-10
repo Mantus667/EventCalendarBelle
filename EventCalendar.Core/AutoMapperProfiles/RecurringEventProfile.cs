@@ -53,7 +53,7 @@ namespace EventCalendar.Core.AutoMapperProfiles
                 {
                     result.Location = LocationService.GetLocation(result.locationId);
                 }
-
+                result.MediaItems = new List<int>();
                 if (!String.IsNullOrEmpty(source.media))
                 {
                     result.MediaItems = source.media.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(x => int.Parse(x)).ToList();
@@ -173,6 +173,7 @@ namespace EventCalendar.Core.AutoMapperProfiles
                     result.Organiser = new Organiser() { Name = member.Name, Email = member.Email };
                 }
 
+                result.MediaItems = new List<Umbraco.Core.Models.IPublishedContent>();
                 if (source.MediaItems.Any())
                 {
                     var helper = new UmbracoHelper(UmbracoContext.Current);

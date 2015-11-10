@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Web.UI;
 using System.Web.UI.WebControls;
 using Umbraco.Core.Persistence;
 using EventCalendar.Core.Models;
@@ -21,7 +19,7 @@ namespace EventCalendarBelle
     public partial class installer : Umbraco.Web.UmbracoUserControl
     {
         private UmbracoDatabase _db = null;
-        protected Version newVersion = new Version("2.3.0");
+        protected Version newVersion = new Version("2.3.1");
         private Version oldVersion = new Version("2.0.0");
 
         protected void Page_Load(object sender, EventArgs e)

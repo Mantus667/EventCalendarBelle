@@ -1,39 +1,74 @@
 ﻿angular.module('umbraco')
-    .controller('EventCalendar.SecurityOverviewController', function ($scope, assetsService, userResource) {
+    .controller('EventCalendar.SecurityOverviewController', function ($scope, assetsService, userResource, notificationsService) {
 
-        assetsService.loadCss("/App_Plugins/EventCalendar/css/DT_bootstrap.css");
+        $scope.selectedIds = [];
 
-        assetsService
-            .loadJs("/App_Plugins/EventCalendar/scripts/jquery.dataTables.js")
-            .then(function () {
+        $scope.currentPage = 1;
+        $scope.itemsPerPage = 10;
+        $scope.totalPages = 1;
 
-                assetsService
-                    .loadJs("/App_Plugins/EventCalendar/scripts/DT_bootstrap.js")
-                    .then(function () {
+        $scope.reverse = false;
 
-                        var dataSource = [];
+        $scope.searchTerm = "";
+        $scope.predicate = 'id';
 
-                        userResource.getAllUser().then(function (response) {
-                            console.log(response.data);
-                            angular.forEach(response.data, function (user) {
-                                dataSource.push({ id: user.Id, name: user.Name });
-                            });
-
-                            $('#securityOverview').dataTable({
-                                "aaData": dataSource,
-                                "aoColumns": [
-                                    { "mData": "name", "sTitle": "1. Name" },
-                                    { "mData": "id", "fnCreatedCell": buttonEditUser }
-                                ]
-                            });
-
-                        }, function (response) {
-                            notificationsService.error("Error", "Could not load calendars");
-                        });
-                    });
+        function fetchData() {
+            userResource.getPaged($scope.itemsPerPage, $scope.currentPage, $scope.predicate, $scope.reverse ? "desc" : "asc", $scope.searchTerm).then(function (response) {
+                $scope.users = response.data.user;
+                $scope.totalPages = response.data.totalPages;
+            }, function (response) {
+                notificationsService.error("Error", "Could not load user");
             });
-    });
+        };
 
-function buttonEditUser(nTd, sData, oData, iRow, iCol) {
-    $(nTd).html('<a class="btn btn-success" href="#/eventCalendar/ecTree/editUser/' + sData + '"><span class="icon icon-pencil"></span>Edit</a>');
-}
+        $scope.order = function (predicate) {
+            $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
+            $scope.predicate = predicate;
+            $scope.currentPage = 1;
+            fetchData();
+        };
+
+        $scope.toggleSelection = function (val) {
+            var idx = $scope.selectedIds.indexOf(val);
+            if (idx > -1) {
+                $scope.selectedIds.splice(idx, 1);
+            } else {
+                $scope.selectedIds.push(val);
+            }
+        };
+
+        $scope.isRowSelected = function (id) {
+            return $scope.selectedIds.indexOf(id) > -1;
+        };
+
+        $scope.isAnythingSelected = function () {
+            return $scope.selectedIds.length > 0;
+        };
+
+        $scope.prevPage = function () {
+            if ($scope.currentPage > 1) {
+                $scope.currentPage--;
+                fetchData();
+            }
+        };
+
+        $scope.nextPage = function () {
+            if ($scope.currentPage < $scope.totalPages) {
+                $scope.currentPage++;
+                fetchData();
+            }
+        };
+
+        $scope.setPage = function (pageNumber) {
+            $scope.currentPage = pageNumber;
+            fetchData();
+        };
+
+        $scope.search = function (searchFilter) {
+            $scope.searchTerm = searchFilter;
+            $scope.currentPage = 1;
+            fetchData();
+        };
+
+        fetchData();
+    });

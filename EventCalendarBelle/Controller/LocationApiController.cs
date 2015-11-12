@@ -1,12 +1,7 @@
 ﻿using EventCalendar.Core.Services;
 using EventCalendar.Core.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Http;
-using Umbraco.Core.Persistence;
 using Umbraco.Web.Editors;
 using Umbraco.Web.Mvc;
 
@@ -41,6 +36,12 @@ namespace EventCalendarBelle.Controller
         public IEnumerable<EventLocation> GetAll()
         {
             return LocationService.GetAllLocations();
+        }
+
+        public PagedLocationsResult GetPaged(int itemsPerPage, int pageNumber, string sortColumn,
+            string sortOrder, string searchTerm)
+        {
+            return LocationService.GetPagedLocations(itemsPerPage, pageNumber, sortColumn, sortOrder, searchTerm);
         }
     }
 }

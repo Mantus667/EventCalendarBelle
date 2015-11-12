@@ -1,0 +1,22 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using EventCalendar.Core.Services
+
+@{
+	int calendar = int.Parse(Model.MacroParameters["calendar"].ToString());
+	int take = int.Parse(Model.MacroParameters["take"].ToString());
+	int detailId = int.Parse(Model.MacroParameters["detailsPage"].ToString());
+	var events = CalendarService.GetUpcomingEventsForCalendar(calendar,take);
+	var detailPage = Umbraco.TypedContent(detailId);
+}
+
+@if(events.Any()){
+	<p>@Umbraco.GetDictionaryValue("EventCalendar:EventList:UpcomingEventsHeadline")</p>
+	<ul>
+		@foreach(var e in events){
+			var url = detailPage.Url + "?id=" + e.Id + "&type=" + e.Type + "&calendar=" + e.CalendarId;
+			<li><a href="@url">@e.Title</a></li>
+		}
+	</ul>
+} else {
+	<p>@Umbraco.GetDictionaryValue("EventCalendar:EventList:NoEntries")</p>
+}

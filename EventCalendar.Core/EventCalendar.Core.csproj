@@ -221,6 +221,7 @@
     <Compile Include="Models\EventsOverviewModel.cs" />
     <Compile Include="Models\RecurringEvent.cs" />
     <Compile Include="Models\UserSettings.cs" />
+    <Compile Include="ParameterEditors\CalendarParemeterEditor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\CalendarService.cs" />
     <Compile Include="Services\DateExceptionService.cs" />

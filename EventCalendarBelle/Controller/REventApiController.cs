@@ -46,6 +46,12 @@ namespace EventCalendarBelle.Controller
             return RecurringEventService.GetEventsForCalendar(id);
         }
 
+        public PagedREventsResult GetPaged(int calendar, int itemsPerPage, int pageNumber, string sortColumn,
+            string sortOrder, string searchTerm)
+        {
+            return RecurringEventService.GetPagedEvents(calendar, itemsPerPage, pageNumber, sortColumn, sortOrder, searchTerm);
+        }
+
         [HttpGet]
         public IEnumerable<KeyValuePair<int,string>> GetDayOfWeekValues()
         {

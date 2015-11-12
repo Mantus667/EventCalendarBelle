@@ -7,6 +7,7 @@ using System.Linq;
 using System.Globalization;
 using Umbraco.Core;
 using Umbraco.Web;
+using System.Collections.Generic;
 
 namespace EventCalendar.Core.AutoMapperProfiles
 {
@@ -36,8 +37,13 @@ namespace EventCalendar.Core.AutoMapperProfiles
                     start = source.Start,
                     title = source.Title,
                     icon = source.Icon,
-                    media = String.Join(",", source.MediaItems.ToArray())
                 };
+
+                if (source.MediaItems != null)
+                {
+                    result.media = String.Join(",", source.MediaItems.ToArray());
+                }
+
                 return result;
             }
         }
@@ -60,6 +66,13 @@ namespace EventCalendar.Core.AutoMapperProfiles
                     Icon = String.IsNullOrEmpty(source.icon) ? String.Empty : source.icon
                 };
 
+                if (result.locationId != 0)
+                {
+                    result.Location = LocationService.GetLocation(result.locationId);
+                }
+                result.Calendar = CalendarService.GetCalendarById(result.calendarId);
+
+                result.MediaItems = new List<int>();
                 if (!String.IsNullOrEmpty(source.media))
                 {
                     result.MediaItems = source.media.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(x => int.Parse(x)).ToList();
@@ -99,6 +112,7 @@ namespace EventCalendar.Core.AutoMapperProfiles
                     result.Organiser = new Organiser() { Name = member.Name, Email = member.Email };
                 }
 
+                result.MediaItems = new List<Umbraco.Core.Models.IPublishedContent>();
                 if (source.MediaItems.Any())
                 {
                     var helper = new UmbracoHelper(UmbracoContext.Current);

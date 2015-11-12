@@ -23,4 +23,13 @@ namespace EventCalendar.Core.Models
         public EventType type { get; set; }
         public int calendar { get; set; }
     }
+
+    public class EventListModel
+    {
+        public string Title { get; set; }
+        public int Id { get; set; }
+        public DateTime Start { get; set; }
+        public int CalendarId { get; set; }
+        public int Type { get; set; }
+    }
 }

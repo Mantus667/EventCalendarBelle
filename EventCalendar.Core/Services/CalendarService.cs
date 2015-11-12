@@ -7,6 +7,8 @@ using Umbraco.Core.Persistence;
 using EventCalendar.Core.EventArgs;
 using AutoMapper;
 using EventCalendar.Core.Dto;
+using ScheduleWidget.ScheduledEvents;
+using ScheduleWidget.Enums;
 
 namespace EventCalendar.Core.Services
 {
@@ -134,6 +136,250 @@ namespace EventCalendar.Core.Services
             var settings = SecurityService.GetSecuritySettingsByUserId(user);
             var calendar = GetAllCalendar();
             return calendar.Where(x => settings.AllowedCalendar.Contains(x.Id.ToString()));
+        }
+
+        /// <summary>
+        /// Get paged calendar
+        /// </summary>
+        /// <param name="itemsPerPage">Items per page</param>
+        /// <param name="pageNumber">Current page</param>
+        /// <param name="sortColumn">Sort column</param>
+        /// <param name="sortOrder">Sort order</param>
+        /// <param name="searchTerm">Search term</param>
+        /// <returns>Paged calendar result </returns>
+        public static PagedCalendarResult GetPagedCalendar(int itemsPerPage, int pageNumber, string sortColumn,
+            string sortOrder, string searchTerm)
+        {
+            var items = new List<ECalendar>();
+            var db = ApplicationContext.Current.DatabaseContext.Database;
+
+            var currentType = typeof(CalendarDto);
+
+            var query = new Sql().Select("*").From("ec_calendars");
+
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                int c = 0;
+                foreach (var property in currentType.GetProperties())
+                {
+                    string before = "WHERE";
+                    if (c > 0)
+                    {
+                        before = "OR";
+                    }
+
+                    var columnAttri =
+                           property.GetCustomAttributes(typeof(ColumnAttribute), false);
+
+                    var columnName = property.Name;
+                    if (columnAttri.Any())
+                    {
+                        columnName = ((ColumnAttribute)columnAttri.FirstOrDefault()).Name;
+                    }
+
+                    query.Append(before + " [" + columnName + "] like @0", "%" + searchTerm + "%");
+                    c++;
+                }
+            }
+            if (!string.IsNullOrEmpty(sortColumn) && !string.IsNullOrEmpty(sortOrder))
+                query.OrderBy(sortColumn + " " + sortOrder);
+            else
+            {
+                query.OrderBy("id asc");
+            }
+
+            var p = db.Page<CalendarDto>(pageNumber, itemsPerPage, query);
+            var result = new PagedCalendarResult
+            {
+                TotalPages = p.TotalPages,
+                TotalItems = p.TotalItems,
+                ItemsPerPage = p.ItemsPerPage,
+                CurrentPage = p.CurrentPage,
+                Calendar = Mapper.Map<IEnumerable<ECalendar>>(p.Items).ToList()
+            };
+            return result;
+        }
+
+        public static IEnumerable<EventListModel> GetUpcomingEvents(int take = 10)
+        {
+            var list = new List<EventListModel>();
+            var calendar = CalendarService.GetAllCalendar();
+
+            foreach (var cal in calendar)
+            {
+                list.AddRange(CalendarService.GetUpcomingEventForCalendar(cal.Id, take));
+            }
+
+            return list.OrderBy(x => x.Start).Take(take);
+        }
+
+        public static IEnumerable<EventListModel> GetUpcomingEventForCalendar(int calendar, int take = 10)
+        {
+            var list = new List<EventListModel>();
+
+            //Get normal events
+            var events = EventService.GetEventsForCalendar(calendar).Where(x => x.Start >= DateTime.Now).OrderBy(x => x.Start).Take(take);
+            //Get recurring events
+            var recEvents = RecurringEventService.GetEventsForCalendar(calendar);
+
+            if (!events.Any())
+            {
+                return Enumerable.Empty<EventListModel>();
+            }
+
+            DateRange range = new DateRange();
+            range.StartDateTime = DateTime.Now;
+            range.EndDateTime = DateTime.Now.AddYears(1);
+
+            //Get occurences for recurring Events
+            foreach (var e in recEvents)
+            {
+                RangeInYear rangeInYear = null;
+
+                if (e.range_start != 0 && e.range_end != 0)
+                {
+                    rangeInYear = new RangeInYear()
+                    {
+                        StartMonth = e.range_start,
+                        EndMonth = e.range_end
+                    };
+                }
+
+                var tmp_event = new ScheduleWidget.ScheduledEvents.Event()
+                {
+                    Title = e.Title,
+                    ID = e.Id,
+                    FrequencyTypeOptions = (FrequencyTypeEnum)e.Frequency,
+                };
+
+                if (rangeInYear != null)
+                {
+                    tmp_event.RangeInYear = rangeInYear;
+                }
+
+                foreach (var day in e.Days)
+                {
+                    tmp_event.DaysOfWeekOptions = tmp_event.DaysOfWeekOptions | (DayOfWeekEnum)day;
+                }
+                foreach (var i in e.MonthlyIntervals)
+                {
+                    tmp_event.MonthlyIntervalOptions = tmp_event.MonthlyIntervalOptions | (MonthlyIntervalEnum)i;
+                }
+
+                var schedule = new Schedule(tmp_event, e.Exceptions.Select(x => x.Date.Value).ToList());
+
+                foreach (var tmp in schedule.Occurrences(range))
+                {
+                    list.Add(new EventListModel()
+                    {
+                        Title = e.Title,
+                        Id = e.Id,
+                        Start = new DateTime(tmp.Year, tmp.Month, tmp.Day, e.Start.Hour, e.Start.Minute, 0),
+                        CalendarId = e.calendarId,
+                        Type = (int)EventType.Recurring
+                    });
+                }
+            }
+
+            list.AddRange(events.Select(x => new EventListModel { Id = x.Id, Title = x.Title, Start = x.Start.Value, CalendarId = x.calendarId, Type = (int)EventType.Normal }));
+
+            return list.OrderBy(x => x.Start).Take(take);
+        }
+
+        /// <summary>
+        /// Returns a list of the last events
+        /// </summary>
+        /// <param name="take">Number of events</param>
+        /// <returns>List of events</returns>
+        public static IEnumerable<EventListModel> GetLatestEvents(int take = 10)
+        {
+            var list = new List<EventListModel>();
+            var calendar = CalendarService.GetAllCalendar();
+
+            foreach (var cal in calendar)
+            {
+                list.AddRange(CalendarService.GetLatestEventsForCalendar(cal.Id, take));
+            }
+
+            return list.OrderByDescending(x => x.Start).Take(take);
+        }
+
+        /// <summary>
+        /// Returns a list of the last events for a given calendar
+        /// </summary>
+        /// <param name="calendar">The calendar to fetch events from</param>
+        /// <param name="take">Number of events to show</param>
+        /// <returns>List of events</returns>
+        public static IEnumerable<EventListModel> GetLatestEventsForCalendar(int calendar, int take = 10)
+        {
+            var list = new List<EventListModel>();
+
+            //Get the latest normal events for calendar
+            var events = EventService.GetEventsForCalendar(calendar).Where(x => x.Start <= DateTime.Now).OrderByDescending(x => x.Start).Take(take);
+            var recEvents = RecurringEventService.GetEventsForCalendar(calendar);
+
+            if (!events.Any())
+            {
+                return Enumerable.Empty<EventListModel>();
+            }
+
+            DateRange range = new DateRange();
+            range.StartDateTime = events.Last().Start.Value;
+            range.EndDateTime = DateTime.Now;
+
+            //Get occurences for recurring Events
+            foreach (var e in recEvents)
+            {
+                RangeInYear rangeInYear = null;
+
+                if (e.range_start != 0 && e.range_end != 0)
+                {
+                    rangeInYear = new RangeInYear()
+                    {
+                        StartMonth = e.range_start,
+                        EndMonth = e.range_end
+                    };
+                }
+
+                var tmp_event = new ScheduleWidget.ScheduledEvents.Event()
+                {
+                    Title = e.Title,
+                    ID = e.Id,
+                    FrequencyTypeOptions = (FrequencyTypeEnum)e.Frequency,
+                };
+
+                if (rangeInYear != null)
+                {
+                    tmp_event.RangeInYear = rangeInYear;
+                }
+
+                foreach (var day in e.Days)
+                {
+                    tmp_event.DaysOfWeekOptions = tmp_event.DaysOfWeekOptions | (DayOfWeekEnum)day;
+                }
+                foreach (var i in e.MonthlyIntervals)
+                {
+                    tmp_event.MonthlyIntervalOptions = tmp_event.MonthlyIntervalOptions | (MonthlyIntervalEnum)i;
+                }
+
+                var schedule = new Schedule(tmp_event, e.Exceptions.Select(x => x.Date.Value).ToList());
+
+                foreach (var tmp in schedule.Occurrences(range))
+                {
+                    list.Add(new EventListModel()
+                    {
+                        Title = e.Title,
+                        Id = e.Id,
+                        Start = new DateTime(tmp.Year, tmp.Month, tmp.Day, e.Start.Hour, e.Start.Minute, 0),
+                        CalendarId = e.calendarId,
+                        Type = (int)EventType.Recurring
+                    });
+                }
+            }
+
+            list.AddRange(events.Select(x => new EventListModel { Id = x.Id, Title = x.Title, Start = x.Start.Value, CalendarId = x.calendarId, Type = (int)EventType.Normal }));
+
+            return list.OrderByDescending(x => x.Start).Take(take);
         }
 
         #region EventHandler Delegates

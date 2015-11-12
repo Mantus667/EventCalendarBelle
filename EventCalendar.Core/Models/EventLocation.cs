@@ -56,11 +56,30 @@ namespace EventCalendar.Core.Models
         [Column("latitude")]
         [Required]
         [DataMember(Name = "lat", IsRequired = true)]
-        public string lat { get; set; }
+        public string latitude { get; set; }
 
         [Column("longitude")]
         [Required]
         [DataMember(Name = "lon", IsRequired = true)]
-        public string lon { get; set; }
+        public string longitude { get; set; }
+    }
+
+    [DataContract(Name = "pagedLocations", Namespace = "")]
+    public class PagedLocationsResult
+    {
+        [DataMember(Name = "locations")]
+        public List<EventLocation> Locations { get; set; }
+
+        [DataMember(Name = "currentPage")]
+        public long CurrentPage { get; set; }
+
+        [DataMember(Name = "itemsPerPage")]
+        public long ItemsPerPage { get; set; }
+
+        [DataMember(Name = "totalPages")]
+        public long TotalPages { get; set; }
+
+        [DataMember(Name = "totalItems")]
+        public long TotalItems { get; set; }
     }
 }

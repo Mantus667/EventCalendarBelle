@@ -248,10 +248,15 @@
     <None Include="EventCalendar\package.manifest" />
     <None Include="EventCalendar\scripts\bootstrap-tagsinput.min.js.map" />
     <None Include="EventCalendar\Views\Partials\EventDetails.cshtml" />
+    <None Include="EventCalendar\Views\Partials\LocationDetails.cshtml" />
     <None Include="packages.config" />
     <None Include="Views\ECCalendar.cshtml" />
     <None Include="Views\ECEventDetails.cshtml" />
     <None Include="Views\ECCalendarCatFilter.cshtml" />
+    <None Include="Views\MacroPartials\EventCalendar.LatestEvents.cshtml" />
+    <None Include="Views\MacroPartials\EventCalendar.LatestEventsForCalendar.cshtml" />
+    <None Include="Views\MacroPartials\EventCalendar.UpcomingEvents.cshtml" />
+    <None Include="Views\MacroPartials\EventCalendar.UpcomingEventsForCalendar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Css\EventCalendar\fullcalendar.css" />

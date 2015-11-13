@@ -69,11 +69,12 @@
                             window.open(event.url);
                             return false;
                         } else {
-                            if (event.type == 1) {
-                                window.location.href = event_details_url + '?id=' + event.id + '&type=1&calendar=' + event.calendar;
-                            } else {
-                                window.location.href = event_details_url + '?id=' + event.id + '&type=0&calendar=' + event.calendar;
-                            }
+                            //if (event.type == 1) {
+                            //    window.location.href = event_details_url + '?id=' + event.id + '&type=1&calendar=' + event.calendar;
+                            //} else {
+                            //    window.location.href = event_details_url + '?id=' + event.id + '&type=0&calendar=' + event.calendar;
+                            //}
+                            window.location.href = '/EventCalendar/' + event.title + '/' + event.id + '/' + event.type + '/' + event.calendar;
                             return false;
                         }
                     },

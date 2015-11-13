@@ -12,6 +12,7 @@ using Umbraco.Web.Mvc;
 using DDay.iCal;
 using DDay.iCal.Serialization;
 using EventCalendar.Core.Services;
+using Umbraco.Web;
 
 namespace EventCalendarBelle.Controller
 {
@@ -35,6 +36,13 @@ namespace EventCalendarBelle.Controller
             }
 
             return PartialView("EventDetails", evm);
+        }
+
+        [ChildActionOnly]
+        public ActionResult GetLocationDetails(int id)
+        {
+            var location = LocationService.GetLocation(id);
+            return PartialView("LocationDetails", location);
         }
 
         public ActionResult GetIcsForEvent(int id, int type = 0)

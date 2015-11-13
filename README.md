@@ -1,3 +1,5 @@
+[![Stories in Ready](https://badge.waffle.io/Mantus667/EventCalendarBelle.png?label=ready&title=Ready)](http://waffle.io/Mantus667/EventCalendarBelle)
+
 EventCalendarBelle
 ==================
 

@@ -1,7 +1,7 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<EventCalendar.Core.Models.EventDetailsModel>
 @using System.Globalization
 @{
-    var showLocation = (Model.LocationId != 0) ? true : false;
+    var showLocation = (Model.Location != null) ? true : false;
 }
 @if (showLocation)
 {

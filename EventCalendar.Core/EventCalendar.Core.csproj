@@ -200,11 +200,13 @@
     <Compile Include="AutoMapperEvent.cs" />
     <Compile Include="AutoMapperProfiles\CalendarProfile.cs" />
     <Compile Include="AutoMapperProfiles\DateExceptionProfile.cs" />
+    <Compile Include="AutoMapperProfiles\EventLocationProfile.cs" />
     <Compile Include="AutoMapperProfiles\EventProfile.cs" />
     <Compile Include="AutoMapperProfiles\RecurringEventProfile.cs" />
     <Compile Include="Dto\CalendarDto.cs" />
     <Compile Include="Dto\DateExceptionsDto.cs" />
     <Compile Include="Dto\EventDto.cs" />
+    <Compile Include="Dto\EventLocationDto.cs" />
     <Compile Include="Dto\RecurringEventDto.cs" />
     <Compile Include="EventArgs\CalendarEventArgs.cs" />
     <Compile Include="EventArgs\EventEventArgs.cs" />

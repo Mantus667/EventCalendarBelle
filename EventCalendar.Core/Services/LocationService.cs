@@ -7,6 +7,8 @@ using Umbraco.Core.Persistence;
 using EventCalendar.Core.EventArgs;
 using ScheduleWidget.ScheduledEvents;
 using ScheduleWidget.Enums;
+using EventCalendar.Core.Dto;
+using AutoMapper;
 
 namespace EventCalendar.Core.Services
 {
@@ -25,7 +27,7 @@ namespace EventCalendar.Core.Services
                 return false;
             }
 
-            var deletedID = db.Delete<EventLocation>(id);
+            var deletedID = db.Delete<EventLocationDto>(id);
 
             var args2 = new LocationDeletedEventArgs { Location = location };
             OnDeleted(args2);
@@ -36,9 +38,10 @@ namespace EventCalendar.Core.Services
         public static EventLocation GetLocation(int id)
         {
             var db = ApplicationContext.Current.DatabaseContext.Database;
-            var query = new Sql().Select("*").From("ec_locations").Where<EventLocation>(x => x.Id == id);
+            var query = new Sql().Select("*").From("ec_locations").Where<EventLocationDto>(x => x.Id == id);
 
-            return db.Fetch<EventLocation>(query).FirstOrDefault();
+            var dto =  db.Fetch<EventLocationDto>(query).FirstOrDefault();
+            return Mapper.Map<EventLocation>(dto);
         }
 
         public static IEnumerable<EventLocation> GetAllLocations()
@@ -46,13 +49,15 @@ namespace EventCalendar.Core.Services
             var db = ApplicationContext.Current.DatabaseContext.Database;
             var query = new Sql().Select("*").From("ec_locations");
 
-            return db.Fetch<EventLocation>(query);
+            var dtos =  db.Fetch<EventLocationDto>(query);
+            return Mapper.Map<IEnumerable<EventLocation>>(dtos);
         }
 
         public static EventLocation UpdateLocation(EventLocation location)
         {
-            ApplicationContext.Current.DatabaseContext.Database.Update(location);
-            return location;
+            var dto = Mapper.Map<EventLocationDto>(location);
+            ApplicationContext.Current.DatabaseContext.Database.Update(dto);
+            return Mapper.Map<EventLocation>(dto);
         }
 
         public static EventLocation CreateLocation(EventLocation location, int creator)
@@ -66,16 +71,18 @@ namespace EventCalendar.Core.Services
             {
                 return location;
             }
+            var dto = Mapper.Map<EventLocationDto>(location);
+            db.Save(dto);
 
-            db.Save(location);
+            var result = Mapper.Map<EventLocation>(dto);
 
             //Update usersettings and add the newly created calendar to the allowed calendar
-            SecurityService.AddLocationToUser(creator, location.Id);
+            SecurityService.AddLocationToUser(creator, result.Id);
 
-            var args2 = new LocationCreatedEventArgs { Location = location };
+            var args2 = new LocationCreatedEventArgs { Location = result };
             OnCreated(args2);
 
-            return location;
+            return result;
         }
 
         /// <summary>
@@ -109,7 +116,7 @@ namespace EventCalendar.Core.Services
             var items = new List<EventLocation>();
             var db = ApplicationContext.Current.DatabaseContext.Database;
 
-            var currentType = typeof(EventLocation);
+            var currentType = typeof(EventLocationDto);
 
             var query = new Sql().Select("*").From("ec_locations");
 
@@ -144,14 +151,14 @@ namespace EventCalendar.Core.Services
                 query.OrderBy("id asc");
             }
 
-            var p = db.Page<EventLocation>(pageNumber, itemsPerPage, query);
+            var p = db.Page<EventLocationDto>(pageNumber, itemsPerPage, query);
             var result = new PagedLocationsResult
             {
                 TotalPages = p.TotalPages,
                 TotalItems = p.TotalItems,
                 ItemsPerPage = p.ItemsPerPage,
                 CurrentPage = p.CurrentPage,
-                Locations = p.Items
+                Locations = Mapper.Map<IEnumerable<EventLocation>>(p.Items).ToList()
             };
             return result;
         }

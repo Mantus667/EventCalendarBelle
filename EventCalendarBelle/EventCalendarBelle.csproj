@@ -255,8 +255,10 @@
     <None Include="Views\ECCalendarCatFilter.cshtml" />
     <None Include="Views\MacroPartials\EventCalendar.LatestEvents.cshtml" />
     <None Include="Views\MacroPartials\EventCalendar.LatestEventsForCalendar.cshtml" />
+    <None Include="Views\MacroPartials\EventCalendar.LatestEventsForLocation.cshtml" />
     <None Include="Views\MacroPartials\EventCalendar.UpcomingEvents.cshtml" />
     <None Include="Views\MacroPartials\EventCalendar.UpcomingEventsForCalendar.cshtml" />
+    <None Include="Views\MacroPartials\EventCalendar.UpcomingEventsForLocation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Css\EventCalendar\fullcalendar.css" />

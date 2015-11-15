@@ -71,5 +71,18 @@
             fetchData();
         };
 
+        $scope.delete = function () {
+            if (confirm("Are you sure you want to delete " + $scope.selectedIds.length + " location" + ($scope.selectedIds.length > 1 ? "s" : "") + "?")) {
+                $scope.actionInProgress = true;
+                _.each($scope.selectedIds, function (id) {
+                    locationResource.deleteById(id).then(function () {
+                    });
+                });
+                $scope.locations = _.reject($scope.locations, function (el) { return $scope.selectedIds.indexOf(el.id) > -1; });
+                $scope.selectedIds = [];
+                $scope.actionInProgress = false;
+            }
+        };
+
         fetchData();
     });

@@ -70,21 +70,18 @@
             fetchData();
         };
 
+        $scope.delete = function () {
+            if (confirm("Are you sure you want to delete " + $scope.selectedIds.length + " calendar?")) {
+                $scope.actionInProgress = true;
+                _.each($scope.selectedIds, function (id) {
+                    calendarResource.deleteById(id).then(function () {
+                    });
+                });
+                $scope.calendar = _.reject($scope.calendar, function (el) { return $scope.selectedIds.indexOf(el.id) > -1; });
+                $scope.selectedIds = [];
+                $scope.actionInProgress = false;
+            }
+        };
+
         fetchData();
     });
-
-function buttonEditCalendar(nTd, sData, oData, iRow, iCol) {
-    $(nTd).html('<a class="btn btn-success" href="#/eventCalendar/ecTree/editCalendar/' + sData + '"><span class="icon icon-pencil"></span>Edit</a>');
-}
-
-function color(nTd, sData, oData, iRow, iCol) {
-    $(nTd).html('<span style="background-color:' + sData + ';display:block;height:25px;width:25px;"></span>');
-}
-
-function gcal(nTd, sData, oData, iRow, iCol) {
-    if (sData == true) {
-        $(nTd).html('<span class="icon icon-check"></span>');
-    } else {
-        $(nTd).html('<span class="icon icon-delete"></span>');
-    }
-}

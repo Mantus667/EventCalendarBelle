@@ -87,6 +87,10 @@ namespace EventCalendar.Core.Services
         {
             var settings = SecurityService.GetSecuritySettingsByUserId(user);
             var locations = GetAllLocations();
+            if (locations == null || !locations.Any() || settings.Locations == null || String.IsNullOrEmpty(settings.Locations))
+            {
+                return Enumerable.Empty<EventLocation>();
+            }
             return locations.Where(x => settings.Locations.Contains(x.Id.ToString()));
         }
 

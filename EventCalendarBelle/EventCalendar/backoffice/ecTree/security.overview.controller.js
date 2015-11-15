@@ -1,7 +1,6 @@
 ﻿angular.module('umbraco')
     .controller('EventCalendar.SecurityOverviewController', function ($scope, assetsService, userResource, notificationsService) {
 
-        $scope.selectedIds = [];
 
         $scope.currentPage = 1;
         $scope.itemsPerPage = 10;
@@ -26,23 +25,6 @@
             $scope.predicate = predicate;
             $scope.currentPage = 1;
             fetchData();
-        };
-
-        $scope.toggleSelection = function (val) {
-            var idx = $scope.selectedIds.indexOf(val);
-            if (idx > -1) {
-                $scope.selectedIds.splice(idx, 1);
-            } else {
-                $scope.selectedIds.push(val);
-            }
-        };
-
-        $scope.isRowSelected = function (id) {
-            return $scope.selectedIds.indexOf(id) > -1;
-        };
-
-        $scope.isAnythingSelected = function () {
-            return $scope.selectedIds.length > 0;
         };
 
         $scope.prevPage = function () {

@@ -41,5 +41,9 @@ namespace EventCalendar.Core.Dto
 
         [Column("longitude")]
         public string Longitude { get; set; }
+
+        [Column("media")]
+        [NullSetting(NullSetting = NullSettings.Null)]
+        public string media { get; set; }
     }
 }

@@ -292,7 +292,6 @@
     <Content Include="EventCalendar\css\bootstrap-switch.css" />
     <Content Include="EventCalendar\css\bootstrap-switch.min.css" />
     <Content Include="EventCalendar\css\bootstrap-tagsinput.css" />
-    <Content Include="EventCalendar\css\DT_bootstrap.css" />
     <Content Include="EventCalendar\css\jquery-gmaps-latlon-picker.css" />
     <Content Include="EventCalendar\dataTable.js" />
     <Content Include="EventCalendar\dataTableExtensions.js" />
@@ -313,9 +312,7 @@
     <Content Include="EventCalendar\scripts\bootstrap-datetimepicker.min.js" />
     <Content Include="EventCalendar\scripts\bootstrap-switch.min.js" />
     <Content Include="EventCalendar\scripts\bootstrap-tagsinput.min.js" />
-    <Content Include="EventCalendar\scripts\DT_bootstrap.js" />
     <Content Include="EventCalendar\scripts\jquery-gmaps-latlon-picker.js" />
-    <Content Include="EventCalendar\scripts\jquery.dataTables.js" />
     <Content Include="EventCalendar\scripts\moment-with-locales.js" />
     <Content Include="EventCalendar\scripts\moment.min.js" />
     <Content Include="EventCalendar\backoffice\ecTree\calendar.create.controller.js" />

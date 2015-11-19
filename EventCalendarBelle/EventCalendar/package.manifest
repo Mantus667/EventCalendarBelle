@@ -59,7 +59,6 @@
 			'/App_Plugins/EventCalendar/css/bootstrap-datetimepicker.min.css',
 			'/App_Plugins/EventCalendar/css/bootstrap-switch.min.css',
 			'/App_Plugins/EventCalendar/css/eventcalendar.custom.css',
-			'/App_Plugins/EventCalendar/css/bootstrap-tagsinput.css',
-			'/App_Plugins/EventCalendar/css/DT_bootstrap.css'
+			'/App_Plugins/EventCalendar/css/bootstrap-tagsinput.css'
 		]
 }

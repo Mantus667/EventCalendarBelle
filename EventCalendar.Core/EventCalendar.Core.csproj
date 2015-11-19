@@ -212,6 +212,7 @@
     <Compile Include="EventArgs\EventEventArgs.cs" />
     <Compile Include="EventArgs\LocationEventArgs.cs" />
     <Compile Include="EventArgs\RecurringEventEventArgs.cs" />
+    <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Models\DateException.cs" />
     <Compile Include="Models\ECalendar.cs" />
     <Compile Include="Models\Event.cs" />

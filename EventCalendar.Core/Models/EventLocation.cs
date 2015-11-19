@@ -37,6 +37,9 @@ namespace EventCalendar.Core.Models
 
         [DataMember(Name = "lon", IsRequired = true)]
         public string Longitude { get; set; }
+
+        [DataMember(Name = "mediaItems")]
+        public List<int> MediaItems { get; set; }
     }
 
     [DataContract(Name = "pagedLocations", Namespace = "")]

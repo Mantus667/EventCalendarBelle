@@ -4,9 +4,7 @@
 @{
 	int location = int.Parse(Model.MacroParameters["location"].ToString());
 	int take = int.Parse(Model.MacroParameters["take"].ToString());
-	int detailId = int.Parse(Model.MacroParameters["detailsPage"].ToString());
 	var events = LocationService.GetUpcomingEventsForLocation(location,take);
-	var detailPage = Umbraco.TypedContent(detailId);
 }
 
 <p>@Umbraco.GetDictionaryValue("EventCalendar:EventList:UpcomingEventsHeadline")</p>
@@ -14,8 +12,7 @@
 	<p>@Umbraco.GetDictionaryValue("EventCalendar:EventList:UpcomingEventsHeadline")</p>
 	<ul>
 		@foreach(var e in events){
-			var url = detailPage.Url + "?id=" + e.Id + "&type=" + e.Type + "&calendar=" + e.CalendarId;
-			<li><a href="@url">@e.Title</a></li>
+			<li><a href="/EventCalendar/@(e.Title)/@(e.Id)/@(e.Type)/@(e.CalendarId)">@e.Title</a></li>
 		}
 	</ul>
 } else {

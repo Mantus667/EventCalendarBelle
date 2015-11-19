@@ -7,7 +7,7 @@
 {
     <script type="text/javascript">
         $(document).ready(function () {
-            var myLatlng = new google.maps.LatLng(@Model.Location.latitude,@Model.Location.longitude);
+            var myLatlng = new google.maps.LatLng(@Model.Location.Latitude,@Model.Location.Longitude);
             var mapOptions = {
                 center: myLatlng,
                 zoom: 14,

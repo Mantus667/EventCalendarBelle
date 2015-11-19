@@ -12,6 +12,7 @@ namespace EventCalendar.Core
             Mapper.AddProfile<EventProfile>();
             Mapper.AddProfile<CalendarProfile>();
             Mapper.AddProfile<DateExceptionProfile>();
+            Mapper.AddProfile<EventLocationProfile>();
         }
     }
 }

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EventCalendar.Core.Extensions;
 
 namespace EventCalendar.Core.AutoMapperProfiles
 {
@@ -33,6 +34,12 @@ namespace EventCalendar.Core.AutoMapperProfiles
                     Street = source.Street,
                     ZipCode = source.ZipCode
                 };
+
+                if (source.MediaItems.AnySave())
+                {
+                    dto.media = String.Join(",", source.MediaItems.ToArray());
+                }
+
                 return dto;
             }
         }
@@ -53,6 +60,12 @@ namespace EventCalendar.Core.AutoMapperProfiles
                     Street = source.Street,
                     ZipCode = source.ZipCode
                 };
+
+                result.MediaItems = new List<int>();
+                if (!String.IsNullOrEmpty(source.media))
+                {
+                    result.MediaItems = source.media.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(x => int.Parse(x)).ToList();
+                }
 
                 return result;
             }

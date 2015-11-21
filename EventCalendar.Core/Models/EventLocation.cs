@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Umbraco.Core.Persistence;
-using Umbraco.Core.Persistence.DatabaseAnnotations;
-using System.ComponentModel.DataAnnotations;
-using System.Web.Mvc;
+﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace EventCalendar.Core.Models
@@ -40,6 +33,9 @@ namespace EventCalendar.Core.Models
 
         [DataMember(Name = "mediaItems")]
         public List<int> MediaItems { get; set; }
+
+        [DataMember(Name = "descriptions")]
+        public List<Description> Descriptions { get; set; }
     }
 
     [DataContract(Name = "pagedLocations", Namespace = "")]

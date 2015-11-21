@@ -166,4 +166,18 @@ namespace EventCalendarBelle.Migrations
             Alter.Table("ec_events").AddColumn("icon").AsString();
         }
     }
+
+    [Migration("2.4.0", 0, "LocationEnhancements")]
+    public class LocationEnhancements : MigrationBase
+    {
+        public override void Down()
+        {
+            Delete.Column("media").FromTable("ec_locations");
+        }
+
+        public override void Up()
+        {
+            Alter.Table("ec_locations").AddColumn("media").AsString();
+        }
+    }
 }

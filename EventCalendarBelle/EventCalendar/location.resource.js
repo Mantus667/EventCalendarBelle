@@ -18,6 +18,10 @@
                     return $http.delete(Umbraco.Sys.ServerVariables.eventCalendar.locationBaseUrl + "DeleteById?id=" + id);
                 },
 
+                getRTEConfiguration: function () {
+                    return $http.get(Umbraco.Sys.ServerVariables.eventCalendar.descriptionBaseUrl + "GetRTEConfiguration");
+                },
+
                 getPaged: function (itemsPerPage, pageNumber, sortColumn, sortOrder, searchTerm) {
                     if (sortColumn == undefined)
                         sortColumn = "";

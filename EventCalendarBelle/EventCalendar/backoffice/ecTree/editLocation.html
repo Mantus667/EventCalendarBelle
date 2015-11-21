@@ -137,6 +137,28 @@
                     </div>
                 </div>
             </umb-tab>
+            <umb-tab id="tabDescriptions" rel="Descriptions">
+                <div class="umb-pane form-horizontal">
+                    <div class="tabbable-panel">
+                        <div class="tabbable-line">
+                            <ul class="nav nav-tabs ">
+                                <li ng-repeat="description in location.descriptions" ng-class="{active:$first}">
+                                    <a ng-href="#{{description.culture}}" data-toggle="tab">{{description.culture}}</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div ng-repeat="description in location.descriptions" id="{{description.culture}}" class="tab-pane" ng-class="{active:$first}">
+                                    <div ng-if="description.view == 'rte'">
+                                        <umb-property property="description">
+                                            <umb-editor model="description"></umb-editor>
+                                        </umb-property>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </umb-tab>
         </umb-tab-view>
     </umb-panel>
 </form>

@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 using Umbraco.Core;
 using Umbraco.Core.Persistence;
 using Newtonsoft.Json;
+using EventCalendar.Core.Enums;
+using EventCalendar.Core.Dto;
+using AutoMapper;
 
 namespace EventCalendar.Core.Services
 {
@@ -50,6 +53,13 @@ namespace EventCalendar.Core.Services
         {
             var query2 = new Sql().Select("*").From("ec_eventdescriptions").Where<EventDescription>(x => x.CalendarId == calendar && x.EventId == @event && x.Type == (int)type);
             return ApplicationContext.Current.DatabaseContext.Database.Fetch<EventDescription>(query2);
+        }
+
+        public static IEnumerable<Description> GetDescriptions(int parent, DescriptionType type)
+        {
+            var db = ApplicationContext.Current.DatabaseContext.Database;
+            var query = new Sql().Select("*").From("ec_descriptions").Where<DescriptionDto>(x => x.ParentId == parent && x.DescriptionType == (int)type);
+            return Mapper.Map<IEnumerable<Description>>(db.Fetch<DescriptionDto>(query));
         }
 
         public static object GetRTEConfiguration()

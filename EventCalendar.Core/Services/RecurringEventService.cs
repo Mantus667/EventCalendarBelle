@@ -19,7 +19,7 @@ namespace EventCalendar.Core.Services
             var db = ApplicationContext.Current.DatabaseContext.Database;
 
             var re = GetRecurringEvent(id);
-            DescriptionService.GetDescriptionsForEvent(re.calendarId, id, EventType.Normal).ForEach(x => DescriptionService.DeleteDescription(x.Id));
+            DescriptionService.GetDescriptionsForEvent(re.calendarId, id, EventType.Recurring).ForEach(x => DescriptionService.DeleteDescription(x.Id));
 
             return db.Delete<RecurringEventDto>(id);
         }

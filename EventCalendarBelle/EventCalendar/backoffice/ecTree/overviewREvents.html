@@ -62,8 +62,8 @@
                                 <a href="#/eventCalendar/ecTree/editREvent/{{event.id}}">{{event.title}}</a>
                             </td>
                             <td><span class="icon icon-check" ng-show="event.allday"></span><span class="icon icon-delete" ng-show="!event.allday"></span></td>
-                            <td>{{event.starttime | date : 'medium'}}</td>
-                            <td>{{event.endtime | date : 'medium'}}</td>
+                            <td>{{ formatDate(event.starttime) }}</td>
+                            <td>{{ formatDate(event.endtime) }}</td>
                             <td><a href="#/eventCalendar/ecTree/editCalendar/{{event.calendar.id}}">{{event.calendar.calendarname}}</a></td>
                             <td><a href="#/eventCalendar/ecTree/editLocation/{{event.location.id}}">{{event.location.name}}</a></td>
                         </tr>

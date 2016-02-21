@@ -83,5 +83,13 @@
             }
         };
 
-        fetchData();
+        $scope.formatDate = function(date){
+            return moment.utc(date).format('LT');
+        };
+
+        assetsService
+            .loadJs("/App_Plugins/EventCalendar/scripts/moment-with-locales.js")
+            .then(function () {
+                fetchData();
+            });
     });

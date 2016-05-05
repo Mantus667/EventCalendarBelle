@@ -101,9 +101,12 @@ namespace EventCalendar.Core.AutoMapperProfiles
                 var ms = ApplicationContext.Current.Services.MemberService;
 
                 var source = (RecurringEvent)context.SourceValue;
+                var calendar = CalendarService.GetCalendarById(source.calendarId);
 
                 var result = new EventDetailsModel()
                 {
+                    CalendarId = calendar.Id,
+                    CalendarName = calendar.Calendarname,
                     Title = source.Title,
                     Descriptions = source.Descriptions
                 };

@@ -92,7 +92,8 @@ namespace EventCalendar.Core.AutoMapperProfiles
                     CalendarId = calendar.Id,
                     CalendarName = calendar.Calendarname,
                     Title = source.Title,
-                    Descriptions = source.Descriptions
+                    Descriptions = source.Descriptions,
+                    AllDay = source.AllDay
                 };
                 if(source.locationId != 0){
                     result.LocationId = source.locationId;

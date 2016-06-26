@@ -13,6 +13,7 @@ namespace EventCalendar.Core.Models
         public string Title { get; set; }
         public string StartDate { get; set; }
         public string EndDate { get; set; }
+        public bool AllDay { get; set; }
         public string Description { get; set; }
         public int LocationId { get; set; }
         public bool isOver { get; set; }

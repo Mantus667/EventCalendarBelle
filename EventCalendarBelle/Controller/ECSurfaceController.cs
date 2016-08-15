@@ -225,7 +225,8 @@ namespace EventCalendarBelle.Controller
                 evt.Description = this.GetDescription(e, CultureInfo.CurrentCulture.ToString());
                 evt.Summary = e.Title;
                 evt.IsAllDay = e.AllDay;
-                evt.Categories.AddRange(e.Categories.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList());
+                if (!string.IsNullOrEmpty(e.Categories))
+                    evt.Categories.AddRange(e.Categories.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList());
 
                 //If it has a location fetch it
                 if (e.locationId != 0)

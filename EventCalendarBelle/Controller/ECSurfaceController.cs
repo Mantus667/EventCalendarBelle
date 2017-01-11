@@ -12,6 +12,7 @@ using Umbraco.Web.Mvc;
 using DDay.iCal;
 using DDay.iCal.Serialization;
 using EventCalendar.Core.Services;
+using Umbraco.Core.Logging;
 
 namespace EventCalendarBelle.Controller
 {
@@ -197,155 +198,175 @@ namespace EventCalendarBelle.Controller
         public ActionResult GetIcsForCalendar(int id)
         {
             DDay.iCal.iCalendar iCal = new DDay.iCal.iCalendar();
-            
+            ECalendar cal = null;
+            EventLocation l = null;
 
             var lctrl = new LocationApiController();
             var calctrl = new CalendarApiController();
-            var cal = calctrl.GetById(id);
 
-            EventLocation l = null;
-
-            iCal.Properties.Add(new CalendarProperty("X-WR-CALNAME", cal.Calendarname));
-
-            //Get normal events for calendar
-            var nectrl = new EventApiController();
-            foreach (var e in nectrl.GetAll().Where(x => x.calendarId == id))
+            try
             {
-                // Create the event, and add it to the iCalendar
-                DDay.iCal.Event evt = iCal.Create<DDay.iCal.Event>();
-
-                var start = (DateTime)e.Start;
-                evt.Start = new iCalDateTime(start.ToUniversalTime());
-                if (e.End != null)
-                {
-                    var end = (DateTime)e.End;
-                    evt.End = new iCalDateTime(end.ToUniversalTime());
-                }
-                
-                evt.Description = this.GetDescription(e, CultureInfo.CurrentCulture.ToString());
-                evt.Summary = e.Title;
-                evt.IsAllDay = e.AllDay;
-                if (!string.IsNullOrEmpty(e.Categories))
-                    evt.Categories.AddRange(e.Categories.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList());
-
-                //If it has a location fetch it
-                if (e.locationId != 0)
-                {
-                    l = lctrl.GetById(e.locationId);
-                    evt.Location = l.LocationName + "," + l.Street + "," + l.ZipCode + " " + l.City + "," + l.Country;
-                }
-
-                var attendes = new List<IAttendee>();
-
-                if (e.Organiser != null && e.Organiser != 0)
-                {
-                    var ms = Services.MemberService;
-                    var member = ms.GetById(e.Organiser);
-                    string attendee = "MAILTO:" + member.Email;
-                    IAttendee reqattendee = new DDay.iCal.Attendee(attendee)
-                    {
-                        CommonName = member.Name,
-                        Role = "REQ-PARTICIPANT"
-                    };
-                    attendes.Add(reqattendee);
-                }
-
-                if (attendes != null && attendes.Count > 0)
-                {
-                    evt.Attendees = attendes;
-                }
+                cal = calctrl.GetById(id);
+            } catch(Exception ex) {
+                LogHelper.Error<ECSurfaceController>("Error during creation of Ics file for calendar", ex);
             }
 
-            //Get recurring events
-            var rectrl = new REventApiController();
-            foreach(var e in rectrl.GetAll().Where(x => x.calendarId == id)) {
-                // Create the event, and add it to the iCalendar
-                DDay.iCal.Event evt = iCal.Create<DDay.iCal.Event>();
+            if (cal != null)
+            {
 
-                evt.Description = this.GetDescription(e, CultureInfo.CurrentCulture.ToString());
-                evt.Summary = e.Title;
-                evt.IsAllDay = e.AllDay;
-                evt.Categories.AddRange(e.Categories.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList());
+                iCal.Properties.Add(new CalendarProperty("X-WR-CALNAME", cal.Calendarname));
 
-                //If it has a location fetch it
-                if (e.locationId != 0)
+                //Get normal events for calendar
+                var nectrl = new EventApiController();
+                foreach (var e in nectrl.GetAll().Where(x => x.calendarId == id))
                 {
-                    l = lctrl.GetById(e.locationId);
-                    evt.Location = l.LocationName + "," + l.Street + "," + l.ZipCode + " " + l.City + "," + l.Country;
-                }
-
-                RecurrencePattern rp = null;
-                var frequency = (FrequencyTypeEnum)e.Frequency;
-                switch (frequency)
-                {
-                    case FrequencyTypeEnum.Daily:
-                        {
-                            rp = new RecurrencePattern(FrequencyType.Daily);
-                            break;
-                        }
-                    case FrequencyTypeEnum.Monthly:
-                        {
-                            rp = new RecurrencePattern(FrequencyType.Monthly);
-                            break;
-                        }
-                    case FrequencyTypeEnum.Weekly:
-                        {
-                            rp = new RecurrencePattern(FrequencyType.Weekly);
-                            break;
-                        }
-                    case FrequencyTypeEnum.Yearly:
-                        {
-                            rp = new RecurrencePattern(FrequencyType.Yearly);
-                            break;
-                        }
-                    default:
-                        {
-                            rp = new RecurrencePattern(FrequencyType.Monthly);
-                            break;
-                        }
-                }
-                rp.ByDay.AddRange(e.Days.Select(x => new WeekDay(x.ToString())));
-                
-                evt.RecurrenceRules.Add(rp);
-
-                var tmp_event = new ScheduleWidget.ScheduledEvents.Event()
-                {
-                    Title = e.Title,
-                    FrequencyTypeOptions = (FrequencyTypeEnum)e.Frequency
-                };
-
-                foreach (var day in e.Days)
-                {
-                    tmp_event.DaysOfWeekOptions = tmp_event.DaysOfWeekOptions | (DayOfWeekEnum)day;
-                }
-                foreach (var i in e.MonthlyIntervals)
-                {
-                    tmp_event.MonthlyIntervalOptions = tmp_event.MonthlyIntervalOptions | (MonthlyIntervalEnum)i;
-                }
-
-                Schedule schedule = new Schedule(tmp_event);
-
-                var occurence = Convert.ToDateTime(schedule.NextOccurrence(DateTime.Now));
-                evt.Start = new iCalDateTime(new DateTime(occurence.Year, occurence.Month, occurence.Day, e.Start.Hour, e.Start.Minute, 0));
-
-                var attendes = new List<IAttendee>();
-
-                if (e.Organiser != null && e.Organiser != 0)
-                {
-                    var ms = Services.MemberService;
-                    var member = ms.GetById(e.Organiser);
-                    string attendee = "MAILTO:" + member.Email;
-                    IAttendee reqattendee = new DDay.iCal.Attendee(attendee)
+                    try
                     {
-                        CommonName = member.Name,
-                        Role = "REQ-PARTICIPANT"
-                    };
-                    attendes.Add(reqattendee);
+                        // Create the event, and add it to the iCalendar
+                        DDay.iCal.Event evt = iCal.Create<DDay.iCal.Event>();
+
+                        var start = (DateTime)e.Start;
+                        evt.Start = new iCalDateTime(start.ToUniversalTime());
+                        if (e.End != null)
+                        {
+                            var end = (DateTime)e.End;
+                            evt.End = new iCalDateTime(end.ToUniversalTime());
+                        }
+
+                        evt.Description = this.GetDescription(e, CultureInfo.CurrentCulture.ToString());
+                        evt.Summary = e.Title;
+                        evt.IsAllDay = e.AllDay;
+                        if (!string.IsNullOrEmpty(e.Categories))
+                            evt.Categories.AddRange(e.Categories.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList());
+
+                        //If it has a location fetch it
+                        if (e.locationId != 0)
+                        {
+                            l = lctrl.GetById(e.locationId);
+                            evt.Location = l.LocationName + "," + l.Street + "," + l.ZipCode + " " + l.City + "," + l.Country;
+                        }
+
+                        var attendes = new List<IAttendee>();
+
+                        if (e.Organiser != 0)
+                        {
+                            var ms = Services.MemberService;
+                            var member = ms.GetById(e.Organiser);
+                            string attendee = "MAILTO:" + member.Email;
+                            IAttendee reqattendee = new DDay.iCal.Attendee(attendee)
+                            {
+                                CommonName = member.Name,
+                                Role = "REQ-PARTICIPANT"
+                            };
+                            attendes.Add(reqattendee);
+                        }
+
+                        if (attendes != null && attendes.Count > 0)
+                        {
+                            evt.Attendees = attendes;
+                        }
+                    } catch(Exception ex) {
+                        LogHelper.Error<ECSurfaceController>("Error during creation of Ics file for calendar", ex);
+                    }
                 }
 
-                if (attendes != null && attendes.Count > 0)
+                //Get recurring events
+                var rectrl = new REventApiController();
+                foreach (var e in rectrl.GetAll().Where(x => x.calendarId == id))
                 {
-                    evt.Attendees = attendes;
+                    try
+                    {
+                        // Create the event, and add it to the iCalendar
+                        DDay.iCal.Event evt = iCal.Create<DDay.iCal.Event>();
+
+                        evt.Description = this.GetDescription(e, CultureInfo.CurrentCulture.ToString());
+                        evt.Summary = e.Title;
+                        evt.IsAllDay = e.AllDay;
+                        evt.Categories.AddRange(e.Categories.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList());
+
+                        //If it has a location fetch it
+                        if (e.locationId != 0)
+                        {
+                            l = lctrl.GetById(e.locationId);
+                            evt.Location = l.LocationName + "," + l.Street + "," + l.ZipCode + " " + l.City + "," + l.Country;
+                        }
+
+                        RecurrencePattern rp = null;
+                        var frequency = (FrequencyTypeEnum)e.Frequency;
+                        switch (frequency)
+                        {
+                            case FrequencyTypeEnum.Daily:
+                                {
+                                    rp = new RecurrencePattern(FrequencyType.Daily);
+                                    break;
+                                }
+                            case FrequencyTypeEnum.Monthly:
+                                {
+                                    rp = new RecurrencePattern(FrequencyType.Monthly);
+                                    break;
+                                }
+                            case FrequencyTypeEnum.Weekly:
+                                {
+                                    rp = new RecurrencePattern(FrequencyType.Weekly);
+                                    break;
+                                }
+                            case FrequencyTypeEnum.Yearly:
+                                {
+                                    rp = new RecurrencePattern(FrequencyType.Yearly);
+                                    break;
+                                }
+                            default:
+                                {
+                                    rp = new RecurrencePattern(FrequencyType.Monthly);
+                                    break;
+                                }
+                        }
+                        rp.ByDay.AddRange(e.Days.Select(x => new WeekDay(x.ToString())));
+
+                        evt.RecurrenceRules.Add(rp);
+
+                        var tmp_event = new ScheduleWidget.ScheduledEvents.Event()
+                        {
+                            Title = e.Title,
+                            FrequencyTypeOptions = (FrequencyTypeEnum)e.Frequency
+                        };
+
+                        foreach (var day in e.Days)
+                        {
+                            tmp_event.DaysOfWeekOptions = tmp_event.DaysOfWeekOptions | (DayOfWeekEnum)day;
+                        }
+                        foreach (var i in e.MonthlyIntervals)
+                        {
+                            tmp_event.MonthlyIntervalOptions = tmp_event.MonthlyIntervalOptions | (MonthlyIntervalEnum)i;
+                        }
+
+                        Schedule schedule = new Schedule(tmp_event);
+
+                        var occurence = Convert.ToDateTime(schedule.NextOccurrence(DateTime.Now));
+                        evt.Start = new iCalDateTime(new DateTime(occurence.Year, occurence.Month, occurence.Day, e.Start.Hour, e.Start.Minute, 0));
+
+                        var attendes = new List<IAttendee>();
+
+                        if (e.Organiser != 0)
+                        {
+                            var ms = Services.MemberService;
+                            var member = ms.GetById(e.Organiser);
+                            string attendee = "MAILTO:" + member.Email;
+                            IAttendee reqattendee = new DDay.iCal.Attendee(attendee)
+                            {
+                                CommonName = member.Name,
+                                Role = "REQ-PARTICIPANT"
+                            };
+                            attendes.Add(reqattendee);
+                        }
+
+                        if (attendes != null && attendes.Count > 0)
+                        {
+                            evt.Attendees = attendes;
+                        }
+                    }catch(Exception ex) {
+                        LogHelper.Error<ECSurfaceController>("Error during creation of Ics file for calendar", ex);
+                    }
                 }
             }
 

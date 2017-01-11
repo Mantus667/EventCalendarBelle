@@ -1,7 +1,7 @@
 ﻿angular.module("umbraco").controller("EventCalendar.REventEditController",
         function ($scope, $routeParams, reventResource, locationResource,
             notificationsService, navigationService, assetsService,
-            userService, entityResource, dialogService) {
+            userService, entityResource, dialogService, $timeout) {
 
             $scope.event = { id: 0, calendarid: 0, allDay: false, organiser: {} };
             var exceptionDate;
@@ -75,11 +75,11 @@
                                .loadJs("/App_Plugins/EventCalendar/scripts/bootstrap-datetimepicker.js")
                                .then(function () {
                                    //this function will execute when all dependencies have loaded
+                                   $('#datetimepicker1 input').val(moment.utc($scope.event.starttime).format('LT'));
                                    $('#datetimepicker1').datetimepicker({
                                        language: locale,
                                        pickDate: false
                                    });
-                                   $('#datetimepicker1 input').val(moment.utc($scope.event.starttime).format('LT'));
 
                                    $('#datetimepicker2').datetimepicker({
                                        language: locale,
@@ -115,7 +115,7 @@
                 initDatePicker();
             };
 
-            var initRTE = function () {                
+            var initRTE = function () {
                 reventResource.getRTEConfiguration().then(function (response) {
                     var tmp = response.data;
                     if (typeof tmp !== null && typeof tmp === 'object') {
@@ -254,39 +254,41 @@
                 });
             };
 
-            if ($routeParams.create == "true") {
-                $scope.event.calendarid = $routeParams.id.replace("c-", "");
-                initAssets();
-            } else {
-                //get a calendar id -> service
-                reventResource.getById($routeParams.id.replace("re-", "")).then(function (response) {
-                    $scope.event = response.data;
-                    $scope.event.organiser = {};
-
-                    initRTE();
-
+            var init = function () {
+                if ($routeParams.create == "true") {
+                    $scope.event.calendarid = $routeParams.id.replace("c-", "");
                     initAssets();
+                } else {
+                    //get a calendar id -> service
+                    reventResource.getById($routeParams.id.replace("re-", "")).then(function (response) {
+                        $scope.event = response.data;
+                        $scope.event.organiser = {};
 
-                    if ($scope.event.organiser_id != 0) {
-                        entityResource.getById($scope.event.organiser_id, "Member")
-                           .then(function (data) {
-                               $scope.event.organiser = { name: data.name, id: data.id, icon: data.icon };
-                           });
-                    }
+                        initRTE();
 
-                    if ($scope.event.mediaItems != null) {
-                        entityResource.getByIds($scope.event.mediaItems, "Media")
-                           .then(function (mediaArray) {
-                               _.forEach(mediaArray, function (item) {
-                                   $scope.images.push({ id: item.id, name: item.name, path: item.metaData.umbracoFile.Value });
+                        initAssets();
+
+                        if ($scope.event.organiser_id != 0) {
+                            entityResource.getById($scope.event.organiser_id, "Member")
+                               .then(function (data) {
+                                   $scope.event.organiser = { name: data.name, id: data.id, icon: data.icon };
                                });
-                           });
-                    }
+                        }
 
-                }, function (response) {
-                    notificationsService.error("Error", $scope.currentNode.name + " could not be loaded");
-                });
-            }
+                        if ($scope.event.mediaItems != null) {
+                            entityResource.getByIds($scope.event.mediaItems, "Media")
+                               .then(function (mediaArray) {
+                                   _.forEach(mediaArray, function (item) {
+                                       $scope.images.push({ id: item.id, name: item.name, path: item.metaData.umbracoFile.Value });
+                                   });
+                               });
+                        }
+
+                    }, function (response) {
+                        notificationsService.error("Error", $scope.currentNode.name + " could not be loaded");
+                    });
+                }
+            };
 
             $scope.save = function (event) {
                 reventResource.save(event).then(function (response) {
@@ -301,5 +303,9 @@
                     notificationsService.error("Error", event.title + " could not be saved");
                 });
             };
+
+            $timeout(function () {
+                init();
+            });
 
         });

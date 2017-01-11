@@ -1,7 +1,7 @@
 ﻿angular.module("umbraco").controller("EventCalendar.EventEditController",
         function ($scope, $routeParams, eventResource, locationResource, notificationsService, assetsService,
             tinyMceService, $timeout, dialogService, navigationService, userService,
-            eventCalendarLocalizationService, entityResource, angularHelper) {
+            eventCalendarLocalizationService, entityResource, angularHelper, $timeout) {
 
             $scope.event = { id: 0, calendarid: 0, allday: false, descriptions: {}, organiser: {} };
             var locale = 'en-US';
@@ -168,38 +168,40 @@
                 });
             };
 
-            if ($routeParams.create == "true") {
-                $scope.event.calendarid = $routeParams.id.replace("c-", "");
-                initAssets();
-            } else {
-                //get a calendar id -> service
-                eventResource.getById($routeParams.id.replace("e-","")).then(function (response) {
-                    $scope.event = response.data;
-                    $scope.event.organiser = {};
-
-                    initRTE();
-
+            var init = function () {
+                if ($routeParams.create == "true") {
+                    $scope.event.calendarid = $routeParams.id.replace("c-", "");
                     initAssets();
+                } else {
+                    //get a calendar id -> service
+                    eventResource.getById($routeParams.id.replace("e-", "")).then(function (response) {
+                        $scope.event = response.data;
+                        $scope.event.organiser = {};
 
-                    if ($scope.event.organiser_id != 0) {
-                        entityResource.getById($scope.event.organiser_id, "Member")
-                       .then(function (data) {
-                           $scope.event.organiser = { name: data.name, id: data.id, icon: data.icon };
-                       });
-                    }
+                        initRTE();
 
-                    if ($scope.event.mediaItems != null) {
-                        entityResource.getByIds($scope.event.mediaItems, "Media")
-                           .then(function (mediaArray) {
-                               _.forEach(mediaArray, function (item) {
-                                   $scope.images.push({ id: item.id, name: item.name, path: item.metaData.umbracoFile.Value });
-                               });
+                        initAssets();
+
+                        if ($scope.event.organiser_id != 0) {
+                            entityResource.getById($scope.event.organiser_id, "Member")
+                           .then(function (data) {
+                               $scope.event.organiser = { name: data.name, id: data.id, icon: data.icon };
                            });
-                    }
+                        }
 
-                }, function (response) {
-                    notificationsService.error("Error", $scope.currentNode.name + " could not be loaded");
-                });
+                        if ($scope.event.mediaItems != null) {
+                            entityResource.getByIds($scope.event.mediaItems, "Media")
+                               .then(function (mediaArray) {
+                                   _.forEach(mediaArray, function (item) {
+                                       $scope.images.push({ id: item.id, name: item.name, path: item.metaData.umbracoFile.Value });
+                                   });
+                               });
+                        }
+
+                    }, function (response) {
+                        notificationsService.error("Error", $scope.currentNode.name + " could not be loaded");
+                    });
+                }
             }
 
             $scope.openMemberPicker = function () {
@@ -264,4 +266,8 @@
                     notificationsService.error("Error", event.title + " could not be saved");
                 });
             };
+
+            $timeout(function () {
+                init();
+            });
         });

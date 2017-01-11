@@ -96,7 +96,7 @@
                                     <small><eventcalendar-localize key="event_monthly_description">Monthly interval of your event?</eventcalendar-localize></small>
                                 </label>
                                 <div class="controls controls-row">
-                                    <select ng-model="event.intervals" name="monSelect" multiple ng-options="m.Key as m.Value for m in MonthlyIntervals" required></select>
+                                    <select ng-model="event.intervals" name="monSelect" multiple ng-options="m.Key as m.Value for m in MonthlyIntervals" ng-class="{ 'ng-invalid-required' : form.monSelect.$error.required }" ng-required="event.frequency == 4"></select>
                                     <span ng-show="form.monSelect.$dirty && form.monSelect.$error.required">Monthly is required</span>
                                 </div>
                             </div>

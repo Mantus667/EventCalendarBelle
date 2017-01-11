@@ -38,7 +38,7 @@ namespace EventCalendar.Core.AutoMapperProfiles
                     End = source.end,
                     Frequency = source.frequency,
                     locationId = source.locationId,
-                    MonthlyIntervals = source.monthly_interval.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(x => int.Parse(x)).ToList(),
+                    MonthlyIntervals = null,
                     range_end = source.range_end,
                     range_start = source.range_start,
                     Start = source.start,
@@ -46,6 +46,10 @@ namespace EventCalendar.Core.AutoMapperProfiles
                     Icon = String.IsNullOrEmpty(source.icon) ? String.Empty : source.icon,
                     Exceptions = DateExceptionService.GetDateExceptionsForRecurringEvent(source.Id).ToList()
                 };
+                if (!String.IsNullOrEmpty(source.monthly_interval))
+                {
+                    result.MonthlyIntervals = source.monthly_interval.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(x => int.Parse(x)).ToList();
+                }
 
                 result.Calendar = CalendarService.GetCalendarById(result.calendarId);
 
@@ -78,7 +82,7 @@ namespace EventCalendar.Core.AutoMapperProfiles
                     day = String.Join(",", source.Days.ToArray()),
                     end = source.End,
                     frequency = source.Frequency,
-                    monthly_interval = String.Join(",", source.MonthlyIntervals.ToArray()),
+                    monthly_interval = String.Empty,
                     Organiser = source.Organiser,
                     range_end = source.range_end,
                     range_start = source.range_start,
@@ -86,6 +90,10 @@ namespace EventCalendar.Core.AutoMapperProfiles
                     title = source.Title,
                     icon = source.Icon,
                 };
+                if (source.MonthlyIntervals != null && source.MonthlyIntervals.Any())
+                {
+                    result.monthly_interval = String.Join(",", source.MonthlyIntervals.ToArray());
+                }
 
                 if (source.MediaItems != null)
                 {
